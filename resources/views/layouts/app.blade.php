@@ -91,11 +91,13 @@
                                 </div>
 
                             @else
-                                <li class="{{request()->is('login') ? 'active' : ''}}"><a href="{{route('login')}}">Login
-                                    </a></li>
+                                <a href="{{route('login')}}"
+                                    class="nav-item nav-link {{request()->is('login') ? 'active' : ''}}">Login</a>
+
                                 @if (Route::has('register'))
-                                    <li class="{{request()->is('register') ? 'active' : ''}}"><a
-                                            href="{{route('register')}}">Register</a></li>
+                                    <a href="{{route('register')}}"
+                                        class="nav-item nav-link {{request()->is('register') ? 'active' : ''}}">Register</a>
+
                                 @endif
                             @endauth
                         @endif

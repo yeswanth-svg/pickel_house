@@ -7,7 +7,7 @@
         background: url('img/bg-cover.jpg') no-repeat center center/cover;
         color: white;">
     <div class="container text-center animated bounceInDown">
-        <h1 class="display-1 mb-4" style="color: white">Menu</h1>
+        <h1 class="display-1 mb-4" style="color: white">Profile</h1>
         <ol class="breadcrumb justify-content-center mb-0 animated bounceInDown">
             <li class="breadcrumb-item">
                 <a href="#" style="color: white">Home</a>
