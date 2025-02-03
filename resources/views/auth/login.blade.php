@@ -4,7 +4,7 @@
 <!-- Hero Start -->
 <div class="container-fluid py-6 my-6 mt-0" style="
         background: url('img/bg-cover.jpg') no-repeat center center/cover;
-        color: white;">
+        color: white;height: 379px;">
     <div class="container text-center animated bounceInDown">
         <h1 class="display-1 mb-4" style="color: white">Login</h1>
         <ol class="breadcrumb justify-content-center mb-0 animated bounceInDown">

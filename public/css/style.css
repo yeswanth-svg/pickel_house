@@ -46,8 +46,8 @@ h6,
 }
 
 .py-6 {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
 }
 
 .wow,
@@ -59,8 +59,6 @@ h6,
 .btn.btn-primary {
     border: 0;
 }
-
-
 
 .btn {
     font-weight: 600;
