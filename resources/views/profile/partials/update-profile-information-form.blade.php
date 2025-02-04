@@ -1,4 +1,4 @@
-<section class="card shadow-sm p-4 w-50">
+<section class="card shadow-sm p-4 col-lg-6" style="max-width:100%;">
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
             {{ __('Profile Information') }}
