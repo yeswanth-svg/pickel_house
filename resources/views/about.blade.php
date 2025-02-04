@@ -11,7 +11,7 @@
   <div class="container text-center animated bounceInDown">
     <h1 class="display-1 mb-4" style="color: white">About Us</h1>
     <ol class="breadcrumb justify-content-center mb-0 animated bounceInDown">
-      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{url('/')}}">Home</a></li>
       <li class="breadcrumb-item text-light" aria-current="page">About</li>
     </ol>
   </div>
@@ -76,9 +76,9 @@
     <div class="row g-4">
       <div class="col-lg-3 col-md-6 wow bounceInUp" data-wow-delay="0.1s">
         <div class="team-item rounded">
-          <img class="img-fluid rounded-top" src="img/team-1.jpg" alt="" />
+          <img class="img-fluid rounded-top" src="img/chef1.jpg" alt="" />
           <div class="team-content text-center py-3 bg-dark rounded-bottom">
-            <h4 class="text-primary">chef 1</h4>
+            <h4 class="text-light">chef 1</h4>
             <p class="text-white mb-0">Professional Chef</p>
           </div>
           <div class="team-icon d-flex flex-column justify-content-center m-4">
@@ -95,9 +95,9 @@
       </div>
       <div class="col-lg-3 col-md-6 wow bounceInUp" data-wow-delay="0.3s">
         <div class="team-item rounded">
-          <img class="img-fluid rounded-top" src="img/team-2.jpg" alt="" />
+          <img class="img-fluid rounded-top" src="img/chef2.jpg" alt="" />
           <div class="team-content text-center py-3 bg-dark rounded-bottom">
-            <h4 class="text-primary">Chef 2</h4>
+            <h4 class="text-light">Chef 2</h4>
             <p class="text-white mb-0">Professional Chef</p>
           </div>
           <div class="team-icon d-flex flex-column justify-content-center m-4">
@@ -114,9 +114,9 @@
       </div>
       <div class="col-lg-3 col-md-6 wow bounceInUp" data-wow-delay="0.5s">
         <div class="team-item rounded">
-          <img class="img-fluid rounded-top" src="img/team-3.jpg" alt="" />
+          <img class="img-fluid rounded-top" src="img/chef3.jpg" alt="" />
           <div class="team-content text-center py-3 bg-dark rounded-bottom">
-            <h4 class="text-primary">Chef 3</h4>
+            <h4 class="text-light">Chef 3</h4>
             <p class="text-white mb-0">Professional Chef</p>
           </div>
           <div class="team-icon d-flex flex-column justify-content-center m-4">
@@ -133,9 +133,9 @@
       </div>
       <div class="col-lg-3 col-md-6 wow bounceInUp" data-wow-delay="0.7s">
         <div class="team-item rounded">
-          <img class="img-fluid rounded-top" src="img/team-4.jpg" alt="" />
+          <img class="img-fluid rounded-top" src="img/chef4.jpg" alt="" />
           <div class="team-content text-center py-3 bg-dark rounded-bottom">
-            <h4 class="text-primary">Chef 4</h4>
+            <h4 class="text-light">Chef 4</h4>
             <p class="text-white mb-0">Professional Chef</p>
           </div>
           <div class="team-icon d-flex flex-column justify-content-center m-4">

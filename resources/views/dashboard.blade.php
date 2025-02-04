@@ -10,7 +10,7 @@
         <h1 class="display-1 mb-4" style="color: white">Dashboard</h1>
         <ol class="breadcrumb justify-content-center mb-0 animated bounceInDown">
             <li class="breadcrumb-item">
-                <a href="#" style="color: white">Home</a>
+                <a href="{{url('/')}}" style="color: white">Home</a>
             </li>
             <li class="breadcrumb-item text-light" aria-current="page">Dashboard</li>
         </ol>
@@ -21,8 +21,8 @@
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 text-gray-900">
-                {{ __("You're logged in!") }}
+            <div class="p-6 text-dark fw-bold fs-3 text-center">
+                {{ __("User Dashboard") }}
             </div>
         </div>
     </div>

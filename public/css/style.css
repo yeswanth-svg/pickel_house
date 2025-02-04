@@ -143,8 +143,7 @@ h6,
 }
 
 .dropdown .dropdown-menu a:hover {
-    background: var(--bs-primary);
-    color: var(--bs-white);
+    color: var(--bs-danger) !important;
 }
 
 #searchModal .modal-content {
@@ -232,6 +231,7 @@ h6,
 /*** Menu Start ***/
 .menu .nav-item a.active {
     background: var(--bs-primary) !important;
+    font-weight: bold !important;
 }
 
 .menu .menu-item .border-bottom {
@@ -427,11 +427,11 @@ h6,
 }
 
 .team-item:hover .team-content h4 {
-    color: var(--bs-dark) !important;
+    color: black !important;
 }
 
 .team-item:hover .team-content p {
-    color: var(--bs-white);
+    color: black !important;
 }
 /*** Team End ***/
 

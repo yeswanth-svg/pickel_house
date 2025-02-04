@@ -10,7 +10,7 @@
         <h1 class="display-1 mb-4" style="color: white">Register</h1>
         <ol class="breadcrumb justify-content-center mb-0 animated bounceInDown">
             <li class="breadcrumb-item">
-                <a href="#" style="color: white">Home</a>
+                <a href="{{url('/')}}" style="color: white">Home</a>
             </li>
             <li class="breadcrumb-item text-light" aria-current="page">Register</li>
         </ol>
