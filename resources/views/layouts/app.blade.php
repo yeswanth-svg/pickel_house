@@ -28,6 +28,10 @@
 
     <!-- Template Stylesheet -->
     <link href="{{asset("css/style.css")}}" rel="stylesheet" />
+    <!-- Slick CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css" />
+
+
 </head>
 
 <body>
@@ -73,8 +77,15 @@
 
                         @if (Route::has('login'))
                             @auth
-                                <a href="{{route('dashboard')}}"
-                                    class="nav-item nav-link {{request()->is('dashboard') ? 'active' : ''}}">Dashboard</a>
+                                @if (auth()->user()->role == 'admin')
+                                    <a href="{{route('admin.dashboard')}}"
+                                        class="nav-item nav-link {{request()->is('dashboard') ? 'active' : ''}}">Admin Dashboard</a>
+
+                                @else
+                                    <a href="{{route('dashboard')}}"
+                                        class="nav-item nav-link {{request()->is('dashboard') ? 'active' : ''}}">Dashboard</a>
+
+                                @endif
 
                                 <div class="nav-item dropdown">
                                     <a href="#" class="nav-link dropdown-toggle"
@@ -270,8 +281,61 @@
     <script src="{{asset("lib/lightbox/js/lightbox.min.js")}}"></script>
     <script src="{{asset("lib/owlcarousel/owl.carousel.min.js")}}"></script>
 
+
     <!-- Template Javascript -->
     <script src="{{asset("js/main.js")}}"></script>
+
+    <script src="{{asset('admin/js/core/jquery-3.7.1.min.js')}}"></script>
+    <!-- Slick JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.min.js"></script>
+    <!-- Bootstrap Notify -->
+    <script src="{{asset('admin/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Success notification
+            @if(session('success'))
+                var content = {
+                    message: "{{ session('success') }}",
+                    title: "Success",
+                    icon: "fa fa-bell"
+                };
+
+                $.notify(content, {
+                    type: 'success', // You can change this to match your notification type
+                    placement: {
+                        from: 'top', // Correct capitalization
+                        align: 'right' // Correct capitalization
+                    },
+                    time: 1000,
+                    delay: 5000, // Adjust delay if needed
+                    allow_dismiss: false,
+                });
+            @endif
+
+
+            // Error notification
+            @if($errors->any())
+                var content = {
+                    message: "{{ $errors->first() }}",
+                    title: "Error",
+                    icon: "fa fa-exclamation-circle",
+                };
+
+                $.notify(content, {
+                    type: "danger", // Error style
+                    allow_dismiss: true,
+                    time: 1000,
+                    delay: 5000,
+                    placement: {
+                        from: 'top', // Correct capitalization
+                        align: 'right' // Correct capitalization
+                    },
+                });
+            @endif
+
+        });
+    </script>
 </body>
 
 </html>

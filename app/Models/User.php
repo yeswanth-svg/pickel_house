@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'phone_number',
+        'role',
         'password',
     ];
 
@@ -46,4 +47,23 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // In User.php
+    public function couponUsages()
+    {
+        return $this->hasMany(CouponUsage::class);
+    }
+
+    // In Coupon.php
+    public function usages()
+    {
+        return $this->hasMany(CouponUsage::class);
+    }
+
+    // In User Model
+    public function addresses()
+    {
+        return $this->hasMany(UserAddress::class);
+    }
+
 }

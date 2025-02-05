@@ -30,6 +30,7 @@ class ProfileTest extends TestCase
             ->patch('/profile', [
                 'name' => 'Test User',
                 'email' => 'test@example.com',
+                'phone_number`' => '123',
             ]);
 
         $response
@@ -40,6 +41,7 @@ class ProfileTest extends TestCase
 
         $this->assertSame('Test User', $user->name);
         $this->assertSame('test@example.com', $user->email);
+        $this->assertSame('7702619719', $user->phone_number);
         $this->assertNull($user->email_verified_at);
     }
 

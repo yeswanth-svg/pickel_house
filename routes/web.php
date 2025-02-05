@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\CuponController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DishController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -17,5 +22,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('category', CategoriesController::class);
+    Route::resource('dishes', DishController::class);
+    Route::resource('orders', OrderController::class);
+    Route::resource('cupons', CuponController::class);
+
+});
+
 
 require __DIR__ . '/auth.php';

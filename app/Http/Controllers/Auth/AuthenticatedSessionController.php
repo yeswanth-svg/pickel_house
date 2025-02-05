@@ -30,8 +30,6 @@ class AuthenticatedSessionController extends Controller
         // Regenerate the session
         $request->session()->regenerate();
 
-
-
         // Default redirection for other roles or unauthenticated users
         return redirect()->intended(route('home', absolute: false));
     }
