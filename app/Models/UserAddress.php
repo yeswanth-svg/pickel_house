@@ -17,4 +17,9 @@ class UserAddress extends Model
         "pincode",
 
     ];
+
+    protected $casts = [
+        'is_default' => 'boolean',
+    ];
+
 }

@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Dishes List')
+@section('title', 'Dish Quantities')
 @section('content')
 
 
@@ -7,7 +7,7 @@
 <div class="container">
     <div class="page-inner">
         <div class="page-header">
-            <h3 class="fw-bold mb-3">Dishes</h3>
+            <h3 class="fw-bold mb-3">Dish Quantity</h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                     <a href="#">
@@ -18,13 +18,13 @@
                     <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Dishes</a>
+                    <a href="#">Dish Quantity</a>
                 </li>
                 <li class="separator">
                     <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">All Dishes</a>
+                    <a href="#">All Quantities</a>
                 </li>
             </ul>
         </div>
@@ -34,11 +34,11 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
-                            <h4 class="card-title">All Dishes</h4>
+                            <h4 class="card-title">All Quantities</h4>
 
                             <button class="btn btn-primary btn-round ms-auto" id="openCreate">
                                 <i class="fa fa-plus"></i>
-                                Add Dish
+                                Add Quantity
                             </button>
 
 
@@ -46,85 +46,43 @@
                     </div>
                     <div class="card-body">
 
-
                         <div class="table-responsive">
                             <table id="add-row" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Dish Category</th>
-                                        <th>Name</th>
-                                        <th>Price</th>
+                                        <th>Dish Name</th>
                                         <th>Quantity</th>
-                                        <th>Image</th>
-                                        <th>Stock Availability</th>
-                                        <th>Spice Level</th>
+                                        <th>Price</th>
+
+
                                         <th style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($dishes as $dish)
+                                    @forelse ($quantites as $quantity)
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
-                                        <td>{{ $dish->category->category_name }}</td>
-                                        <td>{{$dish->name}}</td>
-                                        <td>{{ $dish->price }}</td>
-                                        <td>{{$dish->quantity}}</td>
-                                        <td>
-                                            <img src="{{ asset('dish_images/' . $dish->image) }}"
-                                                alt="{{ $dish->name }}" class="img-fluid"
-                                                style="max-width: 100px; height: auto;">
-                                        </td>
-                                        <td>
-                                            @if ($dish->availability_status == 'in_stock')
-                                                <span class="badge bg-success p-2">✅ In Stock</span>
-                                            @else
-                                                <span class="badge bg-danger p-2">❌ Out of Stock</span>
-                                            @endif
-                                        </td>
-
-                                        <td>
-                                            @if ($dish->spice_level == 'mild')
-                                                <span class="badge bg-primary p-2">
-                                                    🌱 Mild
-                                                </span>
-                                            @elseif ($dish->spice_level == 'medium')
-                                                <span class="badge bg-warning text-dark p-2">
-                                                    🌶️ Medium
-                                                </span>
-                                            @elseif ($dish->spice_level == 'spicy')
-                                                <span class="badge bg-danger p-2">
-                                                    🔥 Spicy
-                                                </span>
-                                            @elseif ($dish->spice_level == 'extra_spicy')
-                                                <span class="badge bg-dark text-light p-2">
-                                                    ☠️ Extra Spicy
-                                                </span>
-                                            @endif
-                                        </td>
+                                        <td>{{ $quantity->dish->name }}</td>
+                                        <td>{{ $quantity->quantity}}</td>
+                                        <td>{{$quantity->price}}</td>
 
                                         <td>
                                             <div class="form-button-action">
 
-                                                <button class="btn btn-link btn-secondary show-button"
-                                                    data-id="{{$dish->id}}" title="Show" id="openShow">
-                                                    <i class="fa fa-eye"></i>
-                                                </button>
-
-
                                                 <button class="btn btn-link btn-lg ms-auto edit-button"
-                                                    data-id="{{ $dish->id }}" title="Edit" id="openEdit">
+                                                    data-id="{{ $quantity->id }}" title="Edit" id="openEdit">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
 
 
-                                                <form action="{{ route('admin.dishes.destroy', $dish->id) }}"
+                                                <form action="{{ route('admin.quantity.destroy', $quantity->id) }}"
                                                     method="POST" class="delete-form" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="button"
                                                         class="btn btn-link btn-danger btn-lg delete-btn"
-                                                        data-url="{{ route('admin.dishes.destroy', $dish->id) }}"
+                                                        data-url="{{ route('admin.quantity.destroy', $quantity->id) }}"
                                                         data-bs-toggle="tooltip" title="Delete">
                                                         <i class="fa fa-times"></i>
                                                     </button>
@@ -161,7 +119,7 @@
         });
 
         $('#openCreate').click(function () {
-            window.location.href = '{{ route('admin.dishes.create') }}';
+            window.location.href = '{{ route('admin.quantity.create') }}';
         })
 
 
@@ -169,14 +127,14 @@
 
     $(document).on('click', '.edit-button', function () {
         var id = $(this).data('id'); // Get the team member ID from the data-id attribute
-        var editUrl = '{{ route('admin.dishes.edit', ':id') }}'.replace(':id', id); // Replace :id with the actual ID
+        var editUrl = '{{ route('admin.quantity.edit', ':id') }}'.replace(':id', id); // Replace :id with the actual ID
         window.location.href = editUrl; // Redirect to the edit page
     });
 
     // Handle showing team member details in modal
     $(document).on('click', '.show-button', function () {
         var id = $(this).data('id'); // Get the team member ID from the data-id attribute
-        var showUrl = '{{ route('admin.dishes.show', ':id') }}'.replace(':id', id); // Replace :id with the actual ID
+        var showUrl = '{{ route('admin.quantity.show', ':id') }}'.replace(':id', id); // Replace :id with the actual ID
         window.location.href = showUrl; // Redirect to the show page
     });
 
@@ -202,14 +160,14 @@
                     if (result.isConfirmed) {
                         Swal.fire(
                             "Deleted!",
-                            "Your dish has been deleted.",
+                            "Your Quantity has been deleted.",
                             "success"
                         );
                         form.submit(); // Submit the form if confirmed
                     } else if (result.dismiss === Swal.DismissReason.cancel) {
                         Swal.fire(
                             "Cancelled",
-                            "Your dish is safe!",
+                            "Your Quantity is safe!",
                             "error"
                         );
                     }

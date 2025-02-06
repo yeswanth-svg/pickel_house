@@ -30,46 +30,6 @@
     <link href="{{asset("css/style.css")}}" rel="stylesheet" />
     <!-- Slick CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css" />
-    <style>
-        /* Badge styling */
-        .cart-badge {
-            position: absolute;
-            top: -22px;
-            right: -13px;
-            background-color: red;
-            color: white;
-            font-size: 12px;
-            padding: 3px 6px;
-            border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            animation: shake 0.1s ease-in-out;
-        }
-
-        /* Bounce animation for the badge */
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-4px);
-            }
-        }
-
-        /* Trigger animation class */
-        .bounce-once {
-            animation: bounce 0.5s ease-in-out;
-        }
-
-        /* Ensure proper spacing for the cart icon */
-        .cart-container {
-            margin-right: 60px;
-            cursor: pointer;
-        }
-    </style>
-
 
 </head>
 
@@ -152,15 +112,10 @@
                             @endauth
                         @endif
                     </div>
-
-                    <button class="btn-search btn btn-primary btn-md-square me-4 rounded-circle d-none d-lg-inline-flex"
-                        data-bs-toggle="modal" data-bs-target="#searchModal">
-                        <i class="fas fa-search"></i>
-                    </button>
                     @auth
                                         <div class="cart-container" style="position: relative; display: inline-block;">
                                             <a href="{{route('user.cart')}}">
-                                                <i class="fas fa-shopping-cart cart-icon" style="font-size:1.3rem;margin-top: 3px;"></i>
+                                                <i class="fas fa-shopping-cart cart-icon" style="font-size:1.5rem;margin-top: 3px;"></i>
                                                 <span class="uk-badge cart-badge">
                                                     {{ auth()->check() ? \App\Models\Order::where([
                             'user_id' => auth()->id(),
@@ -171,6 +126,11 @@
 
                                         </div>
                     @endauth
+                    <button class="btn-search btn btn-primary btn-md-square me-4 rounded-circle d-none d-lg-inline-flex"
+                        data-bs-toggle="modal" data-bs-target="#searchModal">
+                        <i class="fas fa-search"></i>
+                    </button>
+
                 </div>
             </nav>
         </div>
@@ -341,55 +301,64 @@
     <script src="{{asset('admin/js/core/jquery-3.7.1.min.js')}}"></script>
     <!-- Slick JS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.min.js"></script>
+
     <!-- Bootstrap Notify -->
     <script src="{{asset('admin/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
-    <script src="{{asset('admin/js/core/bootstrap.min.js')}}"></script>
+
+
 
     <script>
         $(document).ready(function () {
-            // Success notification
-            @if(session('success'))
-                var content = {
-                    message: "{{ session('success') }}",
-                    title: "Success",
-                    icon: "fa fa-bell"
-                };
-
-                $.notify(content, {
-                    type: 'success', // You can change this to match your notification type
-                    placement: {
-                        from: 'top', // Correct capitalization
-                        align: 'right' // Correct capitalization
-                    },
-                    time: 1000,
-                    delay: 5000, // Adjust delay if needed
-                    allow_dismiss: false,
-                });
-            @endif
-
-
-            // Error notification
-            @if($errors->any())
-                var content = {
-                    message: "{{ $errors->first() }}",
-                    title: "Error",
-                    icon: "fa fa-exclamation-circle",
-                };
-
-                $.notify(content, {
-                    type: "danger", // Error style
-                    allow_dismiss: true,
-                    time: 1000,
+            function showNotification(type, title, message) {
+                $.notify({
+                    icon: type === "success" ? "fa fa-check-circle" : "fa fa-exclamation-circle",
+                }, {
+                    type: type,
+                    allow_dismiss: false, // Removes close button
                     delay: 5000,
                     placement: {
-                        from: 'top', // Correct capitalization
-                        align: 'right' // Correct capitalization
+                        from: 'top',
+                        align: 'right'
                     },
+                    offset: {
+                        x: 20,
+                        y: 60
+                    },
+                    animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                    },
+                    template: `
+                    <div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert" 
+                        style="background: {1}; color: white; border-radius: 6px; box-shadow: 0px 4px 8px rgba(0,0,0,0.15); padding: 10px 15px; display: flex; align-items: center; font-size: 14px; min-width: 150px;">
+                        <span data-notify="icon" style="font-size: 18px;"></span> <strong style="font-size: 14px;">${title}</strong><br>
+                        <div>
+                            
+                            <span style="font-size: 16px;">${message}</span>
+                        </div>
+                    </div>
+                `,
+                    onShow: function () {
+                        $(".alert-success").css("background", "#16C47F"); // Custom green
+                        $(".alert-danger").css("background", "#F93827"); // Custom red
+                    }
                 });
+            }
+
+            // Success Notification
+            @if(session('success'))
+                showNotification("success", "Success", "{{ session('success') }}");
             @endif
 
+            // Error Notification
+            @if($errors->any())
+                showNotification("danger", "Error", "{{ $errors->first() }}");
+            @endif
         });
     </script>
+
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

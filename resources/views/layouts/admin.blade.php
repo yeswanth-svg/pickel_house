@@ -119,6 +119,15 @@
 
                         </li>
 
+                        <li class="nav-item {{request()->is('admin/quantity*') ? 'active' : ''}}">
+                            <a href="{{route('admin.quantity.index')}}">
+                                <i class="fas fa-mortar-pestle"></i>
+                                <p>Dish Quantites</p>
+                                <!-- <span class="caret"></span> -->
+                            </a>
+
+                        </li>
+
                         <li class="nav-item {{request()->is('admin/orders*') ? 'active' : ''}}">
                             <a href="{{route('admin.orders.index')}}">
                                 <i class="fas fa-pen-square"></i>

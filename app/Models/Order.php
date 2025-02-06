@@ -13,10 +13,9 @@ class Order extends Model
     protected $fillable = [
         'dish_id',
         'user_id',
+        'quantity_id',
         'status',
         'total_amount',
-        'applied_coupon_id',
-        'discount_amount',
     ];
 
     public function dish()
@@ -33,5 +32,10 @@ class Order extends Model
     public function user_address()
     {
         return $this->belongsTo(UserAddress::class, 'user_id');
+    }
+
+    public function quantity()
+    {
+        return $this->belongsTo(DishQuantity::class, 'quantity_id'); // 'dish_type_id' is the foreign key in dishes table
     }
 }
