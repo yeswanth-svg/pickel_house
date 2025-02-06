@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/cart', [OrderController::class, 'viewCart'])->name('user.cart');
 });
 
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
@@ -28,7 +29,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('category', CategoriesController::class);
     Route::resource('dishes', DishController::class);
     Route::resource('orders', OrderController::class);
-    Route::resource('cupons', CuponController::class);
+    Route::resource('coupons', CuponController::class);
 
 });
 

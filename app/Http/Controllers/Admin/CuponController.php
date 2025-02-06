@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
 
 class CuponController extends Controller
@@ -13,6 +14,8 @@ class CuponController extends Controller
     public function index()
     {
         //
+        $coupons = Coupon::all();
+        return view('admin.coupons.index', compact('coupons'));
     }
 
     /**
@@ -28,8 +31,20 @@ class CuponController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'code' => 'required|string|unique:coupons,code',
+            'type' => 'required|string',
+            'value' => 'required|numeric',
+            'minimum_order_value' => 'nullable|numeric',
+            'expiry_date' => 'required|date|after:today',
+            'active' => 'required|boolean',
+        ]);
+
+        Coupon::create($request->all());
+
+        return redirect()->route('admin.coupons.index')->with('success', 'Coupon created successfully');
     }
+
 
     /**
      * Display the specified resource.
@@ -50,9 +65,22 @@ class CuponController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $coupon = Coupon::findOrFail($id);
+
+        $request->validate([
+            'code' => 'required|string|unique:coupons,code,' . $id,
+            'type' => 'required|string',
+            'value' => 'required|numeric',
+            'minimum_order_value' => 'nullable|numeric',
+            'expiry_date' => 'required|date|after:today',
+            'active' => 'required|boolean',
+        ]);
+
+        $coupon->update($request->all());
+
+        return redirect()->route('admin.coupons.index')->with('success', 'Coupon updated successfully');
     }
 
     /**
@@ -61,5 +89,7 @@ class CuponController extends Controller
     public function destroy(string $id)
     {
         //
+        Coupon::find($id)->delete();
+        return redirect()->route('admin.coupons.index')->with('success', 'Coupon deleted successfully');
     }
 }

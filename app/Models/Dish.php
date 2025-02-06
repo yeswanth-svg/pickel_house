@@ -17,6 +17,7 @@ class Dish extends Model
         'description',
         'category_id',
         'price',
+        'quantity',
         'availability_status',
     ];
 

@@ -30,6 +30,45 @@
     <link href="{{asset("css/style.css")}}" rel="stylesheet" />
     <!-- Slick CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css" />
+    <style>
+        /* Badge styling */
+        .cart-badge {
+            position: absolute;
+            top: -22px;
+            right: -13px;
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            padding: 3px 6px;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            animation: shake 0.1s ease-in-out;
+        }
+
+        /* Bounce animation for the badge */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
+        /* Trigger animation class */
+        .bounce-once {
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        /* Ensure proper spacing for the cart icon */
+        .cart-container {
+            margin-right: 60px;
+            cursor: pointer;
+        }
+    </style>
 
 
 </head>
@@ -113,11 +152,25 @@
                             @endauth
                         @endif
                     </div>
+
                     <button class="btn-search btn btn-primary btn-md-square me-4 rounded-circle d-none d-lg-inline-flex"
                         data-bs-toggle="modal" data-bs-target="#searchModal">
                         <i class="fas fa-search"></i>
                     </button>
-                    <a href="" class="btn btn-primary py-2 px-4 d-none d-xl-inline-block rounded-pill">Order Now</a>
+                    @auth
+                                        <div class="cart-container" style="position: relative; display: inline-block;">
+                                            <a href="{{route('user.cart')}}">
+                                                <i class="fas fa-shopping-cart cart-icon" style="font-size:1.3rem;margin-top: 3px;"></i>
+                                                <span class="uk-badge cart-badge">
+                                                    {{ auth()->check() ? \App\Models\Order::where([
+                            'user_id' => auth()->id(),
+                            'status' => 'cart'
+                        ])->count() : 0 }}
+                                                </span>
+                                            </a>
+
+                                        </div>
+                    @endauth
                 </div>
             </nav>
         </div>
@@ -290,6 +343,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.min.js"></script>
     <!-- Bootstrap Notify -->
     <script src="{{asset('admin/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+    <script src="{{asset('admin/js/core/bootstrap.min.js')}}"></script>
 
     <script>
         $(document).ready(function () {
@@ -334,6 +388,18 @@
                 });
             @endif
 
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cartBadge = document.querySelector('.cart-badge');
+
+            // Trigger the bounce animation every 5 seconds
+            setInterval(() => {
+                cartBadge.classList.add('bounce-once');
+                setTimeout(() => cartBadge.classList.remove('bounce-once'), 500);
+            }, 5000);
         });
     </script>
 </body>

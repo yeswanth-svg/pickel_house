@@ -36,12 +36,8 @@
     <link rel="stylesheet" href="{{asset('admin/css/demo.css')}}" />
 
 
-    <!-- Add these to your main layout (e.g., app.blade.php) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-
+    <!-- 
 
     <style>
         .notification {
@@ -61,16 +57,16 @@
                 transform: scale(1);
             }
         }
-    </style>
+    </style> -->
 </head>
 
 <body>
     <div class="wrapper">
         <!-- Sidebar -->
-        <div class="sidebar" data-background-color="dark">
+        <div class="sidebar" data-background-color="light">
             <div class="sidebar-logo">
                 <!-- Logo Header -->
-                <div class="logo-header" data-background-color="dark">
+                <div class="logo-header" data-background-color="red2">
                     <a href="{{route('admin.dashboard')}}" class="logo">
                         <!-- <img src="{{asset('admin/img/kaiadmin/logo_dark.svg')}}" alt="navbar brand" class="navbar-brand"
                             height="20" /> -->
@@ -93,8 +89,8 @@
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
                 <div class="sidebar-content">
                     <ul class="nav nav-secondary">
-                        <li class="nav-item active">
-                            <a href="#dashboard">
+                        <li class="nav-item {{request()->is('admin/dashboard') ? 'active' : ''}}">
+                            <a href="{{route('admin.dashboard')}}">
                                 <i class="fas fa-home"></i>
                                 <p>Dashboard</p>
 
@@ -106,16 +102,15 @@
                             </span>
                             <h4 class="text-section">Cookbook Recipes</h4>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item {{ request()->is('admin/category*') ? 'active' : '' }}">
                             <a href="{{route('admin.category.index')}}">
                                 <i class="fas fa-layer-group"></i>
                                 <p>Categories</p>
                                 <!-- <span class="caret"></span> -->
                             </a>
-
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item {{request()->is('admin/dishes*') ? 'active' : ''}}">
                             <a href="{{route('admin.dishes.index')}}">
                                 <i class="fas fa-mortar-pestle"></i>
                                 <p>Dishes</p>
@@ -124,7 +119,7 @@
 
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item {{request()->is('admin/orders*') ? 'active' : ''}}">
                             <a href="{{route('admin.orders.index')}}">
                                 <i class="fas fa-pen-square"></i>
                                 <p>Orders</p>
@@ -132,8 +127,8 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a href="{{route('admin.cupons.index')}}">
+                        <li class="nav-item {{request()->is('admin/coupons*') ? 'active' : ''}}">
+                            <a href="{{route('admin.coupons.index')}}">
                                 <i class="fas fa-coins"></i>
                                 <p>Cupons</p>
                             </a>
@@ -148,7 +143,7 @@
             <div class="main-header">
                 <div class="main-header-logo">
                     <!-- Logo Header -->
-                    <div class="logo-header" data-background-color="dark">
+                    <div class="logo-header" data-background-color="red2">
                         <a href="" class="logo">
                             <img src="{{asset('admin/img/kaiadmin/logo_light.svg')}}" alt="navbar brand"
                                 class="navbar-brand" height="20" />
@@ -168,7 +163,8 @@
                     <!-- End Logo Header -->
                 </div>
                 <!-- Navbar Header -->
-                <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+                <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
+                    data-background-color="red2">
                     <div class="container-fluid">
                         <!-- <nav
                             class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
@@ -340,39 +336,39 @@
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                                     aria-expanded="false">
                                     <div class="avatar-sm">
-                                        <img src="{{asset('admin/img/profile.jpg')}}" alt="..."
+                                        <img src="{{asset('admin/img/mlane.jpg')}}" alt="..."
                                             class="avatar-img rounded-circle" />
                                     </div>
                                     <span class="profile-username">
                                         <span class="op-7">Hi,</span>
-                                        <span class="fw-bold">Hizrian</span>
+                                        <span class="fw-bold">Admin</span>
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-user animated fadeIn">
                                     <div class="dropdown-user-scroll scrollbar-outer">
                                         <li>
                                             <div class="user-box">
-                                                <div class="avatar-lg">
-                                                    <img src="{{asset('admin/img/profile.jpg')}}" alt="image profile"
+                                                <!-- <div class="avatar-lg">
+                                                    <img src="{{asset('images/profile.jpg')}}" alt="image profile"
                                                         class="avatar-img rounded" />
-                                                </div>
+                                                </div> -->
                                                 <div class="u-text">
-                                                    <h4>Hizrian</h4>
-                                                    <p class="text-muted">hello@example.com</p>
-                                                    <a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View
+                                                    <h4>{{auth()->user()->name}}</h4>
+                                                    <p class="text-muted">{{auth()->user()->email}}</p>
+                                                    <a href="{{route('profile.edit')}}"
+                                                        class="btn btn-xs btn-secondary btn-sm">View
                                                         Profile</a>
                                                 </div>
                                             </div>
                                         </li>
                                         <li>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">My Profile</a>
-                                            <a class="dropdown-item" href="#">My Balance</a>
-                                            <a class="dropdown-item" href="#">Inbox</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Account Setting</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Logout</a>
+                                            <form method="POST" action="{{ route('logout') }}" class="m-3">
+                                                @csrf
+                                                <button class="btn btn-danger btn-sm ms-auto"><i
+                                                        class="fas fa-sign-out-alt"></i> Logout</button>
+                                            </form>
+
                                         </li>
                                     </div>
                                 </ul>

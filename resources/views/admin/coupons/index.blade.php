@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Ingredients List')
+@section('title', 'Coupons List')
 @section('content')
 
 
@@ -269,9 +269,9 @@
 </div>
 
 
-<script src="{{asset('js/core/jquery-3.7.1.min.js')}}"></script>
+<script src="{{asset('admin/js/core/jquery-3.7.1.min.js')}}"></script>
 <!-- Datatables -->
-<script src="{{asset('js/plugin/datatables/datatables.min.js')}}"></script>
+<script src="{{asset('admin/js/plugin/datatables/datatables.min.js')}}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

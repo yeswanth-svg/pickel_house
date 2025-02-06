@@ -55,6 +55,11 @@
                                 <p class="text-dark border rounded px-3 py-2">{{ $dish->description }}</p>
                             </div>
 
+                            <div class="col-md-6">
+                                <label class="fs-5 fw-bold text-primary">Quantity</label>
+                                <p class="text-dark border rounded px-3 py-2">{{ $dish->quantity }}</p>
+                            </div>
+
                         </div>
 
                         <div class="row mb-3">
