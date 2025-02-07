@@ -174,11 +174,59 @@ class OrderController extends Controller
 
 
 
-    public function order_confirmation()
+
+
+
+    public function checkout(Request $request)
     {
-        return view('user.order-confirmation');
+        $request->validate([
+            "payment_method" => "required",
+            'total_amount' => "required",
+        ]);
+
+        $user = auth()->user();
+        $orderIds = explode(',', $request->input('order_ids'));
+        $paymentMethod = $request->input('payment_method');
+        $totalAmountInput = $request->input('total_amount');
+        $totalAmount = intval(round((float) str_replace(',', '', $totalAmountInput) * 100));
+        $selected_address = session('selected_address') ?? $user->addresses()->where('is_default', 1)->first();
+
+        if (!$selected_address) {
+            return redirect()->back()->withErrors('No default address available.');
+        }
+
+        if ($paymentMethod === 'COD') {
+            // Update orders
+            Order::whereIn('id', $orderIds)->where('user_id', $user->id)->update([
+                'status' => 'Completed',
+                'payment_status' => 'COD',
+                'selected_address' => json_encode($selected_address),
+            ]);
+
+            // Notify the admin
+            // $admin = Admin::first(); // Assuming a single admin user
+            // if ($admin) {
+            //     $orderDetails = [
+            //         'user_id' => $user->id,
+            //         'order_ids' => $orderIds,
+            //         'payment_method' => $paymentMethod,
+            //         'total_amount' => $totalAmount / 100,
+            //         'selected_address' => $selected_address,
+            //         'status' => 'Completed',
+            //     ];
+            //     $admin->notify(new OrderPlacedNotification($orderDetails));
+            // }
+
+            return redirect()->route('order-confirmation')->with('success', 'Order placed successfully.');
+        }
+
+
     }
 
+    public function order_confirmation()
+    {
+        return view('order-confirmation');
+    }
 
 
 

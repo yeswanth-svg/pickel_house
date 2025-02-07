@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/apply-coupon', [UserOrderController::class, 'applyCoupon'])->name('user.applyCoupon');
     Route::post('/checkout', [UserOrderController::class, 'checkout'])->name('user.checkout');
 
+    Route::get('/order-confirmation', [UserOrderController::class, 'order_confirmation'])->name('order-confirmation');
 });
 
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {

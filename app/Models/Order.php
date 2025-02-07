@@ -16,6 +16,8 @@ class Order extends Model
         'quantity_id',
         'status',
         'total_amount',
+        'applied_coupon_id',
+        'discount_amount',
     ];
 
     public function dish()

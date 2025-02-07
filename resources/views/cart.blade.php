@@ -267,20 +267,6 @@
         border-color: #007bff;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     }
-
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        padding: 10px 20px;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
 </style>
 
 <style>
@@ -331,41 +317,6 @@
         gap: 0.5rem;
     }
 
-    .button-small {
-        background-color: #f8f9fa;
-        border: 1px solid #ddd;
-        padding: 0.4rem 0.8rem;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .button-small:hover {
-        background-color: #e2e6ea;
-    }
-
-    .button-primary {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        padding: 0.6rem 1.2rem;
-        border-radius: 6px;
-        cursor: pointer;
-    }
-
-    .button-primary:hover {
-        background-color: #0056b3;
-    }
-
-    .button-danger {
-        background-color: #dc3545;
-        color: #fff;
-        border: none;
-    }
-
-    .button-danger:hover {
-        background-color: #bd2130;
-    }
 
     .address-label.active-label {
         border: 2px solid #007bff;
@@ -374,69 +325,7 @@
     }
 </style>
 
-<style>
-    .checkbox-wrapper-22 .switch {
-        display: inline-block;
-        height: 34px;
-        position: relative;
-        width: 60px;
-    }
 
-    .checkbox-wrapper-22 .switch input {
-        display: none;
-    }
-
-    .checkbox-wrapper-22 .slider {
-        background-color: #ccc;
-        bottom: 0;
-        cursor: pointer;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        transition: .4s;
-    }
-
-    .checkbox-wrapper-22 .slider:before {
-        background-color: #fff;
-        bottom: 4px;
-        content: "";
-        height: 26px;
-        left: 4px;
-        position: absolute;
-        transition: .4s;
-        width: 26px;
-    }
-
-    .checkbox-wrapper-22 input:checked+.slider {
-        background-color: #66bb6a;
-    }
-
-    .checkbox-wrapper-22 input:checked+.slider:before {
-        transform: translateX(26px);
-    }
-
-    .checkbox-wrapper-22 .slider.round {
-        border-radius: 34px;
-    }
-
-    .checkbox-wrapper-22 .slider.round:before {
-        border-radius: 50%;
-    }
-
-    .checkbox-wrapper-22 {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        margin-bottom: 10px;
-    }
-
-    .checkbox-wrapper-22 small {
-        font-size: 0.85rem;
-        color: #6c757d;
-        margin-top: 5px;
-    }
-</style>
 
 
 
@@ -527,12 +416,12 @@
                                                             </div>
 
                                                             <!-- <div class="form-check form-check-inline address-label">
-                                                                        <input type="radio" id="other" name="label" value="Other"
-                                                                            class="form-check-input">
-                                                                        <label class="form-check-label" for="other">
-                                                                            <i class="fas fa-ellipsis-h me-2"></i> Other
-                                                                        </label>
-                                                                    </div> -->
+                                                                                                                        <input type="radio" id="other" name="label" value="Other"
+                                                                                                                            class="form-check-input">
+                                                                                                                        <label class="form-check-label" for="other">
+                                                                                                                            <i class="fas fa-ellipsis-h me-2"></i> Other
+                                                                                                                        </label>
+                                                                                                                    </div> -->
                                                         </div>
                                                     </div>
 
@@ -801,26 +690,27 @@
                                 <input type="hidden" name="order_ids" value="{{ $cartItems->pluck('id')->join(',') }}">
                                 <input type="hidden" name="total_amount"
                                     value="{{  number_format($finalTotal + 50 + 30.40, 2) }}">
+                                <input type="hidden" name="payment_method" value="COD">
 
-                                <div style="margin-bottom: 1rem;">
-                                    <h4>Select Payment Method</h4>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="payment_method" id="cod" value="COD"
-                                            required>
-                                        <label class="form-check-label" for="cod">
-                                            <i class="fas fa-money-bill-wave me-2"></i> <span class="text-light">Cash on
-                                                Delivery</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="payment_method" id="razorpay"
-                                            value="Online" required>
-                                        <label class="form-check-label" for="razorpay">
-                                            <i class="fas fa-credit-card me-2"></i><span class="text-light">Pay Online
-                                                (Razorpay)</span>
-                                        </label>
-                                    </div>
-                                </div>
+                                <!-- <div style="margin-bottom: 1rem;">
+                                                                            <h4>Select Payment Method</h4>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input class="form-check-input" type="radio" name="payment_method" id="cod" value="COD"
+                                                                                    required>
+                                                                                <label class="form-check-label" for="cod">
+                                                                                    <i class="fas fa-money-bill-wave me-2"></i> <span class="text-light">Cash on
+                                                                                        Delivery</span>
+                                                                                </label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input class="form-check-input" type="radio" name="payment_method" id="razorpay"
+                                                                                    value="Online" required>
+                                                                                <label class="form-check-label" for="razorpay">
+                                                                                    <i class="fas fa-credit-card me-2"></i><span class="text-light">Pay Online
+                                                                                        (Razorpay)</span>
+                                                                                </label>
+                                                                            </div>
+                                                                        </div> -->
 
                                 <label class="price" style="margin-right: 12pc;">
                                     Total: <span id="total-amount3">₹{{ number_format($finalTotal + 50 + 30.40, 2) }}</span>
