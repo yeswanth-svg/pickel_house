@@ -352,8 +352,13 @@
                     <div style="display: flex; align-items: center; gap: 1rem; font-size: 1rem; color: #555;">
                         <!-- Quantity -->
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-cogs" style="color: #3498db;"></i> <!-- Quantity Icon -->
+                            <i class="fas fa-balance-scale" style="color: #3498db;"></i> <!-- Quantity Icon -->
                             <span>{{ $item->quantity->quantity }} <strong>Qty</strong></span>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+
+                            <span>{{ $item->cart_quantity }} <strong>no.</strong></span>
                         </div>
 
                         <!-- Price -->
@@ -416,12 +421,12 @@
                                                             </div>
 
                                                             <!-- <div class="form-check form-check-inline address-label">
-                                                                                                                        <input type="radio" id="other" name="label" value="Other"
-                                                                                                                            class="form-check-input">
-                                                                                                                        <label class="form-check-label" for="other">
-                                                                                                                            <i class="fas fa-ellipsis-h me-2"></i> Other
-                                                                                                                        </label>
-                                                                                                                    </div> -->
+                                                                                                                                                <input type="radio" id="other" name="label" value="Other"
+                                                                                                                                                    class="form-check-input">
+                                                                                                                                                <label class="form-check-label" for="other">
+                                                                                                                                                    <i class="fas fa-ellipsis-h me-2"></i> Other
+                                                                                                                                                </label>
+                                                                                                                                            </div> -->
                                                         </div>
                                                     </div>
 
@@ -693,24 +698,24 @@
                                 <input type="hidden" name="payment_method" value="COD">
 
                                 <!-- <div style="margin-bottom: 1rem;">
-                                                                            <h4>Select Payment Method</h4>
-                                                                            <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio" name="payment_method" id="cod" value="COD"
-                                                                                    required>
-                                                                                <label class="form-check-label" for="cod">
-                                                                                    <i class="fas fa-money-bill-wave me-2"></i> <span class="text-light">Cash on
-                                                                                        Delivery</span>
-                                                                                </label>
-                                                                            </div>
-                                                                            <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio" name="payment_method" id="razorpay"
-                                                                                    value="Online" required>
-                                                                                <label class="form-check-label" for="razorpay">
-                                                                                    <i class="fas fa-credit-card me-2"></i><span class="text-light">Pay Online
-                                                                                        (Razorpay)</span>
-                                                                                </label>
-                                                                            </div>
-                                                                        </div> -->
+                                                                                                    <h4>Select Payment Method</h4>
+                                                                                                    <div class="form-check form-check-inline">
+                                                                                                        <input class="form-check-input" type="radio" name="payment_method" id="cod" value="COD"
+                                                                                                            required>
+                                                                                                        <label class="form-check-label" for="cod">
+                                                                                                            <i class="fas fa-money-bill-wave me-2"></i> <span class="text-light">Cash on
+                                                                                                                Delivery</span>
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                    <div class="form-check form-check-inline">
+                                                                                                        <input class="form-check-input" type="radio" name="payment_method" id="razorpay"
+                                                                                                            value="Online" required>
+                                                                                                        <label class="form-check-label" for="razorpay">
+                                                                                                            <i class="fas fa-credit-card me-2"></i><span class="text-light">Pay Online
+                                                                                                                (Razorpay)</span>
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                </div> -->
 
                                 <label class="price" style="margin-right: 12pc;">
                                     Total: <span id="total-amount3">₹{{ number_format($finalTotal + 50 + 30.40, 2) }}</span>

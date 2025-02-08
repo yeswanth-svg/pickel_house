@@ -503,9 +503,13 @@ h6,
 }
 
 .small-select {
-    font-size: 0.9rem;
-    padding: 2px 6px;
+    width: 100px !important;
+    font-size: 16px;
+    text-align: left;
+    appearance: none;
+    border: 1px solid #ddd;
     border-radius: 5px;
+    background-color: white;
 }
 
 .btn-sm {
@@ -513,134 +517,272 @@ h6,
     padding: 4px 8px;
 }
 
-/* totast styles */
-.toast-container {
-    position: fixed;
-    top: 25px;
-    right: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 1000;
-}
-
-.toast {
-    position: relative;
-    width: 320px;
-    border-radius: 12px;
-    background: #fff;
-    padding: 20px 35px 20px 25px;
-    box-shadow: 0 6px 20px -5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    overflow-x: hidden;
-    align-items: center;
-    transform: translateX(calc(100% + 30px));
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
-}
-
-.toast.active {
-    transform: translateX(0%);
-}
-
-.toast .toast-content {
-    display: flex;
-    align-items: center;
-}
-
-.toast-content .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 35px;
-    min-width: 35px;
-    font-size: 35px;
-    color: #fff;
-}
-
-.toast-content .message {
-    display: flex;
-    flex-direction: column;
-    margin-left: 15px;
-}
-
-.message .text {
-    font-size: 16px;
-    font-weight: 400;
-    color: #666666;
-    font-family: "Outfit", serif;
-    font-optical-sizing: auto;
-    font-style: normal;
-}
-
-.message .text.text-1 {
-    font-weight: 600;
-    color: #333;
-}
-
-.toast .close {
+.wishlist-badge {
     position: absolute;
-    top: 10px;
-    right: 15px;
-    padding: 5px;
-    cursor: pointer;
-    opacity: 0.7;
+    top: -11px;
+    right: 2px;
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    padding: 3px 6px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    animation: shake 0.1s ease-in-out;
 }
 
-.toast .close:hover {
-    opacity: 1;
-}
-
-.toast .progress {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 3px;
-    width: 100%;
-}
-
-.toast .progress:before {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    height: 100%;
-    width: 100%;
-    background-color: #4070f4;
-}
-
-.progress.active:before {
-    animation: progress 5s linear forwards;
-}
-
-@keyframes progress {
+@keyframes shake {
+    0%,
     100% {
-        right: 100%;
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
     }
 }
 
-/* Toast Type Colors */
-.toast.success .icon {
-    color: rgb(25 135 84);
-}
-.toast.error .icon {
-    color: rgb(220 53 69);
-}
-.toast.warning .icon {
-    color: rgb(255 193 7);
-}
-.toast.info .icon {
-    color: rgb(13 202 240);
+/* Trigger animation class */
+.bounce-once {
+    animation: bounce 0.5s ease-in-out;
 }
 
-.toast.success .progress:before {
-    background: rgb(25 135 84);
+/* wishlis items styles  */
+.wishlist-item {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
 }
-.toast.error .progress:before {
-    background: rgb(220 53 69);
+
+.wishlist-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+    max-width: 320px;
 }
-.toast.warning .progress:before {
-    background: rgb(255 193 7);
+
+.wishlist-card:hover {
+    box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
 }
-.toast.info .progress:before {
-    background: rgb(13 202 240);
+
+.wishlist-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.wishlist-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.wishlist-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #555;
+}
+
+.wishlist-info i {
+    color: #3498db;
+}
+
+.wishlist-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-form {
+    margin: 0;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #e74c3c;
+    font-size: 18px;
+    transition: color 0.2s;
+}
+
+.delete-btn:hover {
+    color: #c0392b;
+}
+
+.add-to-cart-btn {
+    background: #16a085;
+    border: none;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.add-to-cart-btn:hover {
+    background: #13896e;
+}
+.wishlist-item {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.wishlist-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+    max-width: 320px;
+}
+
+.wishlist-card:hover {
+    box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
+}
+
+.wishlist-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.wishlist-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.wishlist-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #555;
+}
+
+.wishlist-info i {
+    color: #3498db;
+}
+
+.wishlist-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-form {
+    margin: 0;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #e74c3c;
+    font-size: 18px;
+    transition: color 0.2s;
+}
+
+.delete-btn:hover {
+    color: #c0392b;
+}
+
+.add-to-cart-btn {
+    background: #16a085;
+    border: none;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.add-to-cart-btn:hover {
+    background: #13896e;
+}
+
+/* === Responsive Fix for Menu Items === */
+@media (max-width: 768px) {
+    .menu-item {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .menu-item img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 10px;
+    }
+
+    .w-100 {
+        width: 100% !important;
+    }
+
+    /* Stack elements below the dish name */
+    .menu-item .d-flex.align-items-center {
+        flex-wrap: wrap;
+        justify-content: start;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    /* Adjust wishlist, counter, and cart */
+    .add-to-cart-form,
+    .add-to-cart-form .input-group {
+        justify-content: flex-start !important;
+        margin: 0 !important;
+    }
+
+    /* Make categories appear in 2 columns */
+    .nav.nav-pills {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
+        justify-content: center;
+        padding: 0;
+        margin: 0 auto;
+        max-width: 100%;
+    }
+
+    .nav-item {
+        width: 100%;
+        text-align: center;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .nav-item a {
+        display: block;
+        width: 100%;
+    }
+}
+
+/* Hide number input arrows in Chrome, Safari, Edge, and Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Hide number input arrows in Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
 }

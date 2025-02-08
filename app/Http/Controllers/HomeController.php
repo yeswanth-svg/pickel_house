@@ -22,7 +22,8 @@ class HomeController extends Controller
 
     public function menu()
     {
-        return view('menu');
+        $categories = Category::with('dishes')->get();
+        return view('menu', compact('categories'));
     }
 
     public function contact()

@@ -30,6 +30,27 @@
     <link href="{{asset("css/style.css")}}" rel="stylesheet" />
     <!-- Slick CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css" />
+    <link rel="stylesheet" href="{{asset('admin/css/demo.css')}}" />
+
+    <script src="{{asset('admin/js/plugin/webfont/webfont.min.js')}}"></script>
+    <script>
+        WebFont.load({
+            google: { families: ["Public Sans:300,400,500,600,700"] },
+            custom: {
+                families: [
+                    "Font Awesome 5 Solid",
+                    "Font Awesome 5 Regular",
+                    "Font Awesome 5 Brands",
+                    "simple-line-icons",
+                ],
+                urls: ["{{asset('admin/css/fonts.min.css')}}"],
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            },
+        });
+    </script>
+
 
 </head>
 
@@ -119,7 +140,7 @@
                                                 <span class="uk-badge cart-badge">
                                                     {{ auth()->check() ? \App\Models\Order::where([
                             'user_id' => auth()->id(),
-                            'status' => 'cart'
+                            'status' => 'Incart'
                         ])->count() : 0 }}
                                                 </span>
                                             </a>
@@ -161,6 +182,28 @@
 
 
     @yield('content')
+
+    @auth
+        <!-- Floating Wishlist Icon -->
+        <div class="custom-template">
+            <div class="title">My Wishlist</div>
+            <div class="custom-content">
+                <div class="wishlist-items-container">
+                    <!-- Wishlist items will be dynamically loaded here -->
+                </div>
+            </div>
+            <div class="custom-toggle">
+                <i class="fas fa-shopping-basket"></i>
+                <span class="uk-badge wishlist-badge">
+                    {{ auth()->check() ? \App\Models\WishlistItem::where([
+            'user_id' => auth()->id(),
+        ])->count() : 0 }}
+                </span>
+            </div>
+        </div>
+
+    @endauth
+
 
     <!-- Footer Start -->
     <div class="container-fluid footer py-6 my-6 mb-0 bg-light wow bounceInUp" data-wow-delay="0.1s">
@@ -305,6 +348,7 @@
     <!-- Bootstrap Notify -->
     <script src="{{asset('admin/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
 
+    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
 
 
     <script>
@@ -358,11 +402,227 @@
     </script>
 
 
+    <script>
+        $(document).ready(function () {
+            var toggle_customSidebar = false,
+                custom_open = 0;
+
+            if (!toggle_customSidebar) {
+                var toggle = $('.custom-template .custom-toggle');
+
+                toggle.on('click', function () {
+                    if (custom_open === 1) {
+                        $('.custom-template').removeClass('open');
+                        toggle.removeClass('toggled');
+                        custom_open = 0;
+                    } else {
+                        $('.custom-template').addClass('open');
+                        toggle.addClass('toggled');
+                        custom_open = 1;
+                        fetchWishlistItems(); // ✅ Fetch items when opening the panel
+                    }
+                });
+
+                toggle_customSidebar = true;
+            }
+
+            // Event delegation for quantity buttons
+            $(document).on("click", ".decrease-qty", function () {
+                let input = $(this).next(".cart-quantity");
+                let value = parseInt(input.val(), 10);
+                if (value > 1) {
+                    input.val(value - 1);
+                }
+            });
+
+            $(document).on("click", ".increase-qty", function () {
+                let input = $(this).prev(".cart-quantity");
+                let value = parseInt(input.val(), 10);
+                input.val(value + 1);
+            });
+
+            function showNotification(type, title, message) {
+                $.notify({
+                    icon: type === "success" ? "fa fa-check-circle" : "fa fa-exclamation-circle",
+                }, {
+                    type: type,
+                    allow_dismiss: true,
+                    delay: 4000,
+                    placement: {
+                        from: 'top',
+                        align: 'right'
+                    },
+                    offset: {
+                        x: 20,
+                        y: 60
+                    },
+                    animate: {
+                        enter: 'animated fadeInRight',
+                        exit: 'animated fadeOutRight'
+                    },
+                    template: `
+            <div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert" 
+                style="background: {1}; color: white; border-radius: 6px; box-shadow: 0px 4px 8px rgba(0,0,0,0.15); padding: 10px 15px; display: flex; align-items: center; font-size: 14px; min-width: 180px;">
+                <span data-notify="icon" style="font-size: 18px;"></span>
+                <div class="ms-2">
+                    <strong style="font-size: 14px;">${title}</strong><br>
+                    <span style="font-size: 13px;">${message}</span>
+                </div>
+            </div>
+        `,
+                    onShow: function () {
+                        $(".alert-success").css("background", "#16C47F");
+                        $(".alert-danger").css("background", "#F93827");
+                    }
+                });
+            }
+
+
+            // Function to Fetch Wishlist Items
+            function fetchWishlistItems() {
+                $.ajax({
+                    url: "/get-wishlist-items",
+                    method: "GET",
+                    success: function (response) {
+                        const wishlistContainer = $(".wishlist-items-container");
+                        const wishlistCount = $(".wishlist-count");
+
+                        wishlistContainer.empty(); // Clear existing items
+                        wishlistCount.text(response.items.length); // Update count on the bag icon
+
+                        if (response.items.length > 0) {
+                            response.items.forEach(item => {
+                                wishlistContainer.append(`
+                            <div class="wishlist-item" data-id="${item.id}">
+                                <div class="wishlist-card">
+                                    <div class="wishlist-details">
+                                        <h5 class="wishlist-title">${item.dish_name}</h5>
+                                        <div class="wishlist-meta">
+                                            <div class="wishlist-info">
+                                                <i class="fas fa-balance-scale"></i> 
+                                                <span><strong>Qty:</strong> ${item.quantity}</span>
+                                            </div>
+                                            <div class="wishlist-info">
+                                                <i class="fas fa-tag"></i>
+                                                <span><strong>Price:</strong> $${item.price}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="wishlist-actions">
+                                        <button type="button" class="btn btn-danger delete-wishlist-item" data-id="${item.id}">
+                                            <i class="fas fa-trash-alt"></i> 
+                                        </button>
+                                        <form method="POST" class="add-to-cart-form">
+                                            @csrf
+                                            <input type="hidden" name="wishlist_id" value="${item.id}">
+                                            <input type="hidden" name="dish_id" value="${item.dish_id}">
+                                            <input type="hidden" name="quantity_id" value="${item.quantity_id}">
+                                            <input type="hidden" name="total_amount" value="${item.price}">
+                                            <div class="d-flex justify-content-center">
+                                                <div class="input-group input-group-sm m-2" style="width: 90px;height: 37px;">
+                                                    <button type="button" class="btn btn-outline-secondary btn-sm decrease-qty">−</button>
+                                                    <input type="number" name="cart_quantity" class="form-control text-center cart-quantity" min="1" value="1" style="width: 30px; font-size: 14px;">
+                                                    <button type="button" class="btn btn-outline-secondary btn-sm increase-qty">+</button>
+                                                </div>
+                                                <button type="submit" class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                            });
+
+                            // Attach event listener for delete buttons (event delegation)
+                            $(document).on("click", ".delete-wishlist-item", function () {
+                                const itemId = $(this).data("id");
+                                deleteWishlistItem(itemId);
+                            });
+                        } else {
+                            wishlistContainer.append("<p>Your wishlist is empty.</p>");
+                        }
+                    },
+                    error: function () {
+                        alert("Failed to load wishlist items. Please try again.");
+                    }
+                });
+            }
+
+            // AJAX Submission for "Add to Cart"
+            $(document).on("submit", ".add-to-cart-form", function (e) {
+                e.preventDefault(); // Prevent default form submission
+                var form = $(this);
+                var formData = form.serialize();
+                var wishlistItem = form.closest(".wishlist-item"); // Get the parent wishlist item
+
+                $.ajax({
+                    url: "/add-to-cart", // Change this to your actual route
+                    method: "POST",
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            showNotification("success", "Success", response.message);
+                            updateWishlistCount();
+                            updateCartCount();
+                        } else {
+                            showNotification("danger", "Error", response.message);
+                        }
+                    },
+                    error: function (xhr) {
+                        let errorMessage = "Failed to add item to wishlist.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        showNotification("danger", "Error", errorMessage);
+                    }
+                });
+            });
+
+            function updateWishlistCount() {
+                $.ajax({
+                    url: "/wishlist-count",
+                    method: "GET",
+                    success: function (data) {
+                        $(".wishlist-badge").text(data.count);
+                    },
+                    error: function () {
+                        console.error("Failed to fetch updated wishlist count.");
+                    }
+                });
+            }
+
+            // Function to update cart count (Assuming cart count is displayed somewhere)
+            function updateCartCount() {
+                $.ajax({
+                    url: "/cart-count",
+                    method: "GET",
+                    success: function (data) {
+                        $(".cart-badge").text(data.count);
+                    },
+                    error: function () {
+                        console.error("Failed to fetch updated wishlist count.");
+                    }
+                });
+            }
+        });
+
+    </script>
+
 
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const cartBadge = document.querySelector('.cart-badge');
+
+            // Trigger the bounce animation every 5 seconds
+            setInterval(() => {
+                cartBadge.classList.add('bounce-once');
+                setTimeout(() => cartBadge.classList.remove('bounce-once'), 500);
+            }, 5000);
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const cartBadge = document.querySelector('.wishlist-badge');
 
             // Trigger the bounce animation every 5 seconds
             setInterval(() => {

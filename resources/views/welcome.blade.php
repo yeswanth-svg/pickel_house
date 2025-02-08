@@ -178,43 +178,85 @@
                                             src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}" />
 
                                         <div class="w-100 d-flex flex-column text-start ps-4">
-                                            <div class="d-flex justify-content-between border-bottom border-primary pb-2 mb-2">
-                                                <h4>
-                                                    {{ $dish->name }}
-                                                    @if($dish->quantities->isNotEmpty())
-                                                        <select class="quantity-selector ms-2 small-select"
-                                                            data-dish-id="{{ $dish->id }}">
-                                                            @foreach($dish->quantities as $q)
-                                                                <option value="{{ $q->id }}" data-price="{{ $q->price }}">
-                                                                    {{ $q->quantity }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    @endif
-                                                </h4>
+
+                                            <!-- Dish Name & Quantity Selector -->
+                                            <h4 class="d-flex align-items-center">
+                                                {{ $dish->name }}
+
+                                            </h4>
+                                            <div
+                                                class="d-flex align-items-center justify-content-between border-bottom border-primary pb-2 mb-2 mt-2">
+                                                @if($dish->quantities->isNotEmpty())
+                                                    <select class="quantity-selector ms-2 small-select form-select form-select-sm"
+                                                        data-dish-id="{{ $dish->id }}">
+                                                        @foreach($dish->quantities as $q)
+                                                            <option value="{{ $q->id }}" data-price="{{ $q->price }}">
+                                                                {{ $q->quantity }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                @endif
+
                                                 @auth
                                                     @if($dish->quantities->isNotEmpty())
-                                                        <form action="{{ route('add.to.cart') }}" method="POST"
-                                                            class="add-to-cart-form">
-                                                            @csrf
-                                                            <input type="hidden" name="dish_id" value="{{ $dish->id }}">
-                                                            <input type="hidden" name="quantity_id" class="quantity-input"
-                                                                value="{{ $dish->quantities->first()->id }}">
-                                                            <input type="hidden" name="total_amount" class="price-input"
-                                                                value="{{ $dish->quantities->first()->price }}">
+                                                        <div class="d-flex align-items-center">
+                                                            <!-- Wishlist Button -->
+                                                            <form id="add-to-wishlist-form-{{ $dish->id }}"
+                                                                class="add-to-wishlist-form me-2">
+                                                                @csrf
+                                                                <input type="hidden" name="dish_id" value="{{ $dish->id }}">
+                                                                <input type="hidden" name="quantity_id" class="quantity-input1"
+                                                                    value="{{ $dish->quantities->first()->id }}">
+                                                                <input type="hidden" name="total_amount" class="price-input1"
+                                                                    value="{{ $dish->quantities->first()->price }}">
 
-                                                            <button type="submit" class="btn btn-sm btn-primary mt-2">
-                                                                <i class="fas fa-shopping-cart"></i>
-                                                            </button>
-                                                        </form>
+                                                                <button type="button"
+                                                                    class="btn btn-outline-warning btn-sm add-to-wishlist"
+                                                                    data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top" title="Add to Wishlist">
+                                                                    <i class="fas fa-heart"></i>
+                                                                </button>
+                                                            </form>
+
+                                                            <!-- Add to Cart Form -->
+                                                            <form id="add-to-cart-form-{{$dish->id}}"
+                                                                class="add-to-cart-form d-flex align-items-center">
+                                                                @csrf
+                                                                <input type="hidden" name="dish_id" value="{{ $dish->id }}">
+                                                                <input type="hidden" name="quantity_id" class="quantity-input2"
+                                                                    value="{{ $dish->quantities->first()->id }}">
+                                                                <input type="hidden" name="total_amount" class="price-input2"
+                                                                    value="{{ $dish->quantities->first()->price }}">
+
+                                                                <!-- Cart Quantity Counter (Styled) -->
+                                                                <div class="input-group input-group-sm me-2" style="width: 100px;">
+                                                                    <button type="button"
+                                                                        class="btn btn-outline-secondary btn-sm decrease-qty">−</button>
+                                                                    <input type="number" name="cart_quantity"
+                                                                        class="form-control text-center cart-quantity" min="1" value="1"
+                                                                        style="width: 40px; font-size: 14px;">
+                                                                    <button type="button"
+                                                                        class="btn btn-outline-secondary btn-sm increase-qty">+</button>
+                                                                </div>
+
+                                                                <button type="button" class="btn btn-primary btn-sm add-to-cart"
+                                                                    data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top" title="Add to Cart">
+                                                                    <i class="fas fa-shopping-cart"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
                                                     @else
                                                         <p class="text-danger">No available quantities</p>
                                                     @endif
                                                 @endauth
-                                                <h4 class="text-primary price-display">
+
+                                                <h4 class="text-primary price-display mb-0">
                                                     ${{ $dish->quantities->first()->price ?? 'N/A' }}
                                                 </h4>
                                             </div>
+
                                             <p class="mb-0">{{ $dish->description }}</p>
                                         </div>
                                     </div>
@@ -540,7 +582,18 @@
     </div>
 </div>
 <!-- Testimonial End -->
+<script src="{{asset('admin/js/core/jquery-3.7.1.min.js')}}"></script>
 
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -560,11 +613,214 @@
                 priceDisplay.textContent = `$${price}`;
 
                 // Update hidden input fields in the form
-                let form = this.closest('.menu-item').querySelector('.add-to-cart-form');
-                form.querySelector('.quantity-input').value = quantityId;
-                form.querySelector('.price-input').value = price;
+                let form = this.closest('.menu-item').querySelector('.add-to-wishlist-form');
+                form.querySelector('.quantity-input1').value = quantityId;
+                form.querySelector('.price-input1').value = price;
             });
         });
     });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Automatically show the first category on load
+        document.querySelector(".category-tab").click();
+
+        // Update price dynamically when quantity is changed
+        document.querySelectorAll('.quantity-selector').forEach(selector => {
+            selector.addEventListener('change', function () {
+                let dishId = this.dataset.dishId;
+                let selectedOption = this.options[this.selectedIndex];
+                let price = selectedOption.getAttribute('data-price');
+                let quantityId = selectedOption.value;
+
+                // Update the displayed price
+                let priceDisplay = this.closest('.menu-item').querySelector('.price-display');
+                priceDisplay.textContent = `$${price}`;
+
+                // Update hidden input fields in the form
+                let form = this.closest('.menu-item').querySelector('.add-to-cart-form');
+                form.querySelector('.quantity-input2').value = quantityId;
+                form.querySelector('.price-input2').value = price;
+            });
+        });
+    });
+
+
 </script>
+
+
+<script>
+    $(document).ready(function () {
+        // Function to display notifications
+        function showNotification(type, title, message) {
+            $.notify({
+                icon: type === "success" ? "fa fa-check-circle" : "fa fa-exclamation-circle",
+            }, {
+                type: type,
+                allow_dismiss: true,
+                delay: 4000,
+                placement: {
+                    from: 'top',
+                    align: 'right'
+                },
+                offset: {
+                    x: 20,
+                    y: 60
+                },
+                animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                },
+                template: `
+            <div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert" 
+                style="background: {1}; color: white; border-radius: 6px; box-shadow: 0px 4px 8px rgba(0,0,0,0.15); padding: 10px 15px; display: flex; align-items: center; font-size: 14px; min-width: 180px;">
+                <span data-notify="icon" style="font-size: 18px;"></span>
+                <div class="ms-2">
+                    <strong style="font-size: 14px;">${title}</strong><br>
+                    <span style="font-size: 13px;">${message}</span>
+                </div>
+            </div>
+        `,
+                onShow: function () {
+                    $(".alert-success").css("background", "#16C47F");
+                    $(".alert-danger").css("background", "#F93827");
+                }
+            });
+        }
+
+        // Handle wishlist addition via AJAX
+        $(".add-to-wishlist").on("click", function (e) {
+            e.preventDefault();
+
+            let button = $(this);
+            let form = button.closest("form");
+            let formData = form.serialize(); // Serialize the form data
+
+            $.ajax({
+                url: "{{ route('wishlist.store') }}",
+                method: "POST",
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        showNotification("success", "Success", response.message);
+                        updateWishlistCount();
+                    } else {
+                        showNotification("danger", "Error", response.message);
+                    }
+                },
+                error: function (xhr) {
+                    let errorMessage = "Failed to add item to wishlist.";
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    showNotification("danger", "Error", errorMessage);
+                }
+            });
+        });
+
+        // Function to update wishlist count dynamically
+        function updateWishlistCount() {
+            $.ajax({
+                url: "/wishlist-count",
+                method: "GET",
+                success: function (data) {
+                    $(".wishlist-badge").text(data.count);
+                },
+                error: function () {
+                    console.error("Failed to fetch updated wishlist count.");
+                }
+            });
+        }
+    });
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        // Function to display notifications
+        function showNotification(type, title, message) {
+            $.notify({
+                icon: type === "success" ? "fa fa-check-circle" : "fa fa-exclamation-circle",
+            }, {
+                type: type,
+                allow_dismiss: true,
+                delay: 4000,
+                placement: {
+                    from: 'top',
+                    align: 'right'
+                },
+                offset: {
+                    x: 20,
+                    y: 60
+                },
+                animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+                },
+                template: `
+            <div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert" 
+                style="background: {1}; color: white; border-radius: 6px; box-shadow: 0px 4px 8px rgba(0,0,0,0.15); padding: 10px 15px; display: flex; align-items: center; font-size: 14px; min-width: 180px;">
+                <span data-notify="icon" style="font-size: 18px;"></span>
+                <div class="ms-2">
+                    <strong style="font-size: 14px;">${title}</strong><br>
+                    <span style="font-size: 13px;">${message}</span>
+                </div>
+            </div>
+        `,
+                onShow: function () {
+                    $(".alert-success").css("background", "#16C47F");
+                    $(".alert-danger").css("background", "#F93827");
+                }
+            });
+        }
+
+        // Handle wishlist addition via AJAX
+        $(".add-to-cart").on("click", function (e) {
+            e.preventDefault();
+
+            let button = $(this);
+            let form = button.closest("form");
+            let formData = form.serialize(); // Serialize the form data
+
+            $.ajax({
+                url: "{{ route('add.to.cart') }}",
+                method: "POST",
+                data: formData,
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+                },
+                success: function (response) {
+                    if (response.success) {
+                        showNotification("success", "Success", response.message);
+                        updateCartCount();
+                    } else {
+                        showNotification("danger", "Error", response.message);
+                    }
+                },
+                error: function (xhr) {
+                    let errorMessage = "Failed to add item to wishlist.";
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    showNotification("danger", "Error", errorMessage);
+                }
+            });
+        });
+
+        // Function to update wishlist count dynamically
+        function updateCartCount() {
+            $.ajax({
+                url: "/cart-count",
+                method: "GET",
+                success: function (data) {
+                    $(".cart-badge").text(data.count);
+                },
+                error: function () {
+                    console.error("Failed to fetch updated wishlist count.");
+                }
+            });
+        }
+    });
+
+</script>
+
 @endsection

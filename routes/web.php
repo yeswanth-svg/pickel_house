@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OrderController as UserOrderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -27,6 +28,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/add-to-cart', [UserOrderController::class, 'addToCart'])->name('add.to.cart');
     Route::get('/cart', [UserOrderController::class, 'viewCart'])->name('user.cart');
     Route::delete('/cart/{id}', [UserOrderController::class, 'destroy'])->name('user.cart.destroy');
+    Route::get('/cart-count', function () {
+        $count = \App\Models\Order::where(
+            [
+                'user_id' => auth()->id(),
+                'status' => 'Incart'
+            ]
+        )->count();
+        return response()->json(['count' => $count]);
+    });
 
     Route::post('/address/add', [UserController::class, 'addAddress'])->name('user.address.add');
     Route::post('/address/edit', [UserController::class, 'editAddress'])->name('user.address.edit');
@@ -36,6 +46,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout', [UserOrderController::class, 'checkout'])->name('user.checkout');
 
     Route::get('/order-confirmation', [UserOrderController::class, 'order_confirmation'])->name('order-confirmation');
+
+
+    Route::post('/wishlist/store', [WishlistController::class, 'store'])->name('wishlist.store');
+
+    Route::get('/get-wishlist-items', [WishlistController::class, 'getWishlistItems'])->name('get.wishlist.items');
+    Route::delete('/delete-wishlist-item/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+    Route::get('/wishlist-count', function () {
+        $count = \App\Models\WishlistItem::where('user_id', auth()->id())->count();
+        return response()->json(['count' => $count]);
+    });
+
+
 });
 
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {

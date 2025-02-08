@@ -7,6 +7,7 @@ use App\Models\CouponUsage;
 use App\Models\Dish;
 use App\Models\Order;
 use App\Models\UserAddress;
+use App\Models\WishlistItem;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -16,56 +17,64 @@ class OrderController extends Controller
     {
         // Validate the request data
         $validatedData = $request->validate([
+            'wishlist_id' => 'nullable|integer',
             'dish_id' => 'required|integer',
             'quantity_id' => 'required|integer',
-            'total_amount' => 'required',
+            'cart_quantity' => 'required|integer|min:1', // Renamed quantity to cart_quantity
+            'total_amount' => 'required|numeric',
         ]);
+
+        $wishlist_id = $validatedData['wishlist_id'] ?? null;
+        if ($wishlist_id) {
+            $wishlist_item = WishlistItem::find($wishlist_id);
+            if ($wishlist_item) {
+                $wishlist_item->delete();
+            }
+        }
 
         $user_id = auth()->user()->id;
 
-        // Check if the cart already has the same dish with the same ingredients
-        $cart = Order::where('user_id', $user_id)
+        // Check if the same dish with the same quantity_id exists in the cart
+        $cartItem = Order::where('user_id', $user_id)
             ->where('dish_id', $validatedData['dish_id'])
-            ->where('quantity_id', $validatedData['quantity_id'])  // Compare based on ingredients
-            ->where('status', 'Cart')
+            ->where('quantity_id', $validatedData['quantity_id'])
+            ->where('status', 'Incart')
             ->first();
 
-        if ($cart) {
-            // If the cart item already exists, update it
-            $cart->total_amount = $validatedData['total_amount'];  // Update total_amount if necessary
-            $cart->updated_at = now();
-            $cart->save();
+        if ($cartItem) {
+            // If item exists, update the cart_quantity and total_amount
+            $cartItem->cart_quantity += $validatedData['cart_quantity'];
+            $cartItem->total_amount += $validatedData['total_amount'];
+            $cartItem->updated_at = now();
+            $cartItem->save();
         } else {
-            // If no cart item exists, create a new one
+            // If no existing cart item, create a new one
             Order::create([
                 'user_id' => $user_id,
                 'dish_id' => $validatedData['dish_id'],
                 'quantity_id' => $validatedData['quantity_id'],
+                'cart_quantity' => $validatedData['cart_quantity'],
                 'total_amount' => $validatedData['total_amount'],
-                'status' => 'Cart',
+                'status' => 'Incart',
             ]);
         }
 
-        // Recalculate the cart total after adding the new dish
-        $cartItems = Order::where('user_id', $user_id)
-            ->where('status', 'Cart')
-            ->get();
+        // Recalculate the cart total
+        $cartTotal = Order::where('user_id', $user_id)
+            ->where('status', 'Incart')
+            ->sum('total_amount');
 
-        $cartTotal = $cartItems->sum('total_amount');  // Calculate the new cart total
-
-        // Check if a coupon discount is applied and recalculate the new total
+        // Apply coupon discount if available
         $couponDiscount = session('coupon_discount', 0);
-        if ($couponDiscount > 0) {
-            // Apply the coupon discount to the new total
-            $newTotal = $cartTotal - $couponDiscount;
-            session(['new_total' => $newTotal]);  // Update the session with the new total
-        } else {
-            // If no coupon is applied, just store the new total
-            session(['new_total' => $cartTotal]);
-        }
+        $newTotal = ($couponDiscount > 0) ? max($cartTotal - $couponDiscount, 0) : $cartTotal;
+        session(['new_total' => $newTotal]);
 
-        return redirect()->route('home')->with('success', 'Item added to cart!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Item added to Cart successfully!',
+        ]);
     }
+
 
     public function viewCart()
     {
@@ -73,7 +82,7 @@ class OrderController extends Controller
         $user_id = $user->id;
 
         $cartItems = Order::where('user_id', $user_id)
-            ->where('status', 'Cart')
+            ->where('status', 'Incart')
             ->with(['dish', 'quantity'])
             ->get();
 
@@ -127,7 +136,7 @@ class OrderController extends Controller
         }
 
         $cartItems = Order::where('user_id', $user->id)
-            ->where('status', 'Cart')
+            ->where('status', 'Incart')
             ->get();
 
         if ($cartItems->isEmpty()) {
@@ -236,7 +245,7 @@ class OrderController extends Controller
         $order = Order::findOrFail($id);
 
         // Ensure the item belongs to the current user (optional for security)
-        if ($order->user_id !== auth('user')->user()->id) {
+        if ($order->user_id !== auth()->user()->id) {
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
 
