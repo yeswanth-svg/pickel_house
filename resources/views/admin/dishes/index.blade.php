@@ -54,8 +54,6 @@
                                         <th>ID</th>
                                         <th>Dish Category</th>
                                         <th>Name</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
                                         <th>Image</th>
                                         <th>Stock Availability</th>
                                         <th>Spice Level</th>
@@ -68,8 +66,6 @@
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{ $dish->category->category_name }}</td>
                                         <td>{{$dish->name}}</td>
-                                        <td>{{ $dish->price }}</td>
-                                        <td>{{$dish->quantity}}</td>
                                         <td>
                                             <img src="{{ asset('dish_images/' . $dish->image) }}"
                                                 alt="{{ $dish->name }}" class="img-fluid"

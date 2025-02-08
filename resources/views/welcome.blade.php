@@ -215,7 +215,7 @@
                                                                     class="btn btn-outline-warning btn-sm add-to-wishlist"
                                                                     data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip"
                                                                     data-bs-placement="top" title="Add to Wishlist">
-                                                                    <i class="fas fa-heart"></i>
+                                                                    <i class="fas fa-shopping-basket"></i>
                                                                 </button>
                                                             </form>
 
@@ -653,7 +653,9 @@
         // Function to display notifications
         function showNotification(type, title, message) {
             $.notify({
-                icon: type === "success" ? "fa fa-check-circle" : "fa fa-exclamation-circle",
+                icon: type === "success" ? "fa fa-bell" : "fa fa-exclamation-circle",
+                title: title,
+                message: message
             }, {
                 type: type,
                 allow_dismiss: true,
@@ -662,31 +664,13 @@
                     from: 'top',
                     align: 'right'
                 },
-                offset: {
-                    x: 20,
-                    y: 60
-                },
+                offset: { x: 0, y: 60 },
                 animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated fadeOutRight'
-                },
-                template: `
-            <div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert" 
-                style="background: {1}; color: white; border-radius: 6px; box-shadow: 0px 4px 8px rgba(0,0,0,0.15); padding: 10px 15px; display: flex; align-items: center; font-size: 14px; min-width: 180px;">
-                <span data-notify="icon" style="font-size: 18px;"></span>
-                <div class="ms-2">
-                    <strong style="font-size: 14px;">${title}</strong><br>
-                    <span style="font-size: 13px;">${message}</span>
-                </div>
-            </div>
-        `,
-                onShow: function () {
-                    $(".alert-success").css("background", "#16C47F");
-                    $(".alert-danger").css("background", "#F93827");
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
                 }
             });
         }
-
         // Handle wishlist addition via AJAX
         $(".add-to-wishlist").on("click", function (e) {
             e.preventDefault();
@@ -739,7 +723,9 @@
         // Function to display notifications
         function showNotification(type, title, message) {
             $.notify({
-                icon: type === "success" ? "fa fa-check-circle" : "fa fa-exclamation-circle",
+                icon: type === "success" ? "fa fa-bell" : "fa fa-exclamation-circle",
+                title: title,
+                message: message
             }, {
                 type: type,
                 allow_dismiss: true,
@@ -748,27 +734,10 @@
                     from: 'top',
                     align: 'right'
                 },
-                offset: {
-                    x: 20,
-                    y: 60
-                },
+                offset: { x: 0, y: 60 },
                 animate: {
-                    enter: 'animated fadeInRight',
-                    exit: 'animated fadeOutRight'
-                },
-                template: `
-            <div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert" 
-                style="background: {1}; color: white; border-radius: 6px; box-shadow: 0px 4px 8px rgba(0,0,0,0.15); padding: 10px 15px; display: flex; align-items: center; font-size: 14px; min-width: 180px;">
-                <span data-notify="icon" style="font-size: 18px;"></span>
-                <div class="ms-2">
-                    <strong style="font-size: 14px;">${title}</strong><br>
-                    <span style="font-size: 13px;">${message}</span>
-                </div>
-            </div>
-        `,
-                onShow: function () {
-                    $(".alert-success").css("background", "#16C47F");
-                    $(".alert-danger").css("background", "#F93827");
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
                 }
             });
         }

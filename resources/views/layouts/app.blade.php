@@ -51,6 +51,120 @@
         });
     </script>
 
+    <style>
+        .alert {
+            border: 0;
+            position: relative;
+            padding: 0.95rem 1.25rem;
+            border-radius: 1px;
+            color: inherit;
+            background-color: #fff;
+            -webkit-box-shadow: 1px 1px 14px 0 rgba(18, 38, 63, 0.26);
+            -moz-box-shadow: 1px 1px 14px 0 rgba(18, 38, 63, 0.26);
+            box-shadow: 1px 1px 14px 0 rgba(18, 38, 63, 0.26);
+        }
+
+        .alert [data-notify="icon"] {
+            display: block;
+        }
+
+        .alert [data-notify="icon"]::before {
+            line-height: 35px;
+            font-size: 22px;
+            display: block;
+            left: 15px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 35px;
+            height: 35px;
+            border-radius: 30px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .alert [data-notify="title"] {
+            display: block;
+            color: #2b2b2b;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .alert [data-notify="message"] {
+            font-size: 13px;
+            color: #908e8e;
+        }
+
+        .alert .close {
+            background: rgba(255, 255, 255, 0.8);
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+            top: 12px !important;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .alert-black {
+            border-left: 4px solid #1a2035;
+        }
+
+        .alert-black [data-notify="icon"]:before {
+            background: #1a2035;
+        }
+
+        .alert-primary {
+            border-left: 4px solid #1572e8;
+        }
+
+        .alert-primary [data-notify="icon"]:before {
+            background: #1572e8;
+        }
+
+        .alert-secondary {
+            border-left: 4px solid #6861ce;
+        }
+
+        .alert-secondary [data-notify="icon"]:before {
+            background: #6861ce;
+        }
+
+        .alert-info {
+            border-left: 4px solid #48abf7;
+        }
+
+        .alert-info [data-notify="icon"]:before {
+            background: #48abf7;
+        }
+
+        .alert-success {
+            border-left: 4px solid #31ce36;
+        }
+
+        .alert-success [data-notify="icon"]:before {
+            background: #31ce36;
+        }
+
+        .alert-warning {
+            border-left: 4px solid #ffad46;
+        }
+
+        .alert-warning [data-notify="icon"]:before {
+            background: #ffad46;
+        }
+
+        .alert-danger {
+            border-left: 4px solid #f25961;
+        }
+
+        .alert-danger [data-notify="icon"]:before {
+            background: #f25961;
+        }
+    </style>
+
 
 </head>
 
@@ -353,51 +467,50 @@
 
     <script>
         $(document).ready(function () {
-            function showNotification(type, title, message) {
-                $.notify({
-                    icon: type === "success" ? "fa fa-check-circle" : "fa fa-exclamation-circle",
-                }, {
-                    type: type,
-                    allow_dismiss: false, // Removes close button
+            // Success notification
+            @if(session('success'))
+                var content = {
+                    message: "{{ session('success') }}",
+                    title: "Success",
+                    icon: "fa fa-bell"
+                };
+
+                $.notify(content, {
+                    type: 'success', // You can change this to match your notification type
+                    placement: {
+                        from: 'top', // Correct capitalization
+                        align: 'right' // Correct capitalization
+                    },
+                    time: 1000,
+                    delay: 5000, // Adjust delay if needed
+                });
+            @endif
+
+
+            // Error notification
+            @if($errors->any())
+                var content = {
+                    message: "{{ $errors->first() }}",
+                    title: "Error",
+                    icon: "fa fa-exclamation-circle",
+                };
+
+                $.notify(content, {
+                    type: "danger", // Error style
+                    allow_dismiss: true,
                     delay: 5000,
                     placement: {
-                        from: 'top',
-                        align: 'right'
+                        from: "top",
+                        align: "right",
                     },
-                    offset: {
-                        x: 20,
-                        y: 60
-                    },
+                    offset: { x: 20, y: 70 },
                     animate: {
-                        enter: 'animated fadeInRight',
-                        exit: 'animated fadeOutRight'
+                        enter: "animated fadeInDown",
+                        exit: "animated fadeOutUp",
                     },
-                    template: `
-                    <div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert" 
-                        style="background: {1}; color: white; border-radius: 6px; box-shadow: 0px 4px 8px rgba(0,0,0,0.15); padding: 10px 15px; display: flex; align-items: center; font-size: 14px; min-width: 150px;">
-                        <span data-notify="icon" style="font-size: 18px;"></span> <strong style="font-size: 14px;">${title}</strong><br>
-                        <div>
-                            
-                            <span style="font-size: 16px;">${message}</span>
-                        </div>
-                    </div>
-                `,
-                    onShow: function () {
-                        $(".alert-success").css("background", "#16C47F"); // Custom green
-                        $(".alert-danger").css("background", "#F93827"); // Custom red
-                    }
                 });
-            }
-
-            // Success Notification
-            @if(session('success'))
-                showNotification("success", "Success", "{{ session('success') }}");
             @endif
 
-            // Error Notification
-            @if($errors->any())
-                showNotification("danger", "Error", "{{ $errors->first() }}");
-            @endif
         });
     </script>
 
@@ -443,7 +556,9 @@
 
             function showNotification(type, title, message) {
                 $.notify({
-                    icon: type === "success" ? "fa fa-check-circle" : "fa fa-exclamation-circle",
+                    icon: type === "success" ? "fa fa-bell" : "fa fa-exclamation-circle",
+                    title: title,
+                    message: message
                 }, {
                     type: type,
                     allow_dismiss: true,
@@ -452,30 +567,14 @@
                         from: 'top',
                         align: 'right'
                     },
-                    offset: {
-                        x: 20,
-                        y: 60
-                    },
+                    offset: { x: 0, y: 60 },
                     animate: {
-                        enter: 'animated fadeInRight',
-                        exit: 'animated fadeOutRight'
-                    },
-                    template: `
-            <div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert" 
-                style="background: {1}; color: white; border-radius: 6px; box-shadow: 0px 4px 8px rgba(0,0,0,0.15); padding: 10px 15px; display: flex; align-items: center; font-size: 14px; min-width: 180px;">
-                <span data-notify="icon" style="font-size: 18px;"></span>
-                <div class="ms-2">
-                    <strong style="font-size: 14px;">${title}</strong><br>
-                    <span style="font-size: 13px;">${message}</span>
-                </div>
-            </div>
-        `,
-                    onShow: function () {
-                        $(".alert-success").css("background", "#16C47F");
-                        $(".alert-danger").css("background", "#F93827");
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
                     }
                 });
             }
+
 
 
             // Function to Fetch Wishlist Items

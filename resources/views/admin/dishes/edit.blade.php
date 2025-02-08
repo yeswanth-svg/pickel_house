@@ -78,18 +78,7 @@
 
 
 
-                                <div class="col-md-6 mb-3">
-                                    <label for="price" class="form-label text-success fw-bold fs-4">Price</label>
-                                    <input type="number" name="price" id="price" class="form-control"
-                                        placeholder="e.g.,250 g or 1 kg" value="{{$dish->price}}" step="0.1">
-                                </div>
-
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="quantity" class="form-label text-success fw-bold fs-4">Quantity</label>
-                                    <input type="text" name="quantity" id="quantity" class="form-control"
-                                        placeholder="e.g., Chicken Biryani" value="{{$dish->quantity}}" step="0.1">
-                                </div>
+                            
 
                                 <div class="col-md-6 mb-3">
                                     <label for="dishName"

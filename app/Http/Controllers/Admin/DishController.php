@@ -39,8 +39,6 @@ class DishController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'price' => ['required', 'numeric'],
-            'quantity' => ['required', 'numeric'],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
             'image' => ['required', 'mimes:jpg,jpeg,png'], // Corrected this line
             'spice_level' => ['required'],
@@ -50,8 +48,6 @@ class DishController extends Controller
         $dish = new Dish();
         $dish->name = $request->name;
         $dish->description = $request->description;
-        $dish->price = $request->price;
-        $dish->quantity = $request->quantity;
         $dish->category_id = $request->category_id;
         $dish->spice_level = $request->spice_level;
 
@@ -106,8 +102,6 @@ class DishController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'price' => ['required', 'numeric'],
-            'quantity' => ['required', 'string'],// Image is nullable
             'category_id' => ['required', 'integer', 'exists:categories,id'],
             'image' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Image is nullable
             'spice_level' => ['required', 'string'],
@@ -133,8 +127,6 @@ class DishController extends Controller
         // 🔹 Explicitly Assign Fields
         $dish->name = $request->name;
         $dish->description = $request->description;
-        $dish->price = $request->price;
-        $dish->quantity = $request->quantity;
         $dish->category_id = $request->category_id;
         $dish->spice_level = $request->spice_level;
         $dish->availability_status = $request->availability_status;
