@@ -14,7 +14,7 @@ class Order extends Model
         'dish_id',
         'user_id',
         'quantity_id',
-        'status',
+        'order_stage',
         'total_amount',
         'applied_coupon_id',
         'discount_amount',

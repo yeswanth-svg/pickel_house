@@ -21,18 +21,18 @@
 }
 
 h1,
-h2,
-h3,
-.h1,
-.h2,
-.h3 {
+.h1 {
     font-weight: 400 !important;
     font-family: "Playball", cursive !important;
 }
 
+h2,
+h3,
 h4,
 h5,
 h6,
+.h2,
+.h3,
 .h4,
 .h5,
 .h6 {
@@ -595,12 +595,6 @@ h6,
     color: #3498db;
 }
 
-.wishlist-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .delete-form {
     margin: 0;
 }
@@ -682,7 +676,7 @@ h6,
 
 .wishlist-actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
 }
 
@@ -898,3 +892,4 @@ input[type="number"] {
 .alert-danger [data-notify="icon"]:before {
     background: #f25961;
 }
+

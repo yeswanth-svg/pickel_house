@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'All Orders List')
+@section('title', 'Cancelled Orders List')
 @section('content')
 
 
@@ -12,11 +12,10 @@
     }
 </style>
 
-
 <div class="container">
     <div class="page-inner">
         <div class="page-header">
-            <h3 class="fw-bold mb-3">Orders</h3>
+            <h3 class="fw-bold mb-3">Cancelled Orders</h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                     <a href="#">
@@ -27,13 +26,13 @@
                     <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Orders</a>
+                    <a href="#">Cancelled Orders</a>
                 </li>
                 <li class="separator">
                     <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">All Orders</a>
+                    <a href="#">All Cancelled Orders</a>
                 </li>
             </ul>
         </div>
@@ -43,7 +42,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
-                            <h4 class="card-title">All Orders</h4>
+                            <h4 class="card-title">Cancelled Orders</h4>
                         </div>
                     </div>
                     <div class="card-body">
@@ -60,7 +59,7 @@
                                         <th>Total Amount</th>
                                         <th>Quantity</th>
                                         <th>No.of.Items</th>
-                                        <th>Order Stage</th>
+                                        <th>Status</th>
                                         <th>Payment Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -86,8 +85,6 @@
                                         </td>
 
 
-
-
                                         <td>{{ $order->dish->name }}</td>
 
                                         <td>{{ !empty($order->total_amount) ? formatCurrency($order->total_amount) : '-' }}
@@ -95,52 +92,43 @@
                                         <td>{{$order->quantity->quantity}}</td>
                                         <td>{{$order->cart_quantity}}</td>
                                         <td>
-                                            <form action="{{ route('admin.orders.update_status', $order->id) }}"
-                                                method="POST" class="status-form">
-                                                @csrf
-                                                @method('PUT')
-                                                <select name="order_stage" class="form-select status-select"
-                                                    onchange="this.form.submit()">
-                                                    @php
-                                                        $orderStages = [
-                                                            'in_cart' => 'In Cart',
-                                                            'confirmed' => 'Confirmed',
-                                                            'processing' => 'Processing',
-                                                            'packing' => 'Packing',
-                                                            'shipped' => 'Shipped',
-                                                            'out_for_delivery' => 'Out for Delivery',
-                                                            'delivered' => 'Delivered',
-                                                            'completed' => 'Completed',
-                                                            'cancelled' => 'Cancelled',
-                                                        ];
-                                                    @endphp
-                                                    @foreach ($orderStages as $key => $label)
-                                                        <option value="{{ $key }}" {{ $order->order_stage == $key ? 'selected' : '' }}>{{ $label }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </form>
+                                            @php
+                                                $orderStageStyles = [
+                                                    'in_cart' => 'bg-light text-secondary',
+                                                    'confirmed' => 'bg-info text-white',
+                                                    'processing' => 'bg-primary text-white',
+                                                    'packing' => 'bg-warning text-dark',
+                                                    'shipped' => 'bg-success text-white',
+                                                    'out_for_delivery' => 'bg-info text-white',
+                                                    'delivered' => 'bg-success text-white',
+                                                    'completed' => 'bg-success text-white',
+                                                    'cancelled' => 'bg-danger text-white',
+                                                    'returned' => 'bg-dark text-white',
+                                                    'removed_from_cart' => 'bg-secondary text-white',
+                                                ];
+                                            @endphp
+                                            <span
+                                                class="badge {{ $orderStageStyles[$order->order_stage] ?? 'bg-secondary text-white' }}">
+                                                {{ ucfirst(str_replace('_', ' ', $order->order_stage)) }}
+                                            </span>
                                         </td>
 
                                         <td>
-                                            <form action="{{ route('admin.orders.update_payment_status', $order->id) }}"
-                                                method="POST" class="status-form">
-                                                @csrf
-                                                @method('PUT')
-                                                <select name="payment_state" class="form-select status-select"
-                                                    onchange="this.form.submit()">
-                                                    @php
-                                                        $paymentStates = [
-                                                            'pending' => 'Pending',
-                                                            'processing' => 'Processing',
-                                                            'failed' => 'Failed',
-                                                            'completed' => 'Completed',
-                                                        ];
-                                                    @endphp
-                                                    @foreach ($paymentStates as $key => $label)
-                                                        <option value="{{ $key }}" {{ $order->payment_status == $key ? 'selected' : '' }}>{{ $label }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </form>
+                                            @php
+                                                $paymentStateStyles = [
+                                                    'pending' => 'bg-warning text-dark',
+                                                    'processing' => 'bg-primary text-white',
+                                                    'failed' => 'bg-danger text-white',
+                                                    'completed' => 'bg-success text-white',
+                                                    'refunded' => 'bg-info text-white',
+                                                    'partially_refunded' => 'bg-secondary text-white',
+                                                    'chargeback' => 'bg-dark text-white',
+                                                ];
+                                            @endphp
+                                            <span
+                                                class="badge {{ $paymentStateStyles[$order->payment_state] ?? 'bg-secondary text-white' }}">
+                                                {{ ucfirst(str_replace('_', ' ', $order->payment_state)) }}
+                                            </span>
                                         </td>
 
 
@@ -149,7 +137,8 @@
                                             <div class="form-button-action">
 
                                                 <button class="btn btn-link btn-secondary show-button"
-                                                    data-id="{{$order->id}}" title="Show" id="openShow">
+                                                    data-bs-toggle="modal" data-bs-target="#ShowModal"
+                                                    data-id="{{$order->id}}">
                                                     <i class="fa fa-eye"></i>
                                                 </button>
 
@@ -281,6 +270,5 @@
         }
     }
 </script>
-
 
 @endsection

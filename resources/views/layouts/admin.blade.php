@@ -128,12 +128,95 @@
 
                         </li>
 
-                        <li class="nav-item {{request()->is('admin/orders*') ? 'active' : ''}}">
-                            <a href="{{route('admin.orders.index')}}">
+
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#order"
+                                aria-expanded="{{ request()->is('admin/orders*') && !request()->is('admin/orders/payment*') ? 'true' : 'false' }}"
+                                aria-controls="order">
                                 <i class="fas fa-pen-square"></i>
                                 <p>Orders</p>
                                 <span class="caret"></span>
                             </a>
+
+                            <!-- Show only if not under Order Payments -->
+                            <div class="collapse {{ request()->is('admin/orders*') && !request()->is('admin/orders/payment*') ? 'show' : '' }}"
+                                id="order">
+                                <ul class="nav nav-collapse">
+                                    <li class="{{ request()->is('admin/orders') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.orders.index') }}"><span class="sub-item">All
+                                                Orders</span></a>
+                                    </li>
+                                    <li class="{{ request()->is('admin/orders/confirmed') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.orders.confirmed') }}"><span class="sub-item">Confirmed
+                                                Orders</span></a>
+                                    </li>
+                                    <li class="{{ request()->is('admin/orders/processing') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.orders.processing') }}"><span
+                                                class="sub-item">Processing Orders</span></a>
+                                    </li>
+                                    <li class="{{ request()->is('admin/orders/packing') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.orders.packing') }}"><span class="sub-item">Packing
+                                                Orders</span></a>
+                                    </li>
+                                    <li class="{{ request()->is('admin/orders/shipped') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.orders.shipped') }}"><span class="sub-item">Shipped
+                                                Orders</span></a>
+                                    </li>
+                                    <li class="{{ request()->is('admin/orders/completed') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.orders.completed') }}"><span class="sub-item">Completed
+                                                Orders</span></a>
+                                    </li>
+                                    <li class="{{ request()->is('admin/orders/cancelled') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.orders.cancelled') }}"><span class="sub-item">Cancelled
+                                                Orders</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#payment"
+                                aria-expanded="{{ request()->is('admin/orders/payment*') ? 'true' : 'false' }}"
+                                aria-controls="payment">
+                                <i class="fas fa-credit-card"></i>
+                                <p>Order Payments</p>
+                                <span class="caret"></span>
+                            </a>
+
+                            <!-- Show only for payment routes -->
+                            <div class="collapse {{ request()->is('admin/orders/payment*') ? 'show' : '' }}"
+                                id="payment">
+                                <ul class="nav nav-collapse">
+                                    <li class="{{ request()->is('admin/orders/payment/pending') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.orders.payment.pending') }}"><span
+                                                class="sub-item">Pending Payments</span></a>
+                                    </li>
+                                    <li class="{{ request()->is('admin/orders/payment/processing') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.orders.payment.processing') }}"><span
+                                                class="sub-item">Processing Payments</span></a>
+                                    </li>
+                                    <li class="{{ request()->is('admin/orders/payment/failed') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.orders.payment.failed') }}"><span
+                                                class="sub-item">Failed Payments</span></a>
+                                    </li>
+                                    <li class="{{ request()->is('admin/orders/payment/completed') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.orders.payment.completed') }}"><span
+                                                class="sub-item">Completed Payments</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+
+
+
+
+                        <li class="nav-item {{request()->is('admin/users*') ? 'active' : ''}}">
+                            <a href="{{route('admin.users.index')}}">
+                                <i class="fas fa-user"></i>
+                                <p>Users</p>
+                            </a>
+
                         </li>
 
                         <li class="nav-item {{request()->is('admin/coupons*') ? 'active' : ''}}">

@@ -38,7 +38,7 @@ class OrderController extends Controller
         $cartItem = Order::where('user_id', $user_id)
             ->where('dish_id', $validatedData['dish_id'])
             ->where('quantity_id', $validatedData['quantity_id'])
-            ->where('status', 'Incart')
+            ->where('order_stage', 'in_cart')
             ->first();
 
         if ($cartItem) {
@@ -55,13 +55,12 @@ class OrderController extends Controller
                 'quantity_id' => $validatedData['quantity_id'],
                 'cart_quantity' => $validatedData['cart_quantity'],
                 'total_amount' => $validatedData['total_amount'],
-                'status' => 'Incart',
             ]);
         }
 
         // Recalculate the cart total
         $cartTotal = Order::where('user_id', $user_id)
-            ->where('status', 'Incart')
+            ->where('order_stage', 'in_cart')
             ->sum('total_amount');
 
         // Apply coupon discount if available
@@ -82,7 +81,7 @@ class OrderController extends Controller
         $user_id = $user->id;
 
         $cartItems = Order::where('user_id', $user_id)
-            ->where('status', 'Incart')
+            ->where('order_stage', 'in_cart')
             ->with(['dish', 'quantity'])
             ->get();
 
@@ -136,7 +135,7 @@ class OrderController extends Controller
         }
 
         $cartItems = Order::where('user_id', $user->id)
-            ->where('status', 'Incart')
+            ->where('order_stage', 'in_cart')
             ->get();
 
         if ($cartItems->isEmpty()) {
@@ -198,7 +197,12 @@ class OrderController extends Controller
         $paymentMethod = $request->input('payment_method');
         $totalAmountInput = $request->input('total_amount');
         $totalAmount = intval(round((float) str_replace(',', '', $totalAmountInput) * 100));
-        $selected_address = session('selected_address') ?? $user->addresses()->where('is_default', 1)->first();
+        $selected_address = UserAddress::where(
+            [
+                'is_default' => 1,
+                'user_id' => $user->id
+            ]
+        )->first();
 
         if (!$selected_address) {
             return redirect()->back()->withErrors('No default address available.');
@@ -207,8 +211,8 @@ class OrderController extends Controller
         if ($paymentMethod === 'COD') {
             // Update orders
             Order::whereIn('id', $orderIds)->where('user_id', $user->id)->update([
-                'status' => 'Completed',
-                'payment_status' => 'COD',
+                'order_stage' => 'confirmed',
+                'payment_state' => 'pending',
                 'selected_address' => json_encode($selected_address),
             ]);
 
@@ -221,7 +225,7 @@ class OrderController extends Controller
             //         'payment_method' => $paymentMethod,
             //         'total_amount' => $totalAmount / 100,
             //         'selected_address' => $selected_address,
-            //         'status' => 'Completed',
+            //         'order_stage' => 'confirmed',
             //     ];
             //     $admin->notify(new OrderPlacedNotification($orderDetails));
             // }
@@ -249,8 +253,12 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'Unauthorized action.');
         }
 
-        $order->status = "Cancelled";
+        if ($order && $order->order_stage === 'in_cart') {
+            $order->order_stage = 'removed_from_cart';
+            $order->applied_coupon_id = 0;
+            $order->discount_amount = 0;
 
+        }
         // Delete the item
         $order->save();
 

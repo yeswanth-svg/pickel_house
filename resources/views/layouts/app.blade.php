@@ -51,7 +51,7 @@
         });
     </script>
 
- 
+
 
 
 </head>
@@ -142,7 +142,7 @@
                                                 <span class="uk-badge cart-badge">
                                                     {{ auth()->check() ? \App\Models\Order::where([
                             'user_id' => auth()->id(),
-                            'status' => 'Incart'
+                            'order_stage' => 'in_cart'
                         ])->count() : 0 }}
                                                 </span>
                                             </a>
@@ -496,9 +496,14 @@
                                         </div>
                                     </div>
                                     <div class="wishlist-actions">
-                                        <button type="button" class="btn btn-danger delete-wishlist-item" data-id="${item.id}">
+                                    <form method="Post" action="/delete-wishlist-item/${item.id}">
+                                    @method("DELETE")
+                                    @csrf
+                                     <button type="button" class="btn btn-danger">
                                             <i class="fas fa-trash-alt"></i> 
                                         </button>
+                                    </form>
+                                       
                                         <form method="POST" class="add-to-cart-form">
                                             @csrf
                                             <input type="hidden" name="wishlist_id" value="${item.id}">
@@ -511,7 +516,7 @@
                                                     <input type="number" name="cart_quantity" class="form-control text-center cart-quantity" min="1" value="1" style="width: 30px; font-size: 14px;">
                                                     <button type="button" class="btn btn-outline-secondary btn-sm increase-qty">+</button>
                                                 </div>
-                                                <button type="submit" class="btn btn-success add-to-cart-btn">Add to Cart</button>
+                                                <button type="submit" class="btn btn-success add-to-cart-btn"><i class="fas fa-shopping-cart"></i></button>
                                             </div>
                                         </form>
                                     </div>

@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
         $count = \App\Models\Order::where(
             [
                 'user_id' => auth()->id(),
-                'status' => 'Incart'
+                'order_stage' => 'in_cart'
             ]
         )->count();
         return response()->json(['count' => $count]);
@@ -59,15 +59,41 @@ Route::middleware('auth')->group(function () {
 
 
 });
+Route::get('/test-route', function () {
+    dd("Route is working");
+});
+
 
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('category', CategoriesController::class);
     Route::resource('dishes', DishController::class);
     Route::resource('quantity', DishQuantities::class);
-    Route::resource('orders', OrderController::class);
+
+    Route::resource('users', UserController::class);
     Route::resource('coupons', CuponController::class);
 
+    Route::get('/orders/confirmed', [OrderController::class, 'confirmed'])->name('orders.confirmed');
+    Route::get('/orders/processing', [OrderController::class, 'processing'])->name('orders.processing');
+    Route::get('/orders/packing', [OrderController::class, 'packing'])->name('orders.packing');
+    Route::get('/orders/shipped', [OrderController::class, 'shipped'])->name('orders.shipped');
+    Route::get('/orders/completed', [OrderController::class, 'completed'])->name('orders.completed');
+    Route::get('/orders/cancelled', [OrderController::class, 'cancelled'])->name('orders.cancelled');
+    Route::get('/orders/returned', [OrderController::class, 'returned'])->name('orders.returned');
+
+    // Payment-related routes
+    Route::get('/orders/payment/pending', [OrderController::class, 'paymentPending'])->name('orders.payment.pending');
+    Route::get('/orders/payment/processing', [OrderController::class, 'paymentProcessing'])->name('orders.payment.processing');
+    Route::get('/orders/payment/failed', [OrderController::class, 'paymentFailed'])->name('orders.payment.failed');
+    Route::get('/orders/payment/completed', [OrderController::class, 'paymentCompleted'])->name('orders.payment.completed');
+    Route::get('/orders/payment/refunded', [OrderController::class, 'paymentRefunded'])->name('orders.payment.refunded');
+    Route::get('/orders/payment/partially_refunded', [OrderController::class, 'paymentPartiallyRefunded'])->name('orders.payment.partially_refunded');
+    Route::get('/orders/payment/chargeback', [OrderController::class, 'paymentChargeback'])->name('orders.payment.chargeback');
+    Route::put('/admin/orders/{id}/update-status', [OrderController::class, 'updateOrderStatus'])->name('orders.update_status');
+    Route::put('/admin/orders/{id}/update-payment-status', [OrderController::class, 'updatePaymentStatus'])->name('orders.update_payment_status');
+
+
+    Route::resource('orders', OrderController::class);
 });
 
 

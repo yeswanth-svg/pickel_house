@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('title', 'Pickel House')
-
 @section('content')
 
 
@@ -9,19 +8,18 @@
     <div class="container">
         <div class="row g-5 align-items-center">
             <div class="col-lg-7 col-md-12">
-                <h1 class="display-1 mb-4 animated bounceInDown">
+                <h1 class="display-1 mb-4">
                     <span style="color: black">Authentic</span>
                     <span class="text-primary">Experience the Rich & Authentic</span>
                     Flavors of Pickles
                 </h1>
-                <a href=""
-                    class="btn btn-primary border-0 rounded-pill py-3 px-4 px-md-5 me-4 animated bounceInLeft">Order
+                <a href="" class="btn btn-primary border-0 rounded-pill py-3 px-4 px-md-5 me-4">Order
                     Now</a>
-                <a href="" class="btn btn-primary border-0 rounded-pill py-3 px-4 px-md-5 animated bounceInLeft">Explore
+                <a href="" class="btn btn-primary border-0 rounded-pill py-3 px-4 px-md-5">Explore
                     Flavors</a>
             </div>
             <div class="col-lg-5 col-md-12">
-                <img src="img/hero1.png" class="img-fluid rounded animated zoomIn" alt="Delicious Pickles" />
+                <img src="img/hero1.png" class="img-fluid rounded " alt="Delicious Pickles" />
             </div>
         </div>
     </div>
@@ -32,10 +30,10 @@
 <div class="container-fluid py-6">
     <div class="container">
         <div class="row g-5 align-items-center">
-            <div class="col-lg-5 wow bounceInUp" data-wow-delay="0.1s">
+            <div class="col-lg-5">
                 <img src="img/about1.png" class="img-fluid rounded" alt="Traditional Pickles" />
             </div>
-            <div class="col-lg-7 wow bounceInUp" data-wow-delay="0.3s">
+            <div class="col-lg-7" data-wow-delay="0.3s">
                 <small
                     class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">About
                     Us</small>
@@ -80,7 +78,7 @@
         <div class="row g-4 align-items-center">
             <div class="col-lg-7">
                 <div class="row g-4">
-                    <div class="col-sm-4 wow bounceInUp" data-wow-delay="0.3s">
+                    <div class="col-sm-4" data-wow-delay="0.3s">
                         <div class="faqt-item bg-primary rounded p-4 text-center">
                             <i class="fas fa-users fa-4x mb-4 text-white"></i>
                             <h1 class="display-4 fw-bold" data-toggle="counter-up">
@@ -91,7 +89,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-sm-4 wow bounceInUp" data-wow-delay="0.5s">
+                    <div class="col-sm-4" data-wow-delay="0.5s">
                         <div class="faqt-item bg-primary rounded p-4 text-center">
                             <i class="fas fa-users-cog fa-4x mb-4 text-white"></i>
                             <h1 class="display-4 fw-bold" data-toggle="counter-up">8</h1>
@@ -100,7 +98,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-sm-4 wow bounceInUp" data-wow-delay="0.7s">
+                    <div class="col-sm-4" data-wow-delay="0.7s">
                         <div class="faqt-item bg-primary rounded p-4 text-center">
                             <i class="fas fa-check fa-4x mb-4 text-white"></i>
                             <h1 class="display-4 fw-bold" data-toggle="counter-up">
@@ -113,7 +111,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-5 wow bounceInUp" data-wow-delay="0.1s">
+            <div class="col-lg-5">
                 <div class="video">
                     <button type="button" class="btn btn-play" data-bs-toggle="modal" data-src="img/hero12.mp4"
                         data-bs-target="#videoModal">
@@ -148,7 +146,7 @@
 <!-- Menu Start -->
 <div class="container-fluid menu py-6">
     <div class="container">
-        <div class="text-center wow bounceInUp" data-wow-delay="0.1s">
+        <div class="text-center">
             <small
                 class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">
                 Our Menu
@@ -156,7 +154,7 @@
             <h1 class="display-5 mb-5">Most Loved Pickles & Traditional Sweets Around the World</h1>
         </div>
         <div class="tab-class text-center">
-            <ul class="nav nav-pills d-inline-flex justify-content-center mb-5 wow bounceInUp" data-wow-delay="0.1s">
+            <ul class="nav nav-pills d-inline-flex justify-content-center mb-5">
                 @foreach($categories as $key => $category)
                     <li class="nav-item p-2">
                         <a class="d-flex py-2 mx-2 border border-primary bg-white rounded-pill category-tab"
@@ -172,7 +170,7 @@
                     <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
                         <div class="row g-4">
                             @foreach($category->dishes as $dish)
-                                <div class="col-lg-6 wow bounceInUp" data-wow-delay="0.1s">
+                                <div class="col-lg-6">
                                     <div class="menu-item d-flex align-items-center">
                                         <img class="flex-shrink-0 img-fluid rounded-circle"
                                             src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}" />
@@ -277,14 +275,14 @@
 <!-- Team Start -->
 <div class="container-fluid team py-6">
     <div class="container">
-        <div class="text-center wow bounceInUp" data-wow-delay="0.1s">
+        <div class="text-center">
             <small
                 class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">Our
                 Team</small>
             <h1 class="display-5 mb-5">We have experienced chef Team</h1>
         </div>
         <div class="row g-4">
-            <div class="col-lg-3 col-md-6 wow bounceInUp" data-wow-delay="0.1s">
+            <div class="col-lg-3 col-md-6">
                 <div class="team-item rounded">
                     <img class="img-fluid rounded-top" src="img/chef1.jpg" alt="" />
                     <div class="team-content text-center py-3 bg-danger rounded-bottom">
@@ -303,7 +301,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 wow bounceInUp" data-wow-delay="0.3s">
+            <div class="col-lg-3 col-md-6" data-wow-delay="0.3s">
                 <div class="team-item rounded">
                     <img class="img-fluid rounded-top" src="img/chef2.jpg" alt="" />
                     <div class="team-content text-center py-3 bg-danger rounded-bottom">
@@ -322,7 +320,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 wow bounceInUp" data-wow-delay="0.5s">
+            <div class="col-lg-3 col-md-6" data-wow-delay="0.5s">
                 <div class="team-item rounded">
                     <img class="img-fluid rounded-top" src="img/chef3.jpg" alt="" />
                     <div class="team-content text-center py-3 bg-danger rounded-bottom">
@@ -341,7 +339,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 wow bounceInUp" data-wow-delay="0.7s">
+            <div class="col-lg-3 col-md-6" data-wow-delay="0.7s">
                 <div class="team-item rounded">
                     <img class="img-fluid rounded-top" src="img/chef4.jpg" alt="" />
                     <div class="team-content text-center py-3 bg-danger rounded-bottom">
@@ -368,14 +366,13 @@
 <!-- Testimonial Start -->
 <div class="container-fluid py-6">
     <div class="container">
-        <div class="text-center wow bounceInUp" data-wow-delay="0.1s">
+        <div class="text-center">
             <small
                 class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">Customer
                 Reviews</small>
             <h1 class="display-5 mb-5">What Our Customers says!</h1>
         </div>
-        <div class="owl-carousel owl-theme testimonial-carousel testimonial-carousel-1 mb-4 wow bounceInUp"
-            data-wow-delay="0.1s">
+        <div class="owl-carousel owl-theme testimonial-carousel testimonial-carousel-1 mb-4">
             <div class="testimonial-item rounded bg-light">
                 <div class="d-flex mb-3">
                     <img src="img/testimonial-1.jpg" class="img-fluid rounded-circle flex-shrink-0" alt="" />
@@ -477,7 +474,7 @@
                 </div>
             </div>
         </div>
-        <div class="owl-carousel testimonial-carousel testimonial-carousel-2 wow bounceInUp" data-wow-delay="0.3s">
+        <div class="owl-carousel testimonial-carousel testimonial-carousel-2" data-wow-delay="0.3s">
             <div class="testimonial-item rounded bg-light">
                 <div class="d-flex mb-3">
                     <img src="img/testimonial-1.jpg" class="img-fluid rounded-circle flex-shrink-0" alt="" />
