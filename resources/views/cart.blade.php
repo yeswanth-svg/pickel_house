@@ -6,27 +6,27 @@
 
 
 <style>
-    /* Styles for the Cart Page */
-    /* From Uiverse.io by mi-series */
-    /* Body */
-
+    /* General Styles */
     hr {
         height: 1px;
         background-color: #E5C7C5;
         border: none;
     }
 
+    /* Card Styles */
     .card {
         width: 100%;
-        background: #FF7D29;
-        box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+        background: #f93827;
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px,
+            rgba(0, 0, 0, 0.1) 0px 2px 4px 0px,
+            rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
         border-radius: 19px 19px 0px 0px;
     }
 
+    /* Title Section */
     .title {
         width: 100%;
         height: 40px;
-        position: relative;
         display: flex;
         align-items: center;
         padding-left: 20px;
@@ -34,16 +34,12 @@
         font-weight: 700;
         font-size: 20px;
         color: white;
-        font-family: "Montserrat", san-serif;
+        font-family: "Montserrat", sans-serif;
     }
 
-    /* Cart */
-
-
+    /* Cart Section */
     .cart .steps {
-
         padding: 20px;
-
     }
 
     .cart .steps .step {
@@ -56,29 +52,26 @@
         color: white;
         margin-bottom: 8px;
         display: block;
-        font-family: "Montserrat", san-serif;
+        font-family: "Montserrat", sans-serif;
     }
 
     .cart .steps .step p {
         font-size: 15px;
         font-weight: 600;
         color: white;
-        font-family: "Montserrat", san-serif;
+        font-family: "Montserrat", sans-serif;
         margin-top: 0px;
     }
 
-
-
-
+    /* Shipping */
     .shipping .form button {
         padding: 10px 18px;
         gap: 10px;
         width: 75%;
         height: 41px;
-        left: -24px;
     }
 
-    /* Promo */
+    /* Promo Section */
     .promo .available-coupons {
         display: flex;
         flex-wrap: wrap;
@@ -88,34 +81,52 @@
     .input_field {
         width: 73%;
         height: 36px;
-        padding: 0 0 0 12px;
+        padding: 0 12px;
         border-radius: 5px;
         outline: none;
         border: 1px solid #E5C7C5;
-        transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
+        transition: all 0.3s ease-in-out;
     }
 
     .input_field:focus {
         border: 1px solid transparent;
         box-shadow: 0px 0px 0px 2px #F3D2C9;
-
     }
 
     .promo .available-coupons button {
         height: 36px;
         border-radius: 5px;
         border: 0;
-        font-style: normal;
         font-weight: 600;
         font-size: 12px;
-        line-height: 15px;
         padding: 10px 18px;
     }
 
     /* Checkout */
+    .checkout-container .row {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .checkout-container .col-lg-4 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .checkout-container .card {
+        flex-grow: 1;
+    }
+
+    .checkout-container .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* Payment Section */
     .payments .details {
         display: grid;
-        grid-template-columns: 8fr 1fr;
+        /* grid-template-columns: 8fr 1fr; */
         gap: 5px;
         word-wrap: break-word;
     }
@@ -126,16 +137,7 @@
         color: white;
     }
 
-    .checkout .footer {
-
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 10px 10px 20px;
-        background-color: #FF7D29;
-        border-radius: 19px 19px 0px 0px;
-    }
-
+    /* Total Price Styling */
     .price {
         font-size: 18px;
         color: white;
@@ -143,55 +145,57 @@
         margin-bottom: 10px;
     }
 
+    /* Ensure total does not appear negative */
+    .negative-total {
+        color: red;
+        font-weight: bold;
+    }
+
+    /* Checkout Button */
+    .checkout .footer {
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+        background-color: #FF7D29;
+        border-radius: 19px 19px 0px 0px;
+    }
+
     .checkout .footer .checkout-btn {
-        flex-direction: row;
+        display: flex;
         justify-content: center;
         align-items: center;
         color: #000000;
         font-size: 16px;
         font-weight: 600;
-
     }
-</style>
-<style>
-    /* css for the button */
+
+    /* Button Styles */
     .button-30 {
         align-items: center;
-        appearance: none;
         background-color: #FCFCFD;
         border-radius: 4px;
         border-width: 0;
-        box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+        box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+            rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
+            #D6D6E7 0 -3px 0 inset;
         box-sizing: border-box;
         color: #36395A;
         cursor: pointer;
         display: inline-flex;
-        font-family: "Montserrat", san-serif;
+        font-family: "Montserrat", sans-serif;
         height: 48px;
         justify-content: center;
-        line-height: 1;
-        list-style: none;
-        overflow: hidden;
         padding-left: 16px;
         padding-right: 16px;
-        position: relative;
-        text-align: left;
-        text-decoration: none;
         transition: box-shadow .15s, transform .15s;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-        white-space: nowrap;
-        will-change: box-shadow, transform;
         font-size: 18px;
     }
 
-    .button-30:focus {
-        box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
-    }
-
     .button-30:hover {
-        box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+        box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px,
+            rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
+            #D6D6E7 0 -3px 0 inset;
         transform: translateY(-2px);
     }
 
@@ -199,7 +203,53 @@
         box-shadow: #D6D6E7 0 3px 7px inset;
         transform: translateY(2px);
     }
+
+    /* Address Section */
+    .address-container {
+        padding: 1.5rem;
+        width: 100%;
+        background: #f93827;
+        border-radius: 19px 19px 0px 0px;
+    }
+
+    .address-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .address-card {
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .address-card.selected {
+        border-color: #007bff;
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+    }
+
+    .address-details {
+        max-width: 70%;
+        color: #ffffff;
+    }
+
+    .address-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .address-label.active-label {
+        border: 2px solid #007bff;
+        border-radius: 8px;
+        background-color: #e7f1ff;
+    }
 </style>
+
 
 <style>
     /* modal desings */
@@ -269,67 +319,6 @@
     }
 </style>
 
-<style>
-    .address-container {
-        padding: 1.5rem;
-        width: 100%;
-        background: #FF7D29;
-        box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
-        border-radius: 19px 19px 0px 0px;
-
-    }
-
-    .title {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        text-align: center;
-        font-weight: bold;
-    }
-
-    .address-list {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .address-card {
-        padding: 1rem;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        transition: box-shadow 0.3s ease;
-    }
-
-    .address-card.selected {
-        border-color: #007bff;
-        box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
-    }
-
-    .address-details {
-        max-width: 70%;
-        color: #ffffff;
-    }
-
-    .address-actions {
-        display: flex;
-        gap: 0.5rem;
-    }
-
-
-    .address-label.active-label {
-        border: 2px solid #007bff;
-        border-radius: 8px;
-        background-color: #e7f1ff;
-    }
-</style>
-
-
-
-
-
-
 
 <div class="container-fluid">
 
@@ -380,9 +369,6 @@
                 </div>
             @endforeach
 
-
-
-
         </div>
 
 
@@ -421,12 +407,12 @@
                                                             </div>
 
                                                             <!-- <div class="form-check form-check-inline address-label">
-                                                                                                                                                <input type="radio" id="other" name="label" value="Other"
-                                                                                                                                                    class="form-check-input">
-                                                                                                                                                <label class="form-check-label" for="other">
-                                                                                                                                                    <i class="fas fa-ellipsis-h me-2"></i> Other
-                                                                                                                                                </label>
-                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                        <input type="radio" id="other" name="label" value="Other"
+                                                                                                                                                                                                                                                            class="form-check-input">
+                                                                                                                                                                                                                                                        <label class="form-check-label" for="other">
+                                                                                                                                                                                                                                                            <i class="fas fa-ellipsis-h me-2"></i> Other
+                                                                                                                                                                                                                                                        </label>
+                                                                                                                                                                                                                                                    </div> -->
                                                         </div>
                                                     </div>
 
@@ -463,7 +449,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                         <!-- Edit Address Modal -->
                         <div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel"
@@ -597,8 +582,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
 
                     <div class="address-container mb-3">
@@ -638,95 +621,85 @@
                                 New Address</button>
                         @endif
                     </div>
-
-
-
                     <div class="card cart">
+                        <label class="title" style="font-size: 20px; font-weight: bold; color: #fff; padding: 10px;">
+                            CHECKOUT
+                        </label>
 
-                        <label class="title">CHECKOUT</label>
-                        <div class="steps">
+                        <!-- Coupons Section -->
+                        <div class="coupons-section"
+                            style="background: #f93827; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                            <h4 style="color: #fff; font-size: 18px; margin-bottom: 10px;">Available Coupons:</h4>
+                            <button type="button" class="button-30" data-bs-toggle="modal" data-bs-target="#couponModal">
+                                View Available Coupons
+                            </button>
+                        </div>
+
+                        <hr style="border-top: 1px solid #fff;">
+
+                        <div class="steps" style="padding: 15px;">
                             <div class="step">
-                                <div class="promo">
-                                    <div class="available-coupons">
-                                        <h4 style="color:white;">Available Coupons:</h4>
-                                        <!-- Modal Trigger -->
-                                        <button type="button" class="button-30" data-bs-toggle="modal"
-                                            data-bs-target="#couponModal">
-                                            View Available Coupons
-                                        </button>
-                                    </div>
-
-                                </div>
-                                <hr>
+                                
+                                <!-- Payment Section -->
                                 <div class="payments">
-                                    <span>PAYMENT</span>
-                                    <div class="details">
-                                        <span>Subtotal:</span>
-                                        <span style="font-weight: bold;">₹{{ number_format($cartTotal, 2) }}</span>
+                                    <span style="font-size: 18px; font-weight: bold; color: #fff;">PAYMENT</span>
+                                    <div class="details" style="padding: 10px; background: #f93827; border-radius: 10px;">
+
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span>Subtotal:</span>
+                                            <span style="font-weight: bold;">₹{{ number_format($cartTotal, 2) }}</span>
+                                        </div>
 
                                         @if ($discountTotal > 0)
-                                            <span>Applied Discount:</span>
-                                            <span style="font-weight: bold; color: #a7ff00;">-
-                                                ₹{{ number_format($discountTotal, 2) }}</span>
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                                <span>Applied Discount:</span>
+                                                <span style="font-weight: bold; color: #a7ff00;">-
+                                                    ₹{{ number_format($discountTotal, 2) }}</span>
+                                            </div>
 
-                                            <span>New Total:</span>
-                                            <span
-                                                style="font-weight: bold; color: #a7ff00;">₹{{ number_format($finalTotal, 2) }}</span>
-
+                                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                                <span>New Total:</span>
+                                                <span
+                                                    style="font-weight: bold; color: #a7ff00;">₹{{ number_format($finalTotal, 2) }}</span>
+                                            </div>
                                         @endif
 
-                                        <span>Shipping:</span>
-                                        <span style="font-weight: bold;">₹50.00</span>
-                                        <span>Tax:</span>
-                                        <span style="font-weight: bold;">₹30.40</span>
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span>Shipping:</span>
+                                            <span style="font-weight: bold;">₹50.00</span>
+                                        </div>
+
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span>Tax:</span>
+                                            <span style="font-weight: bold;">₹30.40</span>
+                                        </div>
                                     </div>
                                 </div>
+                                <!-- Checkout Section -->
+                                <div class="footer" style="text-align: center; padding-top: 15px;">
+                                    <form action="{{ route('user.checkout') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="order_ids" value="{{ $cartItems->pluck('id')->join(',') }}">
+                                        <input type="hidden" name="total_amount"
+                                            value="{{ number_format($finalTotal + 50 + 30.40, 2) }}">
+                                        <input type="hidden" name="payment_method" value="COD">
 
+                                        <label class="price"
+                                            style="font-size: 18px; font-weight: bold; display: block; margin-bottom: 10px;">
+                                            Total: <span id="total-amount3"
+                                                style="color: #fff;">₹{{ number_format($finalTotal + 50 + 30.40, 2) }}</span>
+                                        </label>
 
+                                        <button type="submit" class="button-30 checkout-btn" role="button" style="width: 100%;">
+                                            Checkout
+                                        </button>
+                                    </form>
+                                </div>
 
                             </div>
                         </div>
                     </div>
 
-                    <div class="card checkout mt-2">
-                        <div class="footer">
-                            <form action="{{ route('user.checkout') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="order_ids" value="{{ $cartItems->pluck('id')->join(',') }}">
-                                <input type="hidden" name="total_amount"
-                                    value="{{  number_format($finalTotal + 50 + 30.40, 2) }}">
-                                <input type="hidden" name="payment_method" value="COD">
-
-                                <!-- <div style="margin-bottom: 1rem;">
-                                                                                                    <h4>Select Payment Method</h4>
-                                                                                                    <div class="form-check form-check-inline">
-                                                                                                        <input class="form-check-input" type="radio" name="payment_method" id="cod" value="COD"
-                                                                                                            required>
-                                                                                                        <label class="form-check-label" for="cod">
-                                                                                                            <i class="fas fa-money-bill-wave me-2"></i> <span class="text-light">Cash on
-                                                                                                                Delivery</span>
-                                                                                                        </label>
-                                                                                                    </div>
-                                                                                                    <div class="form-check form-check-inline">
-                                                                                                        <input class="form-check-input" type="radio" name="payment_method" id="razorpay"
-                                                                                                            value="Online" required>
-                                                                                                        <label class="form-check-label" for="razorpay">
-                                                                                                            <i class="fas fa-credit-card me-2"></i><span class="text-light">Pay Online
-                                                                                                                (Razorpay)</span>
-                                                                                                        </label>
-                                                                                                    </div>
-                                                                                                </div> -->
-
-                                <label class="price" style="margin-right: 12pc;">
-                                    Total: <span id="total-amount3">₹{{ number_format($finalTotal + 50 + 30.40, 2) }}</span>
-                                </label>
-
-                                <button type="submit" class="button-30 checkout-btn" role="button">Checkout</button>
-
-                            </form>
-
-                        </div>
-                    </div>
 
 
                 </div>
