@@ -50,6 +50,17 @@
                     value="{{ old('phone_number') }}" required autocomplete="username">
                 <div class="invalid-feedback">Please enter a valid Phone Number.</div>
             </div>
+            <div class="mb-3">
+                <label for="country" class="form-label text-dark fw-bold">Country</label>
+                <select type="text" class="form-select" id="country" name="country" required autocomplete="Country">
+                    <option value="" selected>Select Country</option>
+                    <option value="USA">USA</option>
+                    <option value="UK">UK</option>
+                    <option value="AUS">Australia</option>
+                </select>
+                <div class="invalid-feedback">Please select your country.</div>
+            </div>
+
 
             <div class="mb-3">
                 <label for="password" class="form-label text-dark fw-bold">Password</label>

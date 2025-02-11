@@ -12,6 +12,15 @@ use App\Http\Controllers\OrderController as UserOrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+
+
+
+
+
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-us', [HomeController::class, 'about_us'])->name('about-us');
@@ -20,6 +29,21 @@ Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::get('/dashboard', [HomeController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+// Show email verification notice
+Route::get('/email/verify', EmailVerificationPromptController::class)
+    ->name('verification.notice');
+
+// Handle verification link
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/dashboard');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+// Resend verification email
+Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+    ->middleware(['auth', 'throttle:6,1'])
+    ->name('verification.send');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -37,6 +61,8 @@ Route::middleware('auth')->group(function () {
         )->count();
         return response()->json(['count' => $count]);
     });
+
+
 
     Route::post('/address/add', [UserController::class, 'addAddress'])->name('user.address.add');
     Route::post('/address/edit', [UserController::class, 'editAddress'])->name('user.address.edit');

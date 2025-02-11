@@ -33,6 +33,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'phone_number' => ['required', 'string', 'unique:' . User::class],
+            'country' => 'required',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -40,14 +41,20 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
+            'country' => $request->country,
             'role' => 'user',
             'password' => Hash::make($request->password),
         ]);
 
+        // Fire the event to send email verification
         event(new Registered($user));
 
+        // ✅ Log in the user immediately after registration
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Redirect to the email verification page
+        return redirect(route('verification.notice'))->with('status', 'verification-link-sent');
     }
+
+
 }

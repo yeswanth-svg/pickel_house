@@ -251,7 +251,7 @@
                                                 @endauth
 
                                                 <h4 class="text-primary price-display mb-0">
-                                                    ${{ $dish->quantities->first()->price ?? 'N/A' }}
+                                                    {{ convertPrice($dish->quantities->first()->price) ?? 'N/A' }}
                                                 </h4>
                                             </div>
 
