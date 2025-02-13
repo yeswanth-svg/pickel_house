@@ -182,9 +182,6 @@ class OrderController extends Controller
 
 
 
-
-
-
     public function checkout(Request $request)
     {
         $request->validate([
@@ -240,8 +237,6 @@ class OrderController extends Controller
     {
         return view('order-confirmation');
     }
-
-
 
     public function destroy($id)
     {

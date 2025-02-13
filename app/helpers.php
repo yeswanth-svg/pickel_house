@@ -4,6 +4,8 @@
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
+use Illuminate\Support\Facades\Cache;
+
 if (!function_exists('formatCurrency')) {
     function formatCurrency($amount)
     {
@@ -26,6 +28,7 @@ function formatDate($date)
 
 
 
+
 if (!function_exists('convertPrice')) {
     function convertPrice($amount)
     {
@@ -36,6 +39,7 @@ if (!function_exists('convertPrice')) {
         // Define currency mapping
         $currencyMap = [
             'UK' => 'GBP',
+            'CA' => 'CAD',
             'USA' => 'USD',
             'AUS' => 'AUD',
         ];
@@ -51,7 +55,7 @@ if (!function_exists('convertPrice')) {
             return '₹' . number_format($amount, 2);
         }
 
-        // Fetch conversion rate (use an API or fallback rates)
+        // Fetch conversion rate with caching
         $conversionRate = getExchangeRate($fromCurrency, $toCurrency);
 
         // Convert the price
@@ -65,19 +69,23 @@ if (!function_exists('convertPrice')) {
 if (!function_exists('getExchangeRate')) {
     function getExchangeRate($from, $to)
     {
-        try {
-            // Use an exchange rate API (You can replace this with your preferred API)
-            $response = Http::get("https://api.exchangerate-api.com/v4/latest/{$from}");
+        $cacheKey = "exchange_rate_{$from}_{$to}";
 
-            if ($response->successful()) {
-                $rates = $response->json()['rates'];
-                return $rates[$to] ?? 1;
+        return Cache::remember($cacheKey, now()->addHours(12), function () use ($from, $to) {
+            try {
+                // Use an exchange rate API
+                $response = Http::get("https://api.exchangerate-api.com/v4/latest/{$from}");
+
+                if ($response->successful()) {
+                    $rates = $response->json()['rates'];
+                    return $rates[$to] ?? 1;
+                }
+            } catch (\Exception $e) {
+                return 1; // Default rate if API fails
             }
-        } catch (\Exception $e) {
-            return 1; // Default rate if API fails
-        }
 
-        return 1;
+            return 1;
+        });
     }
 }
 
@@ -88,11 +96,14 @@ if (!function_exists('getCurrencySymbol')) {
             'GBP' => '£',
             'USD' => '$',
             'AUD' => 'A$',
+            'CAD' => 'C$',
         ];
 
         return $symbols[$currency] ?? '₹';
     }
 }
+
+
 
 
 

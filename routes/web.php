@@ -1,15 +1,18 @@
 <?php
 
+use App\Http\Controllers\Admin\AUserController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\CuponController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DishController;
 use App\Http\Controllers\Admin\DishQuantities;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ReferalController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OrderController as UserOrderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
@@ -89,7 +92,7 @@ Route::middleware('auth')->group(function () {
         $count = \App\Models\WishlistItem::where('user_id', auth()->id())->count();
         return response()->json(['count' => $count]);
     });
-
+    Route::get('/referrals', [UserDashboardController::class, 'referrals'])->name('referrals');
 
 });
 Route::get('/test-route', function () {
@@ -103,7 +106,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('dishes', DishController::class);
     Route::resource('quantity', DishQuantities::class);
 
-    Route::resource('users', UserController::class);
+    Route::resource('users', AUserController::class);
+    Route::resource('/users.referrals', ReferalController::class)
+        ->shallow();
     Route::resource('coupons', CuponController::class);
 
     Route::get('/orders/confirmed', [OrderController::class, 'confirmed'])->name('orders.confirmed');

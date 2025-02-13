@@ -187,7 +187,8 @@
                                                     <select class="quantity-selector ms-2 small-select form-select form-select-sm"
                                                         data-dish-id="{{ $dish->id }}">
                                                         @foreach($dish->quantities as $q)
-                                                            <option value="{{ $q->id }}" data-price="{{ $q->price }}">
+                                                            <option value="{{ $q->id }}" data-price="{{convertPrice($q->price) }}"
+                                                                data-normal-price="{{$q->price}}">
                                                                 {{ $q->quantity }}
                                                             </option>
                                                         @endforeach
@@ -599,16 +600,17 @@
                 let dishId = this.dataset.dishId;
                 let selectedOption = this.options[this.selectedIndex];
                 let price = selectedOption.getAttribute('data-price');
+                let normal_price = selectedOption.getAttribute('data-normal-price');
                 let quantityId = selectedOption.value;
 
                 // Update the displayed price
                 let priceDisplay = this.closest('.menu-item').querySelector('.price-display');
-                priceDisplay.textContent = `$${price}`;
+                priceDisplay.textContent = `${price}`;
 
                 // Update hidden input fields in the form
                 let form = this.closest('.menu-item').querySelector('.add-to-wishlist-form');
                 form.querySelector('.quantity-input1').value = quantityId;
-                form.querySelector('.price-input1').value = price;
+                form.querySelector('.price-input1').value = normal_price;
             });
         });
     });
@@ -623,16 +625,17 @@
                 let dishId = this.dataset.dishId;
                 let selectedOption = this.options[this.selectedIndex];
                 let price = selectedOption.getAttribute('data-price');
+                let normal_price = selectedOption.getAttribute('data-normal-price');
                 let quantityId = selectedOption.value;
 
                 // Update the displayed price
                 let priceDisplay = this.closest('.menu-item').querySelector('.price-display');
-                priceDisplay.textContent = `$${price}`;
+                priceDisplay.textContent = `${price}`;
 
                 // Update hidden input fields in the form
                 let form = this.closest('.menu-item').querySelector('.add-to-cart-form');
                 form.querySelector('.quantity-input2').value = quantityId;
-                form.querySelector('.price-input2').value = price;
+                form.querySelector('.price-input2').value = normal_price;
             });
         });
     });

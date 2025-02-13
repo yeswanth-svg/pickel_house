@@ -2,7 +2,8 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<!-- Hero Start -->
+
+<!-- Hero Section -->
 <div class="container-fluid py-6 my-6 mt-0" style="
         background: url('img/bg-cover.jpg') no-repeat center center/cover;
         color: white;height: 379px;">
@@ -18,13 +19,27 @@
 </div>
 <!-- Hero End -->
 
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 text-dark fw-bold fs-3 text-center">
-                {{ __("User Dashboard") }}
+<!-- Main Content -->
+<div class="container py-4">
+
+    <div class="row mt-4">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            @include('partials.dashboard_sidebar')
+        </div>
+
+        <!-- Main Dashboard Content -->
+        <div class="col-md-9">
+            <div class="text-center">
+                <h2 class="fw-bold">User Dashboard</h2>
+            </div>
+
+            <div class="bg-white shadow-sm p-4 rounded">
+                <h4>Welcome, {{ auth()->user()->name }}!</h4>
+                <p>This is your dashboard where you can manage your profile, orders, and settings.</p>
             </div>
         </div>
     </div>
 </div>
+
 @endsection

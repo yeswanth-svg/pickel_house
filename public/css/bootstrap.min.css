@@ -4583,7 +4583,7 @@ fieldset:disabled .btn {
 .list-group-item.active {
     z-index: 2;
     color: #fff;
-    background-color: #d4a762;
+    background-color: #f93827;
     border-color: #d4a762;
 }
 .list-group-item + .list-group-item {

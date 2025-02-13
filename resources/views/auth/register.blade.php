@@ -29,6 +29,8 @@
 
         <form method="POST" action="{{ route('register') }}" class="needs-validation" novalidate>
             @csrf
+            <!-- Store Referral Code -->
+            <input type="hidden" name="ref" value="{{ request('ref') }}">
 
             <div class="mb-3">
                 <label for="name" class="form-label text-dark fw-bold">Name</label>
@@ -55,7 +57,7 @@
                 <select type="text" class="form-select" id="country" name="country" required autocomplete="Country">
                     <option value="" selected>Select Country</option>
                     <option value="USA">USA</option>
-                    <option value="UK">UK</option>
+                    <option value="CA">Canada</option>
                     <option value="AUS">Australia</option>
                 </select>
                 <div class="invalid-feedback">Please select your country.</div>
@@ -84,6 +86,5 @@
         </form>
     </div>
 </section>
-
 
 @endsection
