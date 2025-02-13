@@ -491,7 +491,7 @@
                                             </div>
                                             <div class="wishlist-info">
                                                 <i class="fas fa-tag"></i>
-                                                <span><strong>Price:</strong> $${item.price}</span>
+                                               <span><strong>Price:</strong> ${item.converted_price}</span>
                                             </div>
                                         </div>
                                     </div>

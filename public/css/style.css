@@ -41,8 +41,8 @@ h6,
 }
 
 .my-6 {
-    margin-top: 6rem;
-    margin-bottom: 6rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
 }
 
 .py-6 {
@@ -892,4 +892,3 @@ input[type="number"] {
 .alert-danger [data-notify="icon"]:before {
     background: #f25961;
 }
-
