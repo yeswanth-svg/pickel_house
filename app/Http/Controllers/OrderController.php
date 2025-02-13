@@ -125,7 +125,7 @@ class OrderController extends Controller
         $shippingThreshold = Setting::where('key', 'free_shipping_threshold')->value('value') ?? 500;
         $freeShippingRemaining = max(0, $shippingThreshold - $cartTotal);
 
-        return view('cart', [
+        return view('user.cart', [
             'cartItems' => $cartItems,
             'cartTotal' => $cartTotal,
             'discountTotal' => $discountTotal,
@@ -260,7 +260,7 @@ class OrderController extends Controller
 
     public function order_confirmation()
     {
-        return view('order-confirmation');
+        return view('user.order-confirmation');
     }
 
     public function destroy($id)

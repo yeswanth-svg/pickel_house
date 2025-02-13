@@ -13,6 +13,6 @@ class UserDashboardController extends Controller
     {
         $referrals = Referral::where('referrer_id', auth()->id())->with('referredUser')->get();
 
-        return view('referrals', compact('referrals'));
+        return view('user.referrals', compact('referrals'));
     }
 }

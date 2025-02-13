@@ -48,7 +48,7 @@ class CheckoutController extends Controller
             ->whereNotIn('id', $usedCoupons) // Exclude already used coupons
             ->get();
 
-        return view('checkout', compact(
+        return view('user.checkout', compact(
             'cartItems',
             'subtotal',
             'savings',
@@ -176,7 +176,7 @@ class CheckoutController extends Controller
 
     public function shipping()
     {
-        return view('shipping');
+        return view('user.shipping');
     }
 
 
