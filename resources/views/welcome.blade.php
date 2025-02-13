@@ -2,7 +2,6 @@
 @section('title', 'Pickel House')
 @section('content')
 
-
 <!-- Hero Start -->
 <div class="container-fluid bg-light py-6 my-6 mt-0">
     <div class="container">
@@ -233,7 +232,7 @@
                                                                         class="btn btn-outline-secondary btn-sm decrease-qty">−</button>
                                                                     <input type="number" name="cart_quantity"
                                                                         class="form-control text-center cart-quantity" min="1" value="1"
-                                                                        style="width: 40px; font-size: 14px;">
+                                                                        style="width: 29px; font-size: 14px;">
                                                                     <button type="button"
                                                                         class="btn btn-outline-secondary btn-sm increase-qty">+</button>
                                                                 </div>
@@ -254,8 +253,8 @@
                                                     {{ convertPrice($dish->quantities->first()->price) ?? 'N/A' }}
                                                 </h4>
                                             </div>
-
-                                            <p class="mb-0">{{ $dish->description }}</p>
+<!-- 
+                                            <p class="mb-0">{{ $dish->description }}</p> -->
                                         </div>
                                     </div>
                                 </div>
@@ -267,10 +266,7 @@
         </div>
     </div>
 </div>
-
 <!-- Menu End -->
-
-
 
 <!-- Team Start -->
 <div class="container-fluid team py-6">
@@ -579,8 +575,8 @@
     </div>
 </div>
 <!-- Testimonial End -->
-<script src="{{asset('admin/js/core/jquery-3.7.1.min.js')}}"></script>
 
+<script src="{{asset('admin/js/core/jquery-3.7.1.min.js')}}"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -643,7 +639,6 @@
 
 
 </script>
-
 
 <script>
     $(document).ready(function () {

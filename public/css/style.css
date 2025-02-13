@@ -715,7 +715,7 @@ h6,
 /* === Responsive Fix for Menu Items === */
 @media (max-width: 768px) {
     .menu-item {
-        flex-direction: column;
+        flex-direction:row-reverse;
         align-items: flex-start;
         text-align: left;
     }

@@ -6476,9 +6476,9 @@ fieldset:disabled .btn {
 .ms-1 {
     margin-left: 0.25rem !important;
 }
-.ms-2 {
+/* .ms-2 {
     margin-left: 0.5rem !important;
-}
+} */
 .ms-3 {
     margin-left: 1rem !important;
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OrderController as UserOrderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -22,10 +23,16 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 
 
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-us', [HomeController::class, 'about_us'])->name('about-us');
 Route::get('/menu', [HomeController::class, 'menu'])->name('menu');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
+Route::post('/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('apply.coupon');
+
 Route::get('/dashboard', [HomeController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
