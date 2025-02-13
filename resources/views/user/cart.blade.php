@@ -52,7 +52,7 @@
                             <button type="submit" class="trash-button">
                                 <i class="fas fa-trash-alt"
                                     style="    font-size: 1.2rem;
-                                                                                                                                                                                                                                                                        padding: 2px;"></i>
+                                                                                                                                                                                                                                                                                                                padding: 2px;"></i>
                             </button>
                         </form>
                     </div>
@@ -64,21 +64,29 @@
 
                     <div class="card cart mt-3 p-3" style="border-radius: inherit;">
 
-                        <p class="mb-2">
-                            <i class="fas fa-gift text-primary"></i>
-                            Shop for <span class="font-weight-bold text-primary">
-                                {{ convertPrice($freeShippingThreshold) }}</span>
-                            more for <span class="text-primary font-weight-bold">FREE SHIPPING!</span>
-                        </p>
-                        <div class="progress mb-2" style="height: 8px;">
-                            <div class="progress-bar bg-success" role="progressbar"
-                                style="width: {{ min(100, ($finalTotal / $freeShippingThreshold) * 100) }}%;"
-                                aria-valuenow="{{ $finalTotal }}" aria-valuemin="0"
-                                aria-valuemax="{{ $freeShippingThreshold }}">
-                            </div>
-                        </div>
+                        @if($freeShippingThreshold > 0)
+                            <p class="mb-2">
+                                <i class="fas fa-gift text-primary"></i>
+                                @if($isFreeShippingEligible)
+                                    🎉 <span class="font-weight-bold text-success">You are eligible for FREE SHIPPING!</span>
+                                @else
+                                    Shop for <span class="font-weight-bold text-primary">
+                                        {{ convertPrice($remainingForFreeShipping) }}</span>
+                                    more to unlock <span class="text-primary font-weight-bold">FREE SHIPPING!</span>
+                                @endif
+                            </p>
 
-                        <div class="text-muted small">No Customs Duties</div>
+                            <div class="progress mb-2" style="height: 8px;">
+                                <div class="progress-bar {{ $isFreeShippingEligible ? 'bg-success' : 'bg-warning' }}"
+                                    role="progressbar" style="width: {{ min(100, ($finalTotal / $freeShippingThreshold) * 100) }}%;"
+                                    aria-valuenow="{{ convertPrice($finalTotal) }}" aria-valuemin="0"
+                                    aria-valuemax="{{ convertPrice($freeShippingThreshold) }}">
+                                </div>
+                            </div>
+                        @endif
+
+
+                        <!-- <div class="text-muted small">No Customs Duties</div> -->
 
                         <div class="d-flex justify-content-between mt-2">
                             <span>Total:</span>
@@ -93,8 +101,8 @@
                         @endif
 
                         <div class="d-flex justify-content-between mt-3 border-top pt-2">
-                            <span class="font-weight-bold">Grand Total:</span>
-                            <span class="font-weight-bold">{{ convertPrice($finalTotal) }}</span>
+                            <span class="fw-bold text-primary fs-4">Grand Total:</span>
+                            <span class="fw-bold fs-4">{{ convertPrice($finalTotal) }}</span>
                         </div>
 
                         <a href="{{ url('/checkout') }}" class="btn btn-primary btn-block mt-3">

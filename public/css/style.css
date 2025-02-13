@@ -938,3 +938,7 @@ input[type="number"] {
     background: rgba(239, 0, 0, 0.1);
     padding: 6px;
 }
+
+span{
+    color: black;
+}

@@ -23,6 +23,9 @@
     <link href="{{asset('lib/lightbox/css/lightbox.min.css')}}" rel="stylesheet" />
     <link href="{{asset("lib/owlcarousel/owl.carousel.min.css")}}" rel="stylesheet" />
 
+
+    <!-- <link rel="stylesheet" href="{{asset('admin/css/plugins.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('admin/css/kaiadmin.min.css')}}" /> -->
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" />
 
@@ -50,7 +53,12 @@
             },
         });
     </script>
-
+    <style>
+        .cart-container {
+            position: relative;
+            display: inline-block;
+        }
+    </style>
 
 
 
@@ -74,10 +82,24 @@
                             style="max-width: 100px; max-height: 100px;">
                     </h1>
                 </a>
+
+                <!-- CART ICON (Mobile View) -->
+                @auth
+                    <div class="cart-container d-lg-none" style="position: absolute; right: 73px; top: 62px;">
+                        <a href="{{route('user.cart')}}">
+                            <i class="fas fa-shopping-cart cart-icon" style="font-size: 1.7rem;"></i>
+                            <span class="uk-badge cart-badge">
+                                {{ auth()->check() ? \App\Models\Order::where(['user_id' => auth()->id(), 'order_stage' => 'in_cart'])->count() : 0 }}
+                            </span>
+                        </a>
+                    </div>
+                @endauth
+
                 <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarCollapse">
                     <span class="fa fa-bars text-primary"></span>
                 </button>
+
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav mx-auto">
                         <a href="{{url('/')}}" class="nav-item nav-link {{request()->is('/') ? 'active' : ''}}">Home</a>
@@ -85,16 +107,6 @@
                             class="nav-item nav-link {{request()->is('about-us') ? 'active' : ''}}">About</a>
                         <a href="{{route('menu')}}"
                             class="nav-item nav-link {{request()->is('menu') ? 'active' : ''}}">Menu</a>
-                        <!-- <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                            <div class="dropdown-menu bg-light">
-                                <a href="book.html" class="dropdown-item">Order</a>
-                                <a href="blog.html" class="dropdown-item">Our Blog</a>
-                                <a href="team.html" class="dropdown-item">Our chefs</a>
-                                <a href="testimonial.html" class="dropdown-item">Reviews</a>
-                                <a href="404.html" class="dropdown-item">404 Page</a>
-                            </div>
-                        </div> -->
                         <a href="{{route('contact')}}"
                             class="nav-item nav-link {{request()->is('contact') ? 'active' : ''}}">Contact</a>
 
@@ -103,11 +115,9 @@
                                 @if (auth()->user()->role == 'admin')
                                     <a href="{{route('admin.dashboard')}}"
                                         class="nav-item nav-link {{request()->is('dashboard') ? 'active' : ''}}">Admin Dashboard</a>
-
                                 @else
                                     <a href="{{route('dashboard')}}"
                                         class="nav-item nav-link {{request()->is('dashboard') ? 'active' : ''}}">Dashboard</a>
-
                                 @endif
 
                                 <div class="nav-item dropdown">
@@ -123,42 +133,38 @@
                                         </form>
                                     </div>
                                 </div>
-
                             @else
                                 <a href="{{route('login')}}"
                                     class="nav-item nav-link {{request()->is('login') ? 'active' : ''}}">Login</a>
-
                                 @if (Route::has('register'))
                                     <a href="{{route('register')}}"
                                         class="nav-item nav-link {{request()->is('register') ? 'active' : ''}}">Register</a>
-
                                 @endif
                             @endauth
                         @endif
                     </div>
-                    @auth
-                                        <div class="cart-container" style="position: relative; display: inline-block;">
-                                            <a href="{{route('user.cart')}}">
-                                                <i class="fas fa-shopping-cart cart-icon" style="font-size:1.5rem;margin-top: 3px;"></i>
-                                                <span class="uk-badge cart-badge">
-                                                    {{ auth()->check() ? \App\Models\Order::where([
-                            'user_id' => auth()->id(),
-                            'order_stage' => 'in_cart'
-                        ])->count() : 0 }}
-                                                </span>
-                                            </a>
 
-                                        </div>
+                    <!-- CART ICON (Desktop View) -->
+                    @auth
+                        <div class="cart-container d-none d-lg-inline-block" style="position: relative;">
+                            <a href="{{route('user.cart')}}">
+                                <i class="fas fa-shopping-cart cart-icon" style="font-size: 1.5rem;"></i>
+                                <span class="uk-badge cart-badge">
+                                    {{ auth()->check() ? \App\Models\Order::where(['user_id' => auth()->id(), 'order_stage' => 'in_cart'])->count() : 0 }}
+                                </span>
+                            </a>
+                        </div>
                     @endauth
+
                     <button class="btn-search btn btn-primary btn-md-square me-4 rounded-circle d-none d-lg-inline-flex"
                         data-bs-toggle="modal" data-bs-target="#searchModal">
                         <i class="fas fa-search"></i>
                     </button>
-
                 </div>
             </nav>
         </div>
     </div>
+
     <!-- Navbar End -->
 
     <!-- Modal Search Start -->

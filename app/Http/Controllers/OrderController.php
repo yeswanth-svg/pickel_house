@@ -106,34 +106,34 @@ class OrderController extends Controller
             ->get();
 
         // Calculate Total (sum of original price * quantity)
-        $cartTotal = $cartItems->sum(function ($item) {
-            return ($item->quantity->original_price ?? 0) * $item->cart_quantity;
-        });
+        $cartTotal = $cartItems->sum(fn($item) => ($item->quantity->original_price ?? 0) * $item->cart_quantity);
 
         // Calculate Savings (sum of (original_price - discount_price) * quantity)
-        $discountTotal = $cartItems->sum(function ($item) {
-            return (($item->quantity->original_price ?? 0) - ($item->quantity->discount_price ?? 0)) * $item->cart_quantity;
-        });
+        $discountTotal = $cartItems->sum(fn($item) => (($item->quantity->original_price ?? 0) - ($item->quantity->discount_price ?? 0)) * $item->cart_quantity);
 
         // Calculate Grand Total (sum of discount price * quantity)
-        $finalTotal = $cartItems->sum(function ($item) {
-            return ($item->quantity->discount_price ?? 0) * $item->cart_quantity;
-        });
+        $finalTotal = $cartItems->sum(fn($item) => ($item->quantity->discount_price ?? 0) * $item->cart_quantity);
 
-        // Set Free Shipping Threshold (Example: Free shipping on orders above Rs. 5000)
-        // Free Shipping Logic
-        $shippingThreshold = Setting::where('key', 'free_shipping_threshold')->value('value') ?? 500;
-        $freeShippingRemaining = max(0, $shippingThreshold - $cartTotal);
+        // Fetch Free Shipping Threshold (Can be 0 if no free shipping is available)
+        $freeShippingThreshold = Setting::where('key', 'free_shipping_threshold')->value('value') ?? 0;
 
-        return view('user.cart', [
-            'cartItems' => $cartItems,
-            'cartTotal' => $cartTotal,
-            'discountTotal' => $discountTotal,
-            'finalTotal' => $finalTotal,
-            'freeShippingThreshold' => $shippingThreshold,
-            'remainingForFreeShipping' => $freeShippingRemaining,
-        ]);
+        // Check if user qualifies for Free Shipping
+        $isFreeShippingEligible = $freeShippingThreshold > 0 && $finalTotal >= $freeShippingThreshold;
+
+        // Calculate how much more is needed for free shipping
+        $remainingForFreeShipping = $isFreeShippingEligible ? 0 : max(0, $freeShippingThreshold - $finalTotal);
+
+        return view('user.cart', compact(
+            'cartItems',
+            'cartTotal',
+            'discountTotal',
+            'finalTotal',
+            'freeShippingThreshold',
+            'remainingForFreeShipping',
+            'isFreeShippingEligible'
+        ));
     }
+
 
 
 

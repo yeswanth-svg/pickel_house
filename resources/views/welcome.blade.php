@@ -12,10 +12,13 @@
                         <span class="text-primary">Experience the Rich & Authentic</span>
                         Flavors of Pickles
                     </h1>
-                    <a href="" class="btn btn-primary border-0 rounded-pill py-3 px-4 px-md-5 me-4">Order
-                        Now</a>
-                    <a href="" class="btn btn-primary border-0 rounded-pill py-3 px-4 px-md-5">Explore
-                        Flavors</a>
+                    <div class="d-flex justify-content-start align-items-start">
+                        <a href="" class="btn btn-primary border-0 rounded-pill py-3  px-md-5 me-4">Order
+                            Now</a>
+                        <a href="" class="btn btn-primary border-0 rounded-pill py-3  px-md-5">Explore
+                            Flavors</a>
+                    </div>
+
                 </div>
                 <div class="col-lg-5 col-md-12">
                     <img src="img/hero1.png" class="img-fluid rounded " alt="Delicious Pickles" />
@@ -254,13 +257,14 @@
 
                                                         <h4
                                                             class="cart__compare-price cart__compare-price--punit jsPrice text-primary price-display">
-                                                            {{ convertPrice($dish->quantities->first()->original_price) }}</h4>
+                                                            {{ convertPrice($dish->quantities->first()->original_price) }}
+                                                        </h4>
 
                                                     </div>
 
                                                 </div>
                                                 <!-- 
-                                                                                                                                                                                                                                                                    <p class="mb-0">{{ $dish->description }}</p> -->
+                                                                                                                                                                                                                                                                                                        <p class="mb-0">{{ $dish->description }}</p> -->
                                             </div>
                                         </div>
                                     </div>
