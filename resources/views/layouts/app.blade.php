@@ -69,8 +69,9 @@
         <div class="container">
             <nav class="navbar navbar-light navbar-expand-lg py-4">
                 <a href="{{url('/')}}" class="navbar-brand">
-                    <h1 class="text-primary fw-bold mb-0">
-                        Pickle<span class="text-dark">House</span>
+                    <h1 class="text-primary fw-bold mb-0 d-flex align-items-center">
+                        <img src="{{ asset('img/logo2.png') }}" alt="PickleHouse Logo" class="me-2 img-fluid"
+                            style="max-width: 100px; max-height: 100px;">
                     </h1>
                 </a>
                 <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
