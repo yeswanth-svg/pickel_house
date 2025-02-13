@@ -174,6 +174,11 @@ class CheckoutController extends Controller
 
     }
 
+    public function shipping()
+    {
+        return view('shipping');
+    }
+
 
 
 }

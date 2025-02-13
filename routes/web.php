@@ -94,6 +94,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/applycoupon', [CheckoutController::class, 'applyCoupon'])->name('applyCoupon');
 
+    Route::get('/shipping', [CheckoutController::class, 'shipping'])->name('shipping.page');
+
 
 });
 
