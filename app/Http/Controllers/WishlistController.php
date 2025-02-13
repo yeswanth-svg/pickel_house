@@ -66,8 +66,8 @@ class WishlistController extends Controller
                     'dish_name' => optional($item->dish)->name,
                     'quantity_id' => optional($item->quantity)->id,
                     'quantity' => optional($item->quantity)->quantity,
-                    'price' => optional($item->quantity)->price, // Original price in INR
-                    'converted_price' => convertPrice(optional($item->quantity)->price), // Convert price // Assuming `price` is in the `dishes` table
+                    'discount_price' => convertPrice(optional($item->quantity)->discount_price),
+                    'original_price' => convertPrice(optional($item->quantity)->original_price), // Convert price // Assuming `price` is in the `dishes` table
                 ];
             });
 

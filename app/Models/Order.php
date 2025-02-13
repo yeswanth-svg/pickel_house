@@ -15,9 +15,11 @@ class Order extends Model
         'user_id',
         'quantity_id',
         'order_stage',
+        'original_price',
+        'discount_price',
         'total_amount',
         'applied_coupon_id',
-        'discount_amount',
+        'coupon_discount',
     ];
 
     public function dish()

@@ -93,10 +93,10 @@ if (!function_exists('getCurrencySymbol')) {
     function getCurrencySymbol($currency)
     {
         $symbols = [
-            'GBP' => '£',
-            'USD' => '$',
-            'AUD' => 'A$',
-            'CAD' => 'C$',
+            'GBP' => '£  ',
+            'USD' => '$  ',
+            'AUD' => 'A$  ',
+            'CAD' => 'C$  ',
         ];
 
         return $symbols[$currency] ?? '₹';

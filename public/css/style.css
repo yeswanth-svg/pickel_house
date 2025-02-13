@@ -23,7 +23,7 @@
 h1,
 .h1 {
     font-weight: 400 !important;
-    font-family: "Playball", cursive !important;
+    font-family: "Poppins", sans-serif;
 }
 
 h2,
@@ -37,7 +37,7 @@ h6,
 .h5,
 .h6 {
     font-weight: 600 !important;
-    font-family: "Open Sans", sans-serif !important;
+    font-family: "Poppins", sans-serif !important;
 }
 
 .my-6 {
@@ -715,7 +715,7 @@ h6,
 /* === Responsive Fix for Menu Items === */
 @media (max-width: 768px) {
     .menu-item {
-        flex-direction:row-reverse;
+        flex-direction: row-reverse;
         align-items: flex-start;
         text-align: left;
     }
@@ -891,4 +891,50 @@ input[type="number"] {
 
 .alert-danger [data-notify="icon"]:before {
     background: #f25961;
+}
+
+.cart__item-block .cart__item .cart__punit {
+    max-width: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.jsPrice {
+    font-size: 1.5em !important;
+    color: black;
+}
+
+.cart__compare-price {
+    display: block;
+    font-size: 1.2em !important;
+    text-decoration: line-through;
+    color: black;
+}
+
+.trash-button {
+    border: none;
+    cursor: pointer;
+    color: white;
+    padding: 0;
+    background-color: #e74c3c;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.order-summary {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.savings {
+    color: #ef0000 !important;
+    /* Bootstrap Red */
+    font-weight: bold;
+    background: rgba(239, 0, 0, 0.1);
+    padding: 6px;
 }

@@ -53,7 +53,8 @@
                                         <th>ID</th>
                                         <th>Dish Name</th>
                                         <th>Quantity</th>
-                                        <th>Price</th>
+                                        <th>Original Price</th>
+                                        <th>Discount Price</th>
 
 
                                         <th style="width: 10%">Action</th>
@@ -65,7 +66,8 @@
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{ $quantity->dish->name }}</td>
                                         <td>{{ $quantity->quantity}}</td>
-                                        <td>{{$quantity->price}}</td>
+                                        <td>{{$quantity->original_price}}</td>
+                                        <td>{{ $quantity->discount_price}} </td>
 
                                         <td>
                                             <div class="form-button-action">

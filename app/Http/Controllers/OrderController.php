@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Coupon;
 use App\Models\CouponUsage;
 use App\Models\Dish;
+use App\Models\DishQuantity;
 use App\Models\Order;
+use App\Models\Setting;
 use App\Models\UserAddress;
 use App\Models\WishlistItem;
 use Illuminate\Http\Request;
@@ -21,7 +23,6 @@ class OrderController extends Controller
             'dish_id' => 'required|integer',
             'quantity_id' => 'required|integer',
             'cart_quantity' => 'required|integer|min:1', // Renamed quantity to cart_quantity
-            'total_amount' => 'required|numeric',
         ]);
 
         $wishlist_id = $validatedData['wishlist_id'] ?? null;
@@ -34,6 +35,20 @@ class OrderController extends Controller
 
         $user_id = auth()->user()->id;
 
+        // Fetch dish quantity details
+        $quantityDetails = DishQuantity::find($validatedData['quantity_id']);
+        if (!$quantityDetails) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid dish quantity selection.',
+            ], 400);
+        }
+
+        // Assign prices from dish quantity table
+        $originalPrice = $quantityDetails->original_price;
+        $discountPrice = $quantityDetails->discount_price; // The selling price
+        $itemTotalAmount = $discountPrice * $validatedData['cart_quantity']; // Calculate total for item
+
         // Check if the same dish with the same quantity_id exists in the cart
         $cartItem = Order::where('user_id', $user_id)
             ->where('dish_id', $validatedData['dish_id'])
@@ -44,7 +59,7 @@ class OrderController extends Controller
         if ($cartItem) {
             // If item exists, update the cart_quantity and total_amount
             $cartItem->cart_quantity += $validatedData['cart_quantity'];
-            $cartItem->total_amount += $validatedData['total_amount'];
+            $cartItem->total_amount += $itemTotalAmount;
             $cartItem->updated_at = now();
             $cartItem->save();
         } else {
@@ -54,7 +69,10 @@ class OrderController extends Controller
                 'dish_id' => $validatedData['dish_id'],
                 'quantity_id' => $validatedData['quantity_id'],
                 'cart_quantity' => $validatedData['cart_quantity'],
-                'total_amount' => $validatedData['total_amount'],
+                'original_price' => $originalPrice, // Save the original price
+                'discount_price' => $discountPrice, // Save the admin-set price
+                'total_amount' => $itemTotalAmount, // Total based on discount_price
+                'order_stage' => 'in_cart',
             ]);
         }
 
@@ -75,44 +93,51 @@ class OrderController extends Controller
     }
 
 
+
     public function viewCart()
     {
         $user = auth()->user();
         $user_id = $user->id;
 
+        // Retrieve cart items with dish and quantity relationships
         $cartItems = Order::where('user_id', $user_id)
             ->where('order_stage', 'in_cart')
             ->with(['dish', 'quantity'])
             ->get();
 
-        $cartTotal = $cartItems->sum('total_amount');
-        $discountTotal = $cartItems->sum('discount_amount');
-        $finalTotal = $cartTotal - $discountTotal;
+        // Calculate Total (sum of original price * quantity)
+        $cartTotal = $cartItems->sum(function ($item) {
+            return ($item->quantity->original_price ?? 0) * $item->cart_quantity;
+        });
 
-        $addresses = UserAddress::where('user_id', $user_id)->get();
+        // Calculate Savings (sum of (original_price - discount_price) * quantity)
+        $discountTotal = $cartItems->sum(function ($item) {
+            return (($item->quantity->original_price ?? 0) - ($item->quantity->discount_price ?? 0)) * $item->cart_quantity;
+        });
 
-        // Fetch used and unused coupons logic remains the same
-        $usedCouponIds = CouponUsage::where('user_id', $user_id)->pluck('coupon_id')->toArray();
-        $allCoupons = Coupon::where('active', true)
-            ->whereDate('expiry_date', '>=', now())
-            ->where(function ($query) use ($cartTotal) {
-                $query->whereNull('minimum_order_value')
-                    ->orWhere('minimum_order_value', '<=', $cartTotal);
-            })
-            ->get();
-        $usedCoupons = $allCoupons->whereIn('id', $usedCouponIds);
-        $unusedCoupons = $allCoupons->whereNotIn('id', $usedCouponIds);
+        // Calculate Grand Total (sum of discount price * quantity)
+        $finalTotal = $cartItems->sum(function ($item) {
+            return ($item->quantity->discount_price ?? 0) * $item->cart_quantity;
+        });
+
+        // Set Free Shipping Threshold (Example: Free shipping on orders above Rs. 5000)
+        // Free Shipping Logic
+        $shippingThreshold = Setting::where('key', 'free_shipping_threshold')->value('value') ?? 500;
+        $freeShippingRemaining = max(0, $shippingThreshold - $cartTotal);
 
         return view('cart', [
             'cartItems' => $cartItems,
-            'addresses' => $addresses,
-            'usedCoupons' => $usedCoupons,
-            'unusedCoupons' => $unusedCoupons,
             'cartTotal' => $cartTotal,
             'discountTotal' => $discountTotal,
             'finalTotal' => $finalTotal,
+            'freeShippingThreshold' => $shippingThreshold,
+            'remainingForFreeShipping' => $freeShippingRemaining,
         ]);
     }
+
+
+
+
 
     public function applyCoupon(Request $request)
     {
@@ -251,7 +276,7 @@ class OrderController extends Controller
         if ($order && $order->order_stage === 'in_cart') {
             $order->order_stage = 'removed_from_cart';
             $order->applied_coupon_id = 0;
-            $order->discount_amount = 0;
+            $order->coupon_discount = 0;
 
         }
         // Delete the item

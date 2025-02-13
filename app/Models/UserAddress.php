@@ -7,19 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class UserAddress extends Model
 {
     //
-
     protected $fillable = [
-        "user_id",
-        "label",
-        "address_line_1",
-        "address_line_2",
-        "city",
-        "pincode",
+        'user_id',
+        'first_name',
+        'last_name',
+        'company',
+        'address',
+        'apartment',
+        'city',
+        'state',
+        'zip_code',
+        'phone',
 
     ];
-
-    protected $casts = [
-        'is_default' => 'boolean',
-    ];
-
 }

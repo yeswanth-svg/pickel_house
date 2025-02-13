@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WishlistController;
+use App\Models\UserAddress;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -73,19 +74,7 @@ Route::middleware('auth')->group(function () {
     });
 
 
-
-    Route::post('/address/add', [UserController::class, 'addAddress'])->name('user.address.add');
-    Route::post('/address/edit', [UserController::class, 'editAddress'])->name('user.address.edit');
-    Route::post('/address/select', [UserController::class, 'selectAddress'])->name('address.select');
-
-    Route::post('/apply-coupon', [UserOrderController::class, 'applyCoupon'])->name('user.applyCoupon');
-    Route::post('/checkout', [UserOrderController::class, 'checkout'])->name('user.checkout');
-
-    Route::get('/order-confirmation', [UserOrderController::class, 'order_confirmation'])->name('order-confirmation');
-
-
     Route::post('/wishlist/store', [WishlistController::class, 'store'])->name('wishlist.store');
-
     Route::get('/get-wishlist-items', [WishlistController::class, 'getWishlistItems'])->name('get.wishlist.items');
     Route::delete('/delete-wishlist-item/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
     Route::get('/wishlist-count', function () {
@@ -94,10 +83,20 @@ Route::middleware('auth')->group(function () {
     });
     Route::get('/referrals', [UserDashboardController::class, 'referrals'])->name('referrals');
 
+
+    Route::post('/save-address', [CheckoutController::class, 'saveAddress'])->name('save.address');
+    Route::post('/update-selected-address', [CheckoutController::class, 'updateSelectedAddress'])->name('update.selected.address');
+
+
+    Route::get('/get-address/{id}', function ($id) {
+        return response()->json(UserAddress::find($id));
+    });
+
+    Route::post('/applycoupon', [CheckoutController::class, 'applyCoupon'])->name('applyCoupon');
+
+
 });
-Route::get('/test-route', function () {
-    dd("Route is working");
-});
+
 
 
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {

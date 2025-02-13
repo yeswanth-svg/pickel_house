@@ -490,10 +490,18 @@
                                                 <i class="fas fa-balance-scale"></i> 
                                                 <span><strong>Qty:</strong> ${item.quantity}</span>
                                             </div>
-                                            <div class="wishlist-info">
-                                                <i class="fas fa-tag"></i>
-                                               <span><strong>Price:</strong> ${item.converted_price}</span>
-                                            </div>
+                                                                        <div class="cart__punit hide-mobile">
+                                                        <span
+                                                            class="jsPrice">${item.discount_price}</span>
+
+
+                                                        <h4
+                                                            class="cart__compare-price cart__compare-price--punit jsPrice text-primary price-display">${item.original_price}
+                                                           </h4>
+
+                                                    </div>
+
+                                          
                                         </div>
                                     </div>
                                     <div class="wishlist-actions">
@@ -510,7 +518,6 @@
                                             <input type="hidden" name="wishlist_id" value="${item.id}">
                                             <input type="hidden" name="dish_id" value="${item.dish_id}">
                                             <input type="hidden" name="quantity_id" value="${item.quantity_id}">
-                                            <input type="hidden" name="total_amount" value="${item.price}">
                                             <div class="d-flex justify-content-center">
                                                 <div class="input-group input-group-sm m-2" style="width: 90px;height: 37px;">
                                                     <button type="button" class="btn btn-outline-secondary btn-sm decrease-qty">−</button>
