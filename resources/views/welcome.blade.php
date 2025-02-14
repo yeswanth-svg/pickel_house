@@ -193,7 +193,7 @@
                                                                 <option value="{{ $q->id }}"
                                                                     data-price="{{convertPrice($q->discount_price) }}"
                                                                     data-normal-price="{{$q->discount_price}}">
-                                                                    {{ $q->quantity }}
+                                                                    {{ $q->weight }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -264,7 +264,7 @@
 
                                                 </div>
                                                 <!-- 
-                                                                                                                                                                                                                                                                                                        <p class="mb-0">{{ $dish->description }}</p> -->
+                                                                                                                                                                                                                                                                                                                    <p class="mb-0">{{ $dish->description }}</p> -->
                                             </div>
                                         </div>
                                     </div>

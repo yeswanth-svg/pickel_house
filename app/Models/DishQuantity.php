@@ -9,7 +9,7 @@ class DishQuantity extends Model
     //
     protected $fillable = [
         'dish_id',
-        'quantity',
+        'weight',
         'original_price',
         'discount_price',
     ];

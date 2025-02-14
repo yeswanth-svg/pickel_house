@@ -227,6 +227,14 @@
 
                         </li>
 
+                        <li class="nav-item {{request()->is('admin/settings*') ? 'active' : ''}}">
+                            <a href="{{route('admin.settings.index')}}">
+                                <i class="fas fa-gear"></i>
+                                <p>Settings</p>
+                            </a>
+
+                        </li>
+
                     </ul>
                 </div>
             </div>

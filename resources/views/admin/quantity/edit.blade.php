@@ -52,9 +52,9 @@
 
 
                                     <div class="col-md-6 mb-3">
-                                        <label for="quantity" class="form-label text-success fw-bold fs-4">Quantity</label>
-                                        <input type="text" name="quantity" id="quantity" class="form-control"
-                                            placeholder="e.g., Chicken Biryani" value="{{$quantity->quantity}}" step="0.1">
+                                        <label for="weight" class="form-label text-success fw-bold fs-4">Weight</label>
+                                        <input type="text" name="weight" id="weight" class="form-control"
+                                            placeholder="e.g., Chicken Biryani" value="{{$quantity->weight}}" step="0.1">
                                     </div>
 
                                     <div class="col-md-6 mb-3">

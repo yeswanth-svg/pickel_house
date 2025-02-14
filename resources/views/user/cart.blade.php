@@ -28,7 +28,7 @@
                             <div>
                                 <h3 style="margin: 0; font-size: 1rem; font-weight: bold; color: #333;">{{ $item->dish->name }}
                                 </h3>
-                                <p style="margin: 0; font-size: 0.9rem; color: #777;">{{ $item->quantity->quantity }}</p>
+                                <p style="margin: 0; font-size: 0.9rem; color: #777;">{{ $item->quantity->weight }}</p>
                                 <p style="margin: 0; font-size: 0.9rem; color: #777;">Ready to dispatch in 3 - 5 business days
                                 </p>
                             </div>
@@ -52,7 +52,7 @@
                             <button type="submit" class="trash-button">
                                 <i class="fas fa-trash-alt"
                                     style="    font-size: 1.2rem;
-                                                                                                                                                                                                                                                                                                                padding: 2px;"></i>
+                                                                                                                                                                                                                                                                                                                        padding: 2px;"></i>
                             </button>
                         </form>
                     </div>

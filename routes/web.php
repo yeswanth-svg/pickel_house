@@ -8,9 +8,11 @@ use App\Http\Controllers\Admin\DishController;
 use App\Http\Controllers\Admin\DishQuantities;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ReferalController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OrderController as UserOrderController;
+use App\Http\Controllers\RazorpayController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\CheckoutController;
@@ -96,6 +98,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/shipping', [CheckoutController::class, 'shipping'])->name('shipping.page');
 
+    Route::post('/update-shipping-method', [CheckoutController::class, 'updateShippingMethod'])->name('update-shipping-method');
+
+    Route::post('/razorpay/initiate', [RazorpayController::class, 'initiate'])->name('razorpay.initiate');
+    Route::get('/razorpay/success', [RazorpayController::class, 'success'])->name('razorpay.success');
+
+    Route::get('/order/confimartion', [UserOrderController::class, 'order_confirmation'])->name('order.confirmation');
+
 
 });
 
@@ -133,6 +142,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
 
     Route::resource('orders', OrderController::class);
+    Route::resource('settings', SettingsController::class);
 });
 
 

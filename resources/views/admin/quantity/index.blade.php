@@ -52,7 +52,7 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Dish Name</th>
-                                        <th>Quantity</th>
+                                        <th>Weight</th>
                                         <th>Original Price</th>
                                         <th>Discount Price</th>
 
@@ -65,7 +65,7 @@
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{ $quantity->dish->name }}</td>
-                                        <td>{{ $quantity->quantity}}</td>
+                                        <td>{{ $quantity->weight}}</td>
                                         <td>{{$quantity->original_price}}</td>
                                         <td>{{ $quantity->discount_price}} </td>
 

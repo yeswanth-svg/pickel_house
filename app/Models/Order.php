@@ -20,6 +20,10 @@ class Order extends Model
         'total_amount',
         'applied_coupon_id',
         'coupon_discount',
+        'selected_address',
+        'razorpay_payment_id',
+        'cart_quantity',
+        'type_of_shipping'
     ];
 
     public function dish()

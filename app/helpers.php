@@ -30,7 +30,7 @@ function formatDate($date)
 
 
 if (!function_exists('convertPrice')) {
-    function convertPrice($amount)
+    function convertPrice($amount, $numericOnly = false)
     {
         // Get logged-in user's country
         $user = auth()->user();
@@ -39,9 +39,9 @@ if (!function_exists('convertPrice')) {
         // Define currency mapping
         $currencyMap = [
             'UK' => 'GBP',
-            'CA' => 'CAD',
+            'Canada' => 'CAD',
             'USA' => 'USD',
-            'AUS' => 'AUD',
+            'Australia' => 'AUD',
         ];
 
         // Default currency (INR)
@@ -50,21 +50,22 @@ if (!function_exists('convertPrice')) {
         // Get the target currency
         $toCurrency = $currencyMap[$country] ?? 'INR';
 
-        // If the currency is INR, return directly
-        if ($toCurrency === 'INR') {
-            return '₹' . number_format($amount, 2);
-        }
-
         // Fetch conversion rate with caching
         $conversionRate = getExchangeRate($fromCurrency, $toCurrency);
 
         // Convert the price
         $convertedAmount = $amount * $conversionRate;
 
+        // Return numeric value if requested
+        if ($numericOnly) {
+            return round($convertedAmount, 2);
+        }
+
         // Format and return price with currency symbol
         return getCurrencySymbol($toCurrency) . number_format($convertedAmount, 2);
     }
 }
+
 
 if (!function_exists('getExchangeRate')) {
     function getExchangeRate($from, $to)
@@ -73,14 +74,15 @@ if (!function_exists('getExchangeRate')) {
 
         return Cache::remember($cacheKey, now()->addHours(12), function () use ($from, $to) {
             try {
-                // Use an exchange rate API
-                $response = Http::get("https://api.exchangerate-api.com/v4/latest/{$from}");
+                // Alternative API
+                $response = Http::get("https://open.er-api.com/v6/latest/{$from}");
 
                 if ($response->successful()) {
-                    $rates = $response->json()['rates'];
+                    $rates = $response->json()['rates'] ?? [];
                     return $rates[$to] ?? 1;
                 }
             } catch (\Exception $e) {
+                \Log::error("Exchange rate API failed: " . $e->getMessage());
                 return 1; // Default rate if API fails
             }
 
@@ -88,6 +90,7 @@ if (!function_exists('getExchangeRate')) {
         });
     }
 }
+
 
 if (!function_exists('getCurrencySymbol')) {
     function getCurrencySymbol($currency)

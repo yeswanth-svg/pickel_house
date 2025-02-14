@@ -130,7 +130,7 @@
                             <img src="{{ asset('dish_images/' . $item->dish->image) }}" width="70" class="me-3 rounded">
                             <div>
                                 <p class="mb-0 text-dark"><strong>{{ $item->dish->name }}</strong></p>
-                                <small class="text-dark">{{ $item->quantity->quantity }}</small>
+                                <small class="text-dark">{{ $item->quantity->weight }}</small>
                             </div>
                             <div class="cart__punit hide-mobile">
                                 <span class="jsPrice">{{convertPrice($item->quantity->discount_price) }}</span>
@@ -263,25 +263,6 @@
             let savedAddressSelect = document.getElementById("savedAddress");
             let newAddressForm = document.getElementById("newAddressForm");
             let selectedAddressInput = document.getElementById("selectedAddressInput");
-            let originalAddress = {}; // Store original address for comparison
-
-            // Default to first saved address if available
-            if (savedAddressSelect.value !== "new") {
-                selectedAddressInput.value = savedAddressSelect.value;
-            }
-
-            // Function to compare current form values with original
-            function isAddressChanged() {
-                return (
-                    document.querySelector('[name="first_name"]').value !== originalAddress.first_name ||
-                    document.querySelector('[name="last_name"]').value !== originalAddress.last_name ||
-                    document.querySelector('[name="address"]').value !== originalAddress.address ||
-                    document.querySelector('[name="city"]').value !== originalAddress.city ||
-                    document.querySelector('[name="state"]').value !== originalAddress.state ||
-                    document.querySelector('[name="zip_code"]').value !== originalAddress.zip_code ||
-                    document.querySelector('[name="phone"]').value !== originalAddress.phone
-                );
-            }
 
             // Handle address selection
             savedAddressSelect.addEventListener("change", function () {
@@ -290,14 +271,16 @@
                 if (addressId === "new") {
                     newAddressForm.style.display = 'block';
                     selectedAddressInput.value = "";
-                    originalAddress = {}; // Reset original address
                 } else {
                     fetch(`/get-address/${addressId}`)
                         .then(response => response.json())
                         .then(data => {
+                            document.querySelector('[name="country"]').value = data.country;
                             document.querySelector('[name="first_name"]').value = data.first_name;
                             document.querySelector('[name="last_name"]').value = data.last_name;
+                            document.querySelector('[name="company"]').value = data.company || '';
                             document.querySelector('[name="address"]').value = data.address;
+                            document.querySelector('[name="apartment"]').value = data.apartment || '';
                             document.querySelector('[name="city"]').value = data.city;
                             document.querySelector('[name="state"]').value = data.state;
                             document.querySelector('[name="zip_code"]').value = data.zip_code;
@@ -305,16 +288,7 @@
 
                             selectedAddressInput.value = addressId;
                             newAddressForm.style.display = 'block';
-                            originalAddress = data; // Store original address
                         });
-                }
-            });
-
-            // Handle form submission
-            newAddressForm.addEventListener("submit", function (e) {
-                if (savedAddressSelect.value !== "new" && !isAddressChanged()) {
-                    // If address is the same, just update selected_address in the order
-                    document.getElementById("newAddressForm").action = "/update-selected-address";
                 }
             });
         });

@@ -618,14 +618,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const cartBadge = document.querySelector('.cart-badge');
+            const cartBadges = document.querySelectorAll('.cart-badge'); // Select all instances
 
-            // Trigger the bounce animation every 5 seconds
-            setInterval(() => {
-                cartBadge.classList.add('bounce-once');
-                setTimeout(() => cartBadge.classList.remove('bounce-once'), 500);
-            }, 5000);
+            if (cartBadges.length > 0) {
+                setInterval(() => {
+                    cartBadges.forEach((badge) => {
+                        badge.classList.add('bounce-once');
+                        setTimeout(() => badge.classList.remove('bounce-once'), 500);
+                    });
+                }, 5000);
+            }
         });
+
 
         document.addEventListener('DOMContentLoaded', function () {
             const cartBadge = document.querySelector('.wishlist-badge');

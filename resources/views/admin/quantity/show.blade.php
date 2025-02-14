@@ -62,8 +62,8 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label class="fs-5 fw-bold text-primary">Quantity</label>
-                                    <p class="text-dark border rounded px-3 py-2">{{ $dish->quantity }}</p>
+                                    <label class="fs-5 fw-bold text-primary">Weight</label>
+                                    <p class="text-dark border rounded px-3 py-2">{{ $dish->weight }}</p>
                                 </div>
 
                             </div>
@@ -72,7 +72,7 @@
                                 <div class="col-md-6">
                                     <label class="fs-5 fw-bold text-primary">Stock Availability: </label>
                                     <p class="badge px-3 py-2 
-                            {{ $dish->availability_status == 'in_stock' ? 'bg-success' : 'bg-danger' }}">
+                                {{ $dish->availability_status == 'in_stock' ? 'bg-success' : 'bg-danger' }}">
                                         {{ $dish->availability_status == 'in_stock' ? 'In Stock' : 'Out of Stock' }}
                                     </p>
                                 </div>
@@ -80,7 +80,7 @@
                                     <label class="fs-5 fw-bold text-primary">Spice Level: </label>
                                     <p
                                         class="badge px-3 py-2 
-                            {{ $dish->spice_level == 'mild' ? 'bg-success' : ($dish->spice_level == 'medium' ? 'bg-warning text-dark' : ($dish->spice_level == 'spicy' ? 'bg-orange text-white' : 'bg-danger')) }}">
+                                {{ $dish->spice_level == 'mild' ? 'bg-success' : ($dish->spice_level == 'medium' ? 'bg-warning text-dark' : ($dish->spice_level == 'spicy' ? 'bg-orange text-white' : 'bg-danger')) }}">
                                         {{ ucfirst(str_replace('_', ' ', $dish->spice_level)) }}
                                     </p>
                                 </div>

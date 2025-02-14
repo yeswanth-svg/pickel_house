@@ -37,13 +37,13 @@ class DishQuantities extends Controller
         //
         $request->validate([
             'dish_id' => ['required', 'integer'],
-            'quantity' => ['required', 'string'],
+            'weight' => ['required', 'string'],
             'original_price' => ['required'],
             'discount_price' => ['required'],
         ]);
         $quantity = new DishQuantity();
         $quantity->dish_id = $request->dish_id;
-        $quantity->quantity = $request->quantity;
+        $quantity->weight = $request->weight;
         $quantity->original_price = $request->original_price;
         $quantity->discount_price = $request->discount_price;
         $quantity->save();
@@ -77,13 +77,13 @@ class DishQuantities extends Controller
         //
         $request->validate([
             'dish_id' => ['required', 'integer'],
-            'quantity' => ['required', 'string'],
+            'weight' => ['required', 'string'],
             'original_price' => ['required'],
             'discount_price' => ['required'],
         ]);
         $quantity = DishQuantity::find($id);
         $quantity->dish_id = $request->dish_id;
-        $quantity->quantity = $request->quantity;
+        $quantity->weight = $request->weight;
         $quantity->original_price = $request->original_price;
         $quantity->discount_price = $request->discount_price;
         $quantity->save();

@@ -9,6 +9,7 @@ class UserAddress extends Model
     //
     protected $fillable = [
         'user_id',
+        'country',
         'first_name',
         'last_name',
         'company',

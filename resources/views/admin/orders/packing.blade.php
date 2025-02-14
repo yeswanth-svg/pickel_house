@@ -89,7 +89,7 @@
 
                                         <td>{{ !empty($order->total_amount) ? formatCurrency($order->total_amount) : '-' }}
                                         </td>
-                                        <td>{{$order->quantity->quantity}}</td>
+                                        <td>{{$order->quantity->weight}}</td>
                                         <td>{{$order->cart_quantity}}</td>
                                         <td>
                                             @php
