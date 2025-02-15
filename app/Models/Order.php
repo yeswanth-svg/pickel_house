@@ -23,7 +23,8 @@ class Order extends Model
         'selected_address',
         'razorpay_payment_id',
         'cart_quantity',
-        'type_of_shipping'
+        'type_of_shipping',
+        'reward_message'
     ];
 
     public function dish()

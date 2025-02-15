@@ -226,10 +226,17 @@
                             </a>
 
                         </li>
+                        <li class="nav-item {{request()->is('admin/rewards*') ? 'active' : ''}}">
+                            <a href="{{route('admin.rewards.index')}}">
+                                <i class="fas fa-gift"></i>
+                                <p>Rewards</p>
+                            </a>
+
+                        </li>
 
                         <li class="nav-item {{request()->is('admin/settings*') ? 'active' : ''}}">
                             <a href="{{route('admin.settings.index')}}">
-                                <i class="fas fa-gear"></i>
+                                <i class="fas fa-cog"></i>
                                 <p>Settings</p>
                             </a>
 

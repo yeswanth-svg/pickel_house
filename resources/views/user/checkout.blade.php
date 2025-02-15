@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('title', 'Checkout')
-
-
 @section('content')
+    <!-- Include Animate.css for the shake effect -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
     <div class="container">
         <ol class="breadcrumb justify-content-start mb-3 mt-2 fs-3">
@@ -15,12 +15,12 @@
             <div class="left-panel col-12 col-lg-8">
 
                 <!-- Express Checkout -->
-                <div class="d-flex justify-content-between mt-3">
-                    <button class="btn btn-primary w-50 me-2">Shop Pay</button>
-                    <button class="btn btn-dark w-50">Google Pay</button>
-                </div>
+                @if($rewardMessage)
+                    <div id="rewardAlert" class="alert alert-success mt-2 animate__animated animate__shakeX">
+                        🎉 Congratulations! You have earned: <strong>{{ $rewardMessage }}</strong>
+                    </div>
+                @endif
 
-                <div class="text-center my-3">OR</div>
 
                 <!-- Contact Info -->
                 <div class="border p-3">
@@ -40,11 +40,24 @@
                             @endforeach
                         </select>
                     </div>
+
                     @php
                         $userCountry = auth()->user()->country;
+
+                        // Mapping currency codes to country names
+                        $countryMap = [
+                            'USD' => 'USA',
+                            'CAD' => 'Canada',
+                            'AUD' => 'Australia'
+                        ];
+
+                        // Convert user country if it's a currency code
+                        $userCountry = $countryMap[$userCountry] ?? $userCountry;
+
+                        // Define available countries
                         $countries = ['USA', 'Canada', 'Australia'];
 
-                        // Move the user country to the top
+                        // Move the user country to the top if it exists in the list
                         $filteredCountries = array_diff($countries, [$userCountry]);
                         array_unshift($filteredCountries, $userCountry);
                     @endphp
@@ -52,6 +65,7 @@
                     <form id="newAddressForm" action="{{ route('save.address') }}" method="POST">
                         @csrf
                         <input type="hidden" name="selected_address" id="selectedAddressInput">
+
 
                         <div class="col-md-12 mb-2">
                             <label>Country/Region</label>
@@ -126,19 +140,29 @@
                 <div class="card p-3">
                     <!-- Product Summary -->
                     @foreach ($cartItems as $item)
-                        <div class="d-flex justify-content-around align-items-center mb-2">
-                            <img src="{{ asset('dish_images/' . $item->dish->image) }}" width="70" class="me-3 rounded">
-                            <div>
-                                <p class="mb-0 text-dark"><strong>{{ $item->dish->name }}</strong></p>
-                                <small class="text-dark">{{ $item->quantity->weight }}</small>
-                            </div>
-                            <div class="cart__punit hide-mobile">
-                                <span class="jsPrice">{{convertPrice($item->quantity->discount_price) }}</span>
+                        <div class="d-flex align-items-center justify-content-between mb-3 p-2 border rounded"
+                            style="gap: 12px; background: #fff;">
 
-                                <span
-                                    class="jsPrice d-block text-decoration-line-through text-primary">{{ convertPrice($item->quantity->original_price) }}</span>
+                            <!-- Dish Image -->
+                            <img src="{{ asset('dish_images/' . $item->dish->image) }}" width="80" height="80" class="rounded"
+                                style="object-fit: cover;">
 
+                            <!-- Dish Details -->
+                            <div class="flex-grow-1">
+                                <p class="mb-1 fw-bold text-dark">{{ $item->dish->name }}</p>
+                                <p class="mb-0 text-muted" style="font-size: 0.85rem;">
+                                    {{ $item->quantity->weight }} | Qty: {{ $item->cart_quantity }}
+                                </p>
                             </div>
+
+                            <!-- Pricing Section -->
+                            <div class="text-end">
+                                <p class="mb-0 fw-bold text-dark">{{ convertPrice($item->quantity->discount_price) }}</p>
+                                <p class="mb-0 text-decoration-line-through text-primary" style="font-size: 0.9rem;">
+                                    {{ convertPrice($item->quantity->original_price) }}
+                                </p>
+                            </div>
+
                         </div>
                     @endforeach
 
@@ -154,7 +178,7 @@
                         </button>
                     </div>
                     <!-- Apply Coupon Modal -->
-                    <!-- Apply Coupon Modal -->
+
                     <div class="modal fade" id="couponModal" tabindex="-1" aria-labelledby="couponModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog">
@@ -201,8 +225,7 @@
                                         @endforeach
                                     </div>
                                 </div>
-                                <div class="modal-footer d-flex justify-content-between">
-                                    <span class="text-muted">Maximum savings: ₹200</span>
+                                <div class="modal-footer  text-end">
                                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
@@ -210,33 +233,29 @@
                     </div>
 
 
-
-
-
                     <div class="mt-3">
-                        <div class="d-flex justify-content-between">
-                            <span>Subtotal (Original Price)</span>
+                        <div class="d-flex justify-content-between mt-2 mb-3">
+                            <span class="text-dark fw-bold">Subtotal (Original Price)</span>
                             <span>{{ convertPrice($subtotal) }}</span>
                         </div>
-                        <div class="d-flex justify-content-between text-danger fw-bold">
-                            <span>Your Savings</span>
+                        <div class="d-flex justify-content-between text-danger fw-bold mt-2 mb-3">
+                            <span class="text-dark fw-bold">Your Savings</span>
                             <span class="savings">- {{ convertPrice($savings) }}</span>
                         </div>
-                        <div class="d-flex justify-content-between">
-                            <span>Shipping</span>
-                            <span>{{ $shippingCost == 0 ? 'FREE' : '' . convertPrice($shippingCost) }}</span>
+                        <div class="d-flex justify-content-between mt-2 mb-3">
+                            <span class="text-dark fw-bold">Total</span>
+                            <span>{{ convertPrice($discountedtotal) }}</span>
                         </div>
                         <hr>
-
                         @if($discountAmount > 0)
                             <div class="d-flex justify-content-between text-danger fw-bold">
                                 <span>Coupon Discount</span>
                                 <span class="savings">- {{ convertPrice($discountAmount) }}</span>
                             </div>
                         @endif
-                        <div class="d-flex justify-content-between fw-bold fs-5">
-                            <span class="text-dark fw-bold">Total</span>
-                            <span class="jsGrandTotal">{{ convertPrice($grandTotal + $shippingCost) }}</span>
+                        <div class="d-flex justify-content-between fw-bold fs-4 mt-2 mb-3">
+                            <span class="text-dark fw-bold">Grand Total</span>
+                            <span class="jsGrandTotal">{{ convertPrice($grandTotal) }}</span>
                         </div>
 
                     </div>
@@ -354,5 +373,18 @@
 
         }
 
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            setInterval(() => {
+                let alertBox = document.getElementById("rewardAlert");
+                if (alertBox) {
+                    alertBox.classList.remove("animate__shakeX"); // Remove the class
+                    void alertBox.offsetWidth; // Trigger reflow
+                    alertBox.classList.add("animate__shakeX"); // Re-add the class
+                }
+            }, 2000); // Repeat every 1 second
+        });
     </script>
 @endsection

@@ -155,6 +155,28 @@
                             </a>
                         </div>
                     @endauth
+                    <!-- Currency Selection Dropdown -->
+                    <div class="dropdown me-4">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="currencyDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <img id="selected-flag" src="{{ asset('img/flags/inr.png') }}" width="25" class="me-1">
+                            <span id="selected-currency-text"> INR</span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
+                            <li><a class="dropdown-item currency-option" href="#" data-country="INR"
+                                    data-flag="{{ asset('img/flags/inr.png') }}">🇮🇳 INR</a></li>
+
+                            <li><a class="dropdown-item currency-option" href="#" data-country="USD"
+                                    data-flag="{{ asset('img/flags/usd.png') }}">🇺🇸 USD</a></li>
+
+
+                            <li><a class="dropdown-item currency-option" href="#" data-country="AUD"
+                                    data-flag="{{ asset('img/flags/aud.png') }}">🇦🇺 AUD</a></li>
+
+                            <li><a class="dropdown-item currency-option" href="#" data-country="CAD"
+                                    data-flag="{{ asset('img/flags/cad.png') }}">🇨🇦 CAD</a></li>
+                        </ul>
+                    </div>
 
                     <button class="btn-search btn btn-primary btn-md-square me-4 rounded-circle d-none d-lg-inline-flex"
                         data-bs-toggle="modal" data-bs-target="#searchModal">
@@ -358,6 +380,68 @@
     <script src="{{asset('admin/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
 
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let selectedCurrencyText = document.getElementById("selected-currency-text");
+            let selectedFlag = document.getElementById("selected-flag");
+            let currencyOptions = document.querySelectorAll(".currency-option");
+
+            if (!selectedCurrencyText || !selectedFlag || currencyOptions.length === 0) {
+                console.error("Dropdown elements not found. Ensure your dropdown exists in the HTML.");
+                return;
+            }
+
+            // Get stored values
+            let storedCurrency = localStorage.getItem("selectedCurrency") || "INR";
+            let storedFlag = localStorage.getItem("selectedFlag") || "{{ asset('img/flags/inr.png') }}";
+
+            // Update UI
+            selectedCurrencyText.textContent = storedCurrency;
+            selectedFlag.src = storedFlag;
+
+            currencyOptions.forEach(option => {
+                option.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    let selectedCurrency = this.getAttribute("data-country");
+                    let selectedFlagUrl = this.getAttribute("data-flag");
+
+                    if (!selectedCurrency || !selectedFlagUrl) {
+                        console.error("Missing currency or flag attributes.");
+                        return;
+                    }
+
+                    // Update UI immediately
+                    selectedCurrencyText.textContent = selectedCurrency;
+                    selectedFlag.src = selectedFlagUrl;
+
+                    // Save in localStorage
+                    localStorage.setItem("selectedCurrency", selectedCurrency);
+                    localStorage.setItem("selectedFlag", selectedFlagUrl);
+
+                    // Make AJAX request to update session
+                    fetch("{{ route('set.currency') }}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ currency: selectedCurrency })
+                    }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log("Currency updated in session:", selectedCurrency);
+                                location.reload(); // Refresh to apply conversion
+                            }
+                        })
+                        .catch(error => console.error("Error updating session:", error));
+
+                });
+            });
+        });
+
+    </script>
 
 
     <script>
@@ -614,8 +698,6 @@
 
     </script>
 
-
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const cartBadges = document.querySelectorAll('.cart-badge'); // Select all instances
@@ -641,6 +723,9 @@
             }, 5000);
         });
     </script>
+
+
+
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Settings List')
+@section('title', 'Rewards List')
 @section('content')
 
 
@@ -7,7 +7,7 @@
 <div class="container">
     <div class="page-inner">
         <div class="page-header">
-            <h3 class="fw-bold mb-3">Settings</h3>
+            <h3 class="fw-bold mb-3">Rewards</h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                     <a href="#">
@@ -18,13 +18,13 @@
                     <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Settings</a>
+                    <a href="#">Rewards</a>
                 </li>
                 <li class="separator">
                     <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">All Settings</a>
+                    <a href="#">All Rewards</a>
                 </li>
             </ul>
         </div>
@@ -34,12 +34,12 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
-                            <h4 class="card-title">All Settings</h4>
+                            <h4 class="card-title">All Rewards</h4>
 
                             <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal"
                                 data-bs-target="#addRowModal">
                                 <i class="fa fa-plus"></i>
-                                Add Setting
+                                Add Reward
                             </button>
 
 
@@ -53,35 +53,35 @@
                                     <div class="modal-header border-0">
                                         <h5 class="modal-title">
                                             <span class="fw-mediumbold">Add New</span>
-                                            <span class="fw-light"> Setting </span>
+                                            <span class="fw-light"> Reward </span>
                                         </h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{route('admin.settings.store')}}" method="post">
+                                        <form action="{{route('admin.rewards.store')}}" method="post">
                                             @csrf
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <div class="form-group form-group-default">
-                                                        <label>Key</label>
-                                                        <input id="addKey" name="key" type="text" class="form-control"
-                                                            placeholder="Enter Name" />
+                                                        <label>Min Cart Value</label>
+                                                        <input id="addKey" name="min_cart_value" type="text"
+                                                            class="form-control" placeholder="Enter Min Cart Value" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12">
                                                     <div class="form-group form-group-default">
-                                                        <label>Value</label>
-                                                        <input id="addKey" name="value" type="text" class="form-control"
-                                                            placeholder="Enter Value" />
+                                                        <label>Reward Name</label>
+                                                        <input id="addKey" name="reward_name" type="text"
+                                                            class="form-control" placeholder="Enter Value" />
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12">
                                                     <div class="form-group form-group-default">
-                                                        <label>Content</label>
-                                                        <input id="addKey" name="content" type="text"
-                                                            class="form-control" placeholder="Enter Content" />
+                                                        <label>Reward Message</label>
+                                                        <input id="addKey" name="reward_message" type="text"
+                                                            class="form-control" placeholder="Enter Message" />
                                                     </div>
                                                 </div>
 
@@ -104,7 +104,7 @@
                                     <div class="modal-header border-0">
                                         <h5 class="modal-title">
                                             <span class="fw-mediumbold">Edit</span>
-                                            <span class="fw-light">Setting</span>
+                                            <span class="fw-light">Rewards</span>
                                         </h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
@@ -116,25 +116,28 @@
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <div class="form-group form-group-default">
-                                                        <label>Key</label>
-                                                        <input id="key" name="key" type="text" class="form-control"
-                                                            placeholder="Enter Key Name" required />
+                                                        <label>Min Cart Value</label>
+                                                        <input id="min_cart_value" name="min_cart_value" type="text"
+                                                            class="form-control" placeholder="Enter min cart value Name"
+                                                            required />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-12">
                                                     <div class="form-group form-group-default">
-                                                        <label>Value</label>
-                                                        <input id="value" name="value" type="text" class="form-control"
-                                                            placeholder="Enter Value" required />
+                                                        <label>Reward Name</label>
+                                                        <input id="reward_name" name="reward_name" type="text"
+                                                            class="form-control" placeholder="Enter reward name"
+                                                            required />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-sm-12">
                                                     <div class="form-group form-group-default">
-                                                        <label>Content</label>
-                                                        <input id="content" name="content" type="text"
-                                                            class="form-control" placeholder="Enter Content" required />
+                                                        <label>Reward Message</label>
+                                                        <input id="reward_message" name="reward_message" type="text"
+                                                            class="form-control" placeholder="Enter reward message"
+                                                            required />
                                                     </div>
                                                 </div>
                                             </div>
@@ -155,40 +158,41 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Key</th>
-                                        <th>Value</th>
-                                        <th>Content</th>
+                                        <th>Min Cart Value</th>
+                                        <th>Reward Name</th>
+                                        <th>Reward Message</th>
                                         <th style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($settings as $setting)
+                                    @forelse ($rewards as $reward)
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
-                                        <td>{{$setting->key}}</td>
-                                        <td>{{$setting->value}}</td>
-                                        <td>{{$setting->content ?: '' }}</td>
+                                        <td>{{$reward->min_cart_value}}</td>
+                                        <td>{{$reward->reward_name}}</td>
+                                        <td>{{$reward->reward_message ?: '' }}</td>
                                         <td>
                                             <div class="form-button-action">
 
                                                 <button class="btn btn-link btn-lg ms-auto edit-button"
                                                     data-bs-toggle="modal" data-bs-target="#editRowModal"
-                                                    data-id="{{ $setting->id }}" data-key="{{ $setting->key }}"
-                                                    data-value="{{ $setting->value }}"
-                                                    data-content="{{ $setting->content }}" title="Edit">
+                                                    data-id="{{ $reward->id }}"
+                                                    data-min-cart-value="{{ $reward->min_cart_value }}"
+                                                    data-reward-name="{{ $reward->reward_name }}"
+                                                    data-reward-message="{{ $reward->reward_message }}" title="Edit">
                                                     <i class="fa fa-edit"></i>
                                                 </button>
 
 
 
 
-                                                <form action="{{ route('admin.settings.destroy', $setting->id) }}"
+                                                <form action="{{ route('admin.rewards.destroy', $reward->id) }}"
                                                     method="POST" class="delete-form" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="button"
                                                         class="btn btn-link btn-danger btn-lg delete-btn"
-                                                        data-url="{{ route('admin.settings.destroy', $setting->id) }}"
+                                                        data-url="{{ route('admin.rewards.destroy', $reward->id) }}"
                                                         data-bs-toggle="tooltip" title="Delete">
                                                         <i class="fa fa-times"></i>
                                                     </button>
@@ -241,19 +245,19 @@
         editButtons.forEach(button => {
             button.addEventListener('click', function () {
                 const id = this.getAttribute('data-id');
-                const key = this.getAttribute('data-key');
-                const value = this.getAttribute('data-value');
-                const content = this.getAttribute('data-content'); // Get the content field
+                const min_cart_value = this.getAttribute('data-min-cart-value');
+                const reward_name = this.getAttribute('data-reward-name');
+                const reward_message = this.getAttribute('data-reward-message'); // Get the content field
 
                 // Populate the modal fields
                 const modal = document.getElementById('editRowModal');
-                modal.querySelector('#key').value = key;
-                modal.querySelector('#value').value = value;
-                modal.querySelector('#content').value = content; // Populate content
+                modal.querySelector('#min_cart_value').value = min_cart_value;
+                modal.querySelector('#reward_name').value = reward_name;
+                modal.querySelector('#reward_message').value = reward_message; // Populate content
 
                 // Update the form action with the correct ID
                 const form = modal.querySelector('form');
-                form.action = `/admin/settings/${id}`;
+                form.action = `/admin/rewards/${id}`;
             });
         });
 
@@ -288,14 +292,14 @@
                     if (result.isConfirmed) {
                         Swal.fire(
                             "Deleted!",
-                            "Your Setting has been deleted.",
+                            "Your Reward has been deleted.",
                             "success"
                         );
                         form.submit(); // Submit the form if confirmed
                     } else if (result.dismiss === Swal.DismissReason.cancel) {
                         Swal.fire(
                             "Cancelled",
-                            "Your Setting is safe!",
+                            "Your Reward is safe!",
                             "error"
                         );
                     }

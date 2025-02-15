@@ -11,6 +11,7 @@ use App\Models\Setting;
 use App\Models\UserAddress;
 use App\Models\WishlistItem;
 use Illuminate\Http\Request;
+use App\Models\Reward;
 
 class OrderController extends Controller
 {
@@ -99,40 +100,49 @@ class OrderController extends Controller
         $user = auth()->user();
         $user_id = $user->id;
 
-        // Retrieve cart items with dish and quantity relationships
+        // Retrieve cart items
         $cartItems = Order::where('user_id', $user_id)
             ->where('order_stage', 'in_cart')
             ->with(['dish', 'quantity'])
             ->get();
 
-        // Calculate Total (sum of original price * quantity)
+        // Calculate Totals
         $cartTotal = $cartItems->sum(fn($item) => ($item->quantity->original_price ?? 0) * $item->cart_quantity);
-
-        // Calculate Savings (sum of (original_price - discount_price) * quantity)
         $discountTotal = $cartItems->sum(fn($item) => (($item->quantity->original_price ?? 0) - ($item->quantity->discount_price ?? 0)) * $item->cart_quantity);
-
-        // Calculate Grand Total (sum of discount price * quantity)
         $finalTotal = $cartItems->sum(fn($item) => ($item->quantity->discount_price ?? 0) * $item->cart_quantity);
 
-        // Fetch Free Shipping Threshold (Can be 0 if no free shipping is available)
-        $freeShippingThreshold = Setting::where('key', 'free_shipping_threshold')->value('value') ?? 0;
+        // Fetch rewards dynamically
+        $rewards = Reward::orderBy('min_cart_value', 'asc')->get();
 
-        // Check if user qualifies for Free Shipping
-        $isFreeShippingEligible = $freeShippingThreshold > 0 && $finalTotal >= $freeShippingThreshold;
+        // Find the highest eligible reward
+        $eligibleReward = null;
+        foreach ($rewards as $reward) {
+            if ($finalTotal >= $reward->min_cart_value) {
+                $eligibleReward = $reward;
+            }
+        }
 
-        // Calculate how much more is needed for free shipping
-        $remainingForFreeShipping = $isFreeShippingEligible ? 0 : max(0, $freeShippingThreshold - $finalTotal);
+        // Find the next reward threshold
+        $nextThreshold = null;
+        foreach ($rewards as $reward) {
+            if ($finalTotal < $reward->min_cart_value) {
+                $nextThreshold = $reward;
+                break;
+            }
+        }
+        $remainingForNextReward = $nextThreshold ? max(0, $nextThreshold->min_cart_value - $finalTotal) : null;
 
         return view('user.cart', compact(
             'cartItems',
             'cartTotal',
             'discountTotal',
             'finalTotal',
-            'freeShippingThreshold',
-            'remainingForFreeShipping',
-            'isFreeShippingEligible'
+            'eligibleReward',
+            'nextThreshold',
+            'remainingForNextReward'
         ));
     }
+
 
 
 

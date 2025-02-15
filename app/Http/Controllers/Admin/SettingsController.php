@@ -42,6 +42,7 @@ class SettingsController extends Controller
         $setting = new Setting();
         $setting->key = $request->key;
         $setting->value = $request->value;
+        $setting->content = $request->content;
         $setting->save();
 
         return redirect()->route('admin.settings.index')->with('success', 'Setting Added Successfully');
@@ -80,6 +81,7 @@ class SettingsController extends Controller
         $setting = Setting::findOrFail($id);
         $setting->key = $request->key;
         $setting->value = $request->value;
+        $setting->content = $request->content;
         $setting->update();
 
         return redirect()->route('admin.settings.index')->with('success', 'Setting Updated Successfully');

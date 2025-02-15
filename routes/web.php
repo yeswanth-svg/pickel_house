@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DishController;
 use App\Http\Controllers\Admin\DishQuantities;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ReferalController;
+use App\Http\Controllers\Admin\RewardController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -22,6 +23,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -35,9 +39,24 @@ Route::get('/about-us', [HomeController::class, 'about_us'])->name('about-us');
 Route::get('/menu', [HomeController::class, 'menu'])->name('menu');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
-Route::post('/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('apply.coupon');
+Route::post('/set-currency', function (Request $request) {
+    $currency = $request->currency;
+
+    if (Auth::check()) {
+        // If the user is logged in, update their preferred currency
+        $user = Auth::user();
+        $user->country = $currency;  // Assuming `country` stores the currency type
+        $user->save();
+    }
+
+    // Also store in session for immediate effect
+    Session::put('selected_currency', $currency);
+
+    return response()->json(['success' => true, 'stored_currency' => Session::get('selected_currency')]);
+})->name('set.currency');
+
+
+
 
 Route::get('/dashboard', [HomeController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
@@ -62,6 +81,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/referrals', [UserDashboardController::class, 'referrals'])->name('referrals');
+
+    //cart routes
     Route::post('/add-to-cart', [UserOrderController::class, 'addToCart'])->name('add.to.cart');
     Route::get('/cart', [UserOrderController::class, 'viewCart'])->name('user.cart');
     Route::delete('/cart/{id}', [UserOrderController::class, 'destroy'])->name('user.cart.destroy');
@@ -74,8 +96,9 @@ Route::middleware('auth')->group(function () {
         )->count();
         return response()->json(['count' => $count]);
     });
+    //cart routes
 
-
+    //wishlists routes 
     Route::post('/wishlist/store', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::get('/get-wishlist-items', [WishlistController::class, 'getWishlistItems'])->name('get.wishlist.items');
     Route::delete('/delete-wishlist-item/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
@@ -83,8 +106,12 @@ Route::middleware('auth')->group(function () {
         $count = \App\Models\WishlistItem::where('user_id', auth()->id())->count();
         return response()->json(['count' => $count]);
     });
-    Route::get('/referrals', [UserDashboardController::class, 'referrals'])->name('referrals');
+    //wishlists routes 
 
+
+    //checout routes and payment routes
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
 
     Route::post('/save-address', [CheckoutController::class, 'saveAddress'])->name('save.address');
     Route::post('/update-selected-address', [CheckoutController::class, 'updateSelectedAddress'])->name('update.selected.address');
@@ -94,7 +121,7 @@ Route::middleware('auth')->group(function () {
         return response()->json(UserAddress::find($id));
     });
 
-    Route::post('/applycoupon', [CheckoutController::class, 'applyCoupon'])->name('applyCoupon');
+    Route::post('/apply-coupon', [CheckoutController::class, 'applyCoupon'])->name('apply.coupon');
 
     Route::get('/shipping', [CheckoutController::class, 'shipping'])->name('shipping.page');
 
@@ -104,7 +131,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/razorpay/success', [RazorpayController::class, 'success'])->name('razorpay.success');
 
     Route::get('/order/confimartion', [UserOrderController::class, 'order_confirmation'])->name('order.confirmation');
-
+    //checout routes and payment routes
 
 });
 
@@ -143,6 +170,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     Route::resource('orders', OrderController::class);
     Route::resource('settings', SettingsController::class);
+    Route::resource('rewards', RewardController::class);
+
 });
 
 

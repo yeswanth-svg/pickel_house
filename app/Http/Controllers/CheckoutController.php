@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Coupon;
 use App\Models\CouponUsage;
+use App\Models\Reward;
 use App\Models\Setting;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
@@ -24,46 +25,57 @@ class CheckoutController extends Controller
             ->get();
 
         // Calculate subtotal (Original Prices Sum)
-        $subtotal = $cartItems->sum(fn($item) => $item->quantity->original_price);
+        $subtotal = $cartItems->sum(fn($item) => ($item->quantity->original_price ?? 0) * $item->cart_quantity);
+
+        $discountedtotal = $cartItems->sum(fn($item) => ($item->quantity->discount_price ?? 0) * $item->cart_quantity);
 
         // Calculate savings (Total Discount Amount)
-        $savings = $cartItems->sum(fn($item) => $item->quantity->original_price - $item->quantity->discount_price);
+        $savings = $cartItems->sum(fn($item) => $item->quantity->original_price - $item->quantity->discount_price * $item->cart_quantity);
 
         // Retrieve applied coupon discount from the `orders` table
         $appliedCoupon = $cartItems->firstWhere('applied_coupon_id', '!=', null);
         $discountAmount = $appliedCoupon ? $appliedCoupon->coupon_discount : 0;
 
         // Calculate grand total (subtract discount)
-        $grandTotal = max(0, $cartItems->sum(fn($item) => $item->quantity->discount_price) - $discountAmount);
+        $grandTotal = max(0, $cartItems->sum(fn($item) => $item->quantity->discount_price * $item->cart_quantity) - $discountAmount);
 
-        // Shipping Cost Logic
-        // Get Free Shipping Threshold from `settings` table and convert to float
-        $freeShippingThreshold = (float) Setting::where('key', 'free_shipping_threshold')->value('value');
-        $shippingCost = ($grandTotal >= $freeShippingThreshold) ? 0 : (float) Setting::where('key', 'shipping_fee')->value('value');
+        // Fetch reward based on cart total
+        $reward = Reward::where('min_cart_value', '<=', $grandTotal)
+            ->orderBy('min_cart_value', 'desc') // Get the highest applicable reward
+            ->first();
+
+        $rewardMessage = $reward ? $reward->reward_message : null;
+
+        // **Update the reward message in the orders**
+        Order::where('user_id', $user->id)
+            ->where('order_stage', 'in_cart')
+            ->update(['reward_message' => $rewardMessage]);
+
 
         // Fetch user addresses
         $addresses = UserAddress::where('user_id', $user->id)->get();
 
-        // **Fetch available coupons, excluding used ones from the `coupon_usages` table**
-        $usedCoupons = $user->couponUsages()->pluck('coupon_id'); // Get IDs of used coupons
+        // Fetch available coupons, excluding used ones
+        $usedCoupons = $user->couponUsages()->pluck('coupon_id');
         $availableCoupons = Coupon::where('active', true)
             ->whereDate('expiry_date', '>=', now())
-            ->whereNotIn('id', $usedCoupons) // Exclude already used coupons
+            ->whereNotIn('id', $usedCoupons)
             ->get();
 
         return view('user.checkout', compact(
             'cartItems',
             'subtotal',
+            'discountedtotal',
             'savings',
             'grandTotal',
-            'shippingCost',
-            'freeShippingThreshold',
             'addresses',
             'availableCoupons',
             'discountAmount',
-            'appliedCoupon'
+            'appliedCoupon',
+            'rewardMessage' // Send reward message to frontend
         ));
     }
+
 
 
 
@@ -210,57 +222,47 @@ class CheckoutController extends Controller
             ->get();
 
         // Shipping calculations (same logic as before)
-        $subtotal = (float) $cartItems->sum(fn($item) => (float) $item->quantity->original_price);
-        $savings = (float) $cartItems->sum(fn($item) => (float) ($item->quantity->original_price - $item->quantity->discount_price));
+        $subtotal = (float) $cartItems->sum(fn($item) => (float) $item->quantity->original_price * $item->cart_quantity);
+        $discountedtotal = $cartItems->sum(fn($item) => $item->quantity->discount_price * $item->cart_quantity);
+
+        $savings = (float) $cartItems->sum(fn($item) => (float) ($item->quantity->original_price - $item->quantity->discount_price) * $item->cart_quantity);
         $appliedCoupon = $cartItems->firstWhere('applied_coupon_id', '!=', null);
         $discountAmount = (float) ($appliedCoupon ? $appliedCoupon->coupon_discount : 0);
-        $grandTotal = max(0, (float) ($cartItems->sum(fn($item) => (float) $item->quantity->discount_price) - $discountAmount));
+        $grandTotal = max(0, (float) ($cartItems->sum(fn($item) => (float) $item->quantity->discount_price * $item->cart_quantity) - $discountAmount));
 
         // Fetch user shipping address
         $userAddress = UserAddress::where('user_id', $user->id)->first();
         $country = $userAddress ? $userAddress->country : null;
 
         // Free Shipping Threshold
-        $freeShippingThreshold = (float) Setting::where('key', 'free_shipping_threshold')->value('value') ?? 1000;
 
-        if ($grandTotal >= $freeShippingThreshold) {
-            $priorityShipping = 0;
-            $standardShipping = 0;
-        } else {
-            $totalWeight = (float) $cartItems->sum(fn($item) => (float) $item->quantity->weight);
+        $totalWeight = (float) $cartItems->sum(fn($item) => (float) $item->quantity->weight);
 
-            $shippingZone = DB::table('shipping_zones')
-                ->where('country', $country)
-                ->where('min_weight', '<=', $totalWeight)
-                ->where(function ($query) use ($totalWeight) {
-                    $query->where('max_weight', '>=', $totalWeight)
-                        ->orWhereNull('max_weight');
-                })
-                ->orderBy('max_weight', 'asc')
-                ->first();
+        $shippingZone = DB::table('shipping_zones')
+            ->where('country', $country)
+            ->where('min_weight', '<=', $totalWeight)
+            ->where(function ($query) use ($totalWeight) {
+                $query->where('max_weight', '>=', $totalWeight)
+                    ->orWhereNull('max_weight');
+            })
+            ->orderBy('max_weight', 'asc')
+            ->first();
 
-            $priorityShipping = $shippingZone ? $shippingZone->priority_rate : 50;
-            $standardShipping = $shippingZone ? $shippingZone->standard_rate : 50;
-        }
+        $priorityShipping = $shippingZone->priority_rate;
+        $standardShipping = $shippingZone->standard_rate;
 
-        // **Fetch available coupons, excluding used ones from the `coupon_usages` table**
-        $usedCoupons = $user->couponUsages()->pluck('coupon_id'); // Get IDs of used coupons
-        $availableCoupons = Coupon::where('active', true)
-            ->whereDate('expiry_date', '>=', now())
-            ->whereNotIn('id', $usedCoupons) // Exclude already used coupons
-            ->get();
+
 
         return view('user.shipping', compact(
             'cartItems',
             'subtotal',
+            'discountedtotal',
             'savings',
             'grandTotal',
             'userAddress',
             'priorityShipping',
             'standardShipping',
             'discountAmount',
-            'appliedCoupon',
-            'availableCoupons',
         ));
     }
 
