@@ -105,9 +105,7 @@
         // Initialize DataTable
         // Initialize DataTable with scrollX and fixed footer
         $('#add-row').DataTable({
-            scrollX: true,  // Enables horizontal scrolling
-            autoWidth: true,  // Prevents auto-adjusting column widths
-            fixedHeader: false, // Keeps the header fixed while scrolling
+            pageLength: 10,
         });
 
         // Ensure the parent container is styled properly

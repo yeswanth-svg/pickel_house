@@ -32,26 +32,24 @@ function formatDate($date)
 if (!function_exists('convertPrice')) {
     function convertPrice($amount, $numericOnly = false)
     {
-        // Get logged-in user's country
         $user = auth()->user();
-        $country = $user ? $user->country : 'INR';
+        // Use the user's country currency if logged in; otherwise, use session
+        $country = $user ? $user->country : session('selected_currency', 'INR');
 
         // Define currency mapping
         $currencyMap = [
-            'UK' => 'GBP',
-            'Canada' => 'CAD',
-            'USA' => 'USD',
-            'Australia' => 'AUD',
+            'INR' => 'INR',
+            'USD' => 'USD',
+            'CAD' => 'CAD',
+            'AUD' => 'AUD',
+            'GBP' => 'GBP', // Add more if needed
         ];
 
-        // Default currency (INR)
-        $fromCurrency = 'INR';
-
-        // Get the target currency
+        // Ensure selected currency is valid
         $toCurrency = $currencyMap[$country] ?? 'INR';
 
         // Fetch conversion rate with caching
-        $conversionRate = getExchangeRate($fromCurrency, $toCurrency);
+        $conversionRate = getExchangeRate('INR', $toCurrency);
 
         // Convert the price
         $convertedAmount = $amount * $conversionRate;
@@ -65,6 +63,8 @@ if (!function_exists('convertPrice')) {
         return getCurrencySymbol($toCurrency) . number_format($convertedAmount, 2);
     }
 }
+
+
 
 
 if (!function_exists('getExchangeRate')) {

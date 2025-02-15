@@ -22,17 +22,26 @@
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #fff; border: 1px solid #ddd; border-radius: 8px; flex-wrap: wrap;">
 
                         <!-- Image and Details -->
-                        <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div
+                            style="display: flex; align-items: center; gap: 1rem; padding: 10px; border-radius: 8px; background: #f9f9f9;">
                             <img src="{{ asset('dish_images/' . $item->dish->image) }}" alt="{{ $item->dish->name }}"
                                 style="width: 80px; height: 80px; border-radius: 8px; object-fit: cover;">
-                            <div>
+                            <div style="flex: 1;">
                                 <h3 style="margin: 0; font-size: 1rem; font-weight: bold; color: #333;">{{ $item->dish->name }}
                                 </h3>
-                                <p style="margin: 0; font-size: 0.9rem; color: #777;">{{ $item->quantity->weight }}</p>
-                                <p style="margin: 0; font-size: 0.9rem; color: #777;">Ready to dispatch in 3 - 5 business days
+                                <p style="margin: 4px 0; font-size: 0.9rem; color: #777;">
+                                    <i class="fas fa-weight-hanging" style="color: #555;"></i> {{ $item->quantity->weight }}
+                                </p>
+                                <p style="margin: 4px 0; font-size: 0.9rem; color: #777;">
+                                    <i class="fas fa-shopping-bag" style="color: #555;"></i> Quantity:
+                                    {{ $item->cart_quantity }}
+                                </p>
+                                <p style="margin: 4px 0; font-size: 0.9rem; color: #777;">
+                                    <i class="fas fa-truck" style="color: #555;"></i> Ready to dispatch in 3 - 5 business days
                                 </p>
                             </div>
                         </div>
+
 
                         <!-- Cart Quantity Counter -->
 
@@ -42,7 +51,7 @@
                             <span class="jsPrice">{{convertPrice($item->quantity->discount_price) }}</span>
 
                             <span
-                                class="cart__compare-price cart__compare-price--punit jsPrice">{{ convertPrice($item->quantity->original_price) }}</span>
+                                class="cart__compare-price cart__compare-price--punit jsPrice text-primary">{{ convertPrice($item->quantity->original_price) }}</span>
 
                         </div>
                         <!-- Delete Button -->
@@ -52,7 +61,7 @@
                             <button type="submit" class="trash-button">
                                 <i class="fas fa-trash-alt"
                                     style="    font-size: 1.2rem;
-                                                                                                                                                                                                                                                                                                                        padding: 2px;"></i>
+                                                                                                                                                                                                                                                                                                                                                                padding: 2px;"></i>
                             </button>
                         </form>
                     </div>
@@ -64,26 +73,34 @@
 
                     <div class="card cart mt-3 p-3" style="border-radius: inherit;">
 
-                        @if($freeShippingThreshold > 0)
+                        @if($eligibleReward || $nextThreshold)
                             <p class="mb-2">
                                 <i class="fas fa-gift text-primary"></i>
-                                @if($isFreeShippingEligible)
-                                    🎉 <span class="font-weight-bold text-success">You are eligible for FREE SHIPPING!</span>
-                                @else
+
+                                @if($eligibleReward)
+                                    🎉 <span class="font-weight-bold text-success">
+                                        You are eligible for <strong>{{ $eligibleReward->reward_message }}</strong>! 🏆
+                                    </span>
+                                @endif
+
+                                @if($nextThreshold)
+                                    <br>
                                     Shop for <span class="font-weight-bold text-primary">
-                                        {{ convertPrice($remainingForFreeShipping) }}</span>
-                                    more to unlock <span class="text-primary font-weight-bold">FREE SHIPPING!</span>
+                                        {{ convertPrice($remainingForNextReward) }}</span>
+                                    more to unlock <span
+                                        class="text-primary font-weight-bold">{{ $nextThreshold->reward_message }}!</span>
                                 @endif
                             </p>
 
                             <div class="progress mb-2" style="height: 8px;">
-                                <div class="progress-bar {{ $isFreeShippingEligible ? 'bg-success' : 'bg-warning' }}"
-                                    role="progressbar" style="width: {{ min(100, ($finalTotal / $freeShippingThreshold) * 100) }}%;"
+                                <div class="progress-bar {{ $eligibleReward ? 'bg-success' : 'bg-warning' }}" role="progressbar"
+                                    style="width: {{ min(100, ($finalTotal / ($nextThreshold->min_cart_value ?? $finalTotal)) * 100) }}%;"
                                     aria-valuenow="{{ convertPrice($finalTotal) }}" aria-valuemin="0"
-                                    aria-valuemax="{{ convertPrice($freeShippingThreshold) }}">
+                                    aria-valuemax="{{ convertPrice($nextThreshold->min_cart_value ?? $finalTotal) }}">
                                 </div>
                             </div>
                         @endif
+
 
 
                         <!-- <div class="text-muted small">No Customs Duties</div> -->

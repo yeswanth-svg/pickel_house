@@ -159,14 +159,14 @@
                 <ul class="nav nav-pills d-inline-flex justify-content-center mb-5">
                     @foreach($categories as $key => $category)
                         <li class="nav-item p-2">
-                            <a class="d-flex py-2 mx-2 border border-primary bg-white rounded-pill category-tab"
-                                data-bs-toggle="pill" href="#tab-{{ $category->id }}" data-category-id="{{ $category->id }}"
-                                @if($key === 0) class="active" @endif>
+                            <a class="d-flex py-2 mx-2 border border-primary bg-white rounded-pill category-tab {{ $key === 0 ? 'active' : '' }}"
+                                data-bs-toggle="pill" href="#tab-{{ $category->id }}" data-category-id="{{ $category->id }}">
                                 <span class="text-dark" style="width: 150px">{{ $category->category_name }}</span>
                             </a>
                         </li>
                     @endforeach
                 </ul>
+
                 <div class="tab-content">
                     @foreach($categories as $key => $category)
                         <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
@@ -174,7 +174,7 @@
                                 @foreach($category->dishes as $dish)
                                     <div class="col-lg-6">
                                         <div class="menu-item d-flex align-items-center">
-                                            <img class="flex-shrink-0 img-fluid rounded-circle"
+                                            <img class="flex-shrink-0 img-fluid rounded"
                                                 src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}" />
 
                                             <div class="w-100 d-flex flex-column text-start ps-4">
@@ -185,51 +185,68 @@
 
                                                 </h4>
                                                 <div
-                                                    class="d-flex align-items-center justify-content-between border-bottom border-primary pb-2 mb-2 mt-2">
+                                                    class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2 mt-2">
                                                     @if($dish->quantities->isNotEmpty())
-                                                        <select class="quantity-selector ms-2 small-select form-select form-select-sm"
-                                                            data-dish-id="{{ $dish->id }}">
-                                                            @foreach($dish->quantities as $q)
-                                                                <option value="{{ $q->id }}"
-                                                                    data-price="{{convertPrice($q->discount_price) }}"
-                                                                    data-normal-price="{{$q->discount_price}}">
-                                                                    {{ $q->weight }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
+
+                                                        <!-- Quantity & Spice Selection -->
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <select class="quantity-selector form-select form-select-sm"
+                                                                data-dish-id="{{ $dish->id }}" style="width: 100px;">
+                                                                @foreach($dish->quantities as $q)
+                                                                    <option value="{{ $q->id }}"
+                                                                        data-discount-price="{{ convertPrice($q->discount_price) }}"
+                                                                        data-original-price="{{ convertPrice($q->original_price) }}"
+                                                                        data-normal-price="{{ $q->discount_price }}">
+                                                                        {{ $q->weight }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+
+                                                            <!-- Spice Level -->
+                                                            <select class="form-select form-select-sm" style="width: 120px;">
+                                                                <option>Spice Level</option>
+                                                                <option>Mild 🌶️</option>
+                                                                <option>Medium 🌶️🌶️</option>
+                                                                <option>Hot 🌶️🌶️🌶️</option>
+                                                                <option>Very Hot 🔥</option>
+                                                            </select>
+                                                        </div>
 
                                                     @endif
 
+
                                                     @auth
+
                                                         @if($dish->quantities->isNotEmpty())
-                                                            <div class="d-flex align-items-center">
+                                                            <div class="d-flex align-items-center gap-2">
+
                                                                 <!-- Wishlist Button -->
                                                                 <form id="add-to-wishlist-form-{{ $dish->id }}"
-                                                                    class="add-to-wishlist-form me-2">
+                                                                    class="add-to-wishlist-form">
                                                                     @csrf
                                                                     <input type="hidden" name="dish_id" value="{{ $dish->id }}">
                                                                     <input type="hidden" name="quantity_id" class="quantity-input1"
                                                                         value="{{ $dish->quantities->first()->id }}">
                                                                     <input type="hidden" name="total_amount" class="price-input1"
                                                                         value="{{ $dish->quantities->first()->original_price }}">
-
                                                                     <button type="button"
                                                                         class="btn btn-outline-warning btn-sm add-to-wishlist"
                                                                         data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip"
                                                                         data-bs-placement="top" title="Add to Wishlist">
-                                                                        <i class="fas fa-shopping-basket"></i>
+                                                                        <i class="fas fa-heart"></i>
                                                                     </button>
                                                                 </form>
 
-                                                                <!-- Add to Cart Form -->
+                                                                <!-- Cart Quantity & Add to Cart -->
                                                                 <form id="add-to-cart-form-{{$dish->id}}"
                                                                     class="add-to-cart-form d-flex align-items-center">
                                                                     @csrf
                                                                     <input type="hidden" name="dish_id" value="{{ $dish->id }}">
                                                                     <input type="hidden" name="quantity_id" class="quantity-input2"
                                                                         value="{{ $dish->quantities->first()->id }}">
-                                                                    <!-- Cart Quantity Counter (Styled) -->
-                                                                    <div class="input-group input-group-sm me-2" style="width: 100px;">
+
+                                                                    <!-- Quantity Counter -->
+                                                                    <div class="input-group input-group-sm" style="width: 100px;">
                                                                         <button type="button"
                                                                             class="btn btn-outline-secondary btn-sm decrease-qty">−</button>
                                                                         <input type="number" name="cart_quantity"
@@ -239,7 +256,8 @@
                                                                             class="btn btn-outline-secondary btn-sm increase-qty">+</button>
                                                                     </div>
 
-                                                                    <button type="button" class="btn btn-primary btn-sm add-to-cart"
+                                                                    <!-- Add to Cart Button -->
+                                                                    <button type="button" class="btn btn-primary btn-sm add-to-cart m-2"
                                                                         data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip"
                                                                         data-bs-placement="top" title="Add to Cart">
                                                                         <i class="fas fa-shopping-cart"></i>
@@ -247,24 +265,24 @@
                                                                 </form>
                                                             </div>
                                                         @else
+
                                                             <p class="text-danger">No available quantities</p>
                                                         @endif
+
                                                     @endauth
-                                                    <div class="cart__punit hide-mobile">
-                                                        <span
-                                                            class="jsPrice">{{ convertPrice($dish->quantities->first()->discount_price ?? 0) }}</span>
 
-
-                                                        <h4
-                                                            class="cart__compare-price cart__compare-price--punit jsPrice text-primary price-display">
+                                                    <!-- Pricing -->
+                                                    <div class="text-end">
+                                                        <span class="fs-6 fw-bold text-success discount-price-display"
+                                                            style="font-size: 1.4rem !important;">
+                                                            {{ convertPrice($dish->quantities->first()->discount_price ?? 0) }}
+                                                        </span>
+                                                        <p
+                                                            class="text-primary text-decoration-line-through original-price-display mb-0" style="font-size: 1.3rem !important;">
                                                             {{ convertPrice($dish->quantities->first()->original_price) }}
-                                                        </h4>
-
+                                                        </p>
                                                     </div>
-
                                                 </div>
-                                                <!-- 
-                                                                                                                                                                                                                                                                                                                    <p class="mb-0">{{ $dish->description }}</p> -->
                                             </div>
                                         </div>
                                     </div>
@@ -600,55 +618,41 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Automatically show the first category on load
-            document.querySelector(".category-tab").click();
-
-            // Update price dynamically when quantity is changed
             document.querySelectorAll('.quantity-selector').forEach(selector => {
                 selector.addEventListener('change', function () {
-                    let dishId = this.dataset.dishId;
                     let selectedOption = this.options[this.selectedIndex];
-                    let price = selectedOption.getAttribute('data-price');
-                    let normal_price = selectedOption.getAttribute('data-normal-price');
-                    let quantityId = selectedOption.value;
 
-                    // Update the displayed price
-                    let priceDisplay = this.closest('.menu-item').querySelector('.price-display');
-                    priceDisplay.textContent = `${price}`;
+                    // Fetch values
+                    let original_price = selectedOption.getAttribute('data-original-price');
+                    let discount_price = selectedOption.getAttribute('data-discount-price');
+                    let normal_price = selectedOption.getAttribute('data-normal-price');
+                    let menuItem = this.closest('.menu-item');
+
+                    if (!menuItem) return; // Avoid errors if menu-item is not found
+
+                    // Update displayed prices safely
+                    let original_price_display = menuItem.querySelector('.original-price-display');
+                    if (original_price_display) {
+                        original_price_display.textContent = original_price;
+                    }
+
+                    let discount_price_display = menuItem.querySelector('.discount-price-display');
+                    if (discount_price_display) {
+                        discount_price_display.textContent = discount_price;
+                    }
 
                     // Update hidden input fields in the form
-                    let form = this.closest('.menu-item').querySelector('.add-to-wishlist-form');
-                    form.querySelector('.quantity-input1').value = quantityId;
-                    form.querySelector('.price-input1').value = normal_price;
+                    let form = menuItem.querySelector('.add-to-cart-form');
+                    if (form) {
+                        let quantityInput = form.querySelector('.quantity-input2');
+                        let priceInput = form.querySelector('.price-input2');
+
+                        if (quantityInput) quantityInput.value = selectedOption.value;
+                        if (priceInput) priceInput.value = normal_price;
+                    }
                 });
             });
         });
-
-        document.addEventListener("DOMContentLoaded", function () {
-            // Automatically show the first category on load
-            document.querySelector(".category-tab").click();
-
-            // Update price dynamically when quantity is changed
-            document.querySelectorAll('.quantity-selector').forEach(selector => {
-                selector.addEventListener('change', function () {
-                    let dishId = this.dataset.dishId;
-                    let selectedOption = this.options[this.selectedIndex];
-                    let price = selectedOption.getAttribute('data-price');
-                    let normal_price = selectedOption.getAttribute('data-normal-price');
-                    let quantityId = selectedOption.value;
-
-                    // Update the displayed price
-                    let priceDisplay = this.closest('.menu-item').querySelector('.price-display');
-                    priceDisplay.textContent = `${price}`;
-
-                    // Update hidden input fields in the form
-                    let form = this.closest('.menu-item').querySelector('.add-to-cart-form');
-                    form.querySelector('.quantity-input2').value = quantityId;
-                    form.querySelector('.price-input2').value = normal_price;
-                });
-            });
-        });
-
 
     </script>
 
