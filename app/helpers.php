@@ -32,9 +32,50 @@ function formatDate($date)
 if (!function_exists('convertPrice')) {
     function convertPrice($amount, $numericOnly = false)
     {
+        // Check if a currency is selected in the session (from the dropdown)
+        $selectedCurrency = session('selected_currency');
+
+        // If no currency is selected in the session, use the logged-in user's country as fallback
+        if (!$selectedCurrency) {
+            $userCountry = auth()->user()->country ?? 'INR'; // Default to INR if no user country is found
+            $selectedCurrency = $userCountry;
+        }
+
+        // Define currency mapping
+        $currencyMap = [
+            'INR' => 'INR',
+            'USD' => 'USD',
+            'CAD' => 'CAD',
+            'AUD' => 'AUD',
+            'GBP' => 'GBP', // Add more if needed
+        ];
+
+        // Ensure selected currency is valid
+        $toCurrency = $currencyMap[$selectedCurrency] ?? 'INR'; // Default to INR if not found
+
+        // Fetch conversion rate with caching
+        $conversionRate = getExchangeRate('INR', $toCurrency);
+
+        // Convert the price
+        $convertedAmount = $amount * $conversionRate;
+
+        // Return numeric value if requested
+        if ($numericOnly) {
+            return round($convertedAmount, 2);
+        }
+
+        // Format and return price with currency symbol
+        return getCurrencySymbol($toCurrency) . number_format($convertedAmount, 2);
+    }
+}
+
+
+if (!function_exists('PaymentPrice')) {
+    function PaymentPrice($amount, $numericOnly = false)
+    {
         $user = auth()->user();
         // Use the user's country currency if logged in; otherwise, use session
-        $country = $user ? $user->country : session('selected_currency', 'INR');
+        $country = $user ? $user->country : 'INR';
 
         // Define currency mapping
         $currencyMap = [
@@ -105,6 +146,29 @@ if (!function_exists('getCurrencySymbol')) {
         return $symbols[$currency] ?? '₹';
     }
 }
+
+function getOrderStageColor($stage)
+{
+    return [
+        'confirmed' => 'primary',
+        'processing' => 'info',
+        'shipped' => 'warning',
+        'delivered' => 'success',
+        'completed' => 'success',
+        'cancelled' => 'danger',
+    ][$stage] ?? 'secondary';
+}
+
+function getPaymentStateColor($state)
+{
+    return [
+        'pending' => 'warning',
+        'processing' => 'info',
+        'failed' => 'danger',
+        'completed' => 'success',
+    ][$state] ?? 'secondary';
+}
+
 
 
 

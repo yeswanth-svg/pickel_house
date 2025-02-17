@@ -2,6 +2,12 @@
 @section('title', 'Shipping')
 @section('content')
     <div class="container py-5">
+        <ol class="breadcrumb justify-content-start mb-3 mt-2 fs-3">
+            <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('user.cart') }}">Cart</a></li>
+            <li class="breadcrumb-item active"><a href="{{ route('checkout') }}">Information</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+        </ol>
         <div class="row">
             <!-- Left Section: Shipping Details -->
             <div class="left-panel col-md-7">
@@ -26,34 +32,31 @@
                 @php
                     // Get the type_of_shipping from the first "in_cart" order (assuming all have the same type)
                     $selectedShipping = $cartItems->first() ? $cartItems->first()->type_of_shipping : 'priority_shipping';
-
-                    // Check if shipping is free (both shipping costs are zero)
-                    $isFreeShipping = $priorityShipping == 0 && $standardShipping == 0;
                 @endphp
 
-                @if(!$isFreeShipping)
-                    <div class="card p-4">
-                        <h5>Shipping method</h5>
-                        <form id="shipping-form">
-                            <div class="form-check border p-3 rounded mb-2">
-                                <input class="form-check-input" type="radio" name="shipping" id="priority"
-                                    value="priority_shipping" {{ $selectedShipping == 'priority_shipping' ? 'checked' : '' }}>
-                                <label class="form-check-label d-flex justify-content-between w-100" for="priority">
-                                    <span>3-5 Business day Priority Shipping (FedEx / DHL)</span>
-                                    <strong>{{ convertPrice($priorityShipping) }}</strong>
-                                </label>
-                            </div>
-                            <div class="form-check border p-3 rounded">
-                                <input class="form-check-input" type="radio" name="shipping" id="standard"
-                                    value="standard_shipping" {{ $selectedShipping == 'standard_shipping' ? 'checked' : '' }}>
-                                <label class="form-check-label d-flex justify-content-between w-100" for="standard">
-                                    <span>15-20 Business day Standard Shipping</span>
-                                    <strong>{{ convertPrice($standardShipping) }}</strong>
-                                </label>
-                            </div>
-                        </form>
-                    </div>
-                @endif
+
+                <div class="card p-4">
+                    <h5>Shipping method</h5>
+                    <form id="shipping-form">
+                        <div class="form-check border p-3 rounded mb-2">
+                            <input class="form-check-input" type="radio" name="shipping" id="priority"
+                                value="priority_shipping" {{ $selectedShipping == 'priority_shipping' ? 'checked' : '' }}>
+                            <label class="form-check-label d-flex justify-content-between w-100" for="priority">
+                                <span>3-5 Business day Priority Shipping (FedEx / DHL)</span>
+                                <strong>{{ convertPrice($priorityShipping) }}</strong>
+                            </label>
+                        </div>
+                        <div class="form-check border p-3 rounded">
+                            <input class="form-check-input" type="radio" name="shipping" id="standard"
+                                value="standard_shipping" {{ $selectedShipping == 'standard_shipping' ? 'checked' : '' }}>
+                            <label class="form-check-label d-flex justify-content-between w-100" for="standard">
+                                <span>15-20 Business day Standard Shipping</span>
+                                <strong>{{ convertPrice($standardShipping) }}</strong>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+
 
                 <div class="text-end mb-3">
                     <button id="continue-payment" class="btn btn-primary mt-4">Continue to payment</button>
@@ -75,7 +78,7 @@
                             <!-- Dish Details -->
                             <div class="flex-grow-1">
                                 <p class="mb-1 fw-bold text-dark">{{ $item->dish->name }}</p>
-                                <p class="mb-0 text-muted" style="font-size: 0.85rem;">
+                                <p class="mb-0 fw-bold text-success" style="font-size: 0.85rem;">
                                     {{ $item->quantity->weight }} | Qty: {{ $item->cart_quantity }}
                                 </p>
                             </div>
@@ -99,6 +102,8 @@
                         $selectedShipping = $cartItems->first() ? $cartItems->first()->type_of_shipping : 'priority_shipping';
                         $shippingCost = $selectedShipping == 'priority_shipping' ? $priorityShipping : $standardShipping;
                         $grandTotalWithShipping = $grandTotal + $shippingCost;
+
+                        $convertedAmount = PaymentPrice($discountAmount + $shippingCost, true); // Now only once
                     @endphp
 
                     <div class="mt-3">
@@ -114,20 +119,22 @@
                             <span class="text-dark fw-bold">Total</span>
                             <span class="text-dark fw-bold">{{ convertPrice($discountedtotal) }}</span>
                         </div>
-                        <div class="d-flex justify-content-between mt-2 mb-3">
-                            <span class="text-dark fw-bold">Shipping</span>
-                            <span id="shipping-cost" class="text-dark fw-bold">
-                                {{ $shippingCost == 0 ? 'FREE' : convertPrice($shippingCost) }}
-                            </span>
-                        </div>
-                        <hr>
-
                         @if($discountAmount > 0)
                             <div class="d-flex justify-content-between text-danger fw-bold mt-2 mb-3">
                                 <span class="text-dark fw-bold">Coupon Discount</span>
                                 <span class="savings">- {{ convertPrice($discountAmount) }}</span>
                             </div>
                         @endif
+
+                        <div class="d-flex justify-content-between mt-2 mb-3">
+                            <span class="text-dark fw-bold">Shipping</span>
+                            <span id="shipping-cost" class="text-dark fw-bold adding">
+                                + {{ $shippingCost == 0 ? 'FREE' : convertPrice($shippingCost) }}
+                            </span>
+                        </div>
+                        <hr>
+
+
 
                         <div class="d-flex justify-content-between fw-bold fs-4 mt-2 mb-3">
                             <span class="text-dark fw-bold">Grand Total</span>
@@ -221,6 +228,7 @@
         document.querySelectorAll('input[name="shipping"]').forEach(input => {
             input.addEventListener('change', function () {
                 let selectedShipping = this.value;
+                let shippingCost = selectedShipping === "priority_shipping" ? {{ $priorityShipping }} : {{ $standardShipping }};
 
                 fetch("{{ route('update-shipping-method') }}", {
                     method: "POST",
@@ -228,7 +236,10 @@
                         "Content-Type": "application/json",
                         "X-CSRF-TOKEN": "{{ csrf_token() }}"
                     },
-                    body: JSON.stringify({ shipping_method: selectedShipping })
+                    body: JSON.stringify({
+                        shipping_method: selectedShipping,
+                        shipping_cost: shippingCost // Send cost along with method
+                    })
                 })
                     .then(response => response.json())
                     .then(data => {
@@ -241,12 +252,11 @@
                                 type: "success"
                             });
 
-                            // Refresh the page after a short delay (e.g., 1.5 seconds)
+                            // Refresh the page after a short delay
                             setTimeout(function () {
                                 location.reload();
                             }, 1500);
                         } else {
-                            // Show error notification
                             $.notify({
                                 message: data.message,
                                 title: "Error",
@@ -255,12 +265,12 @@
                                 type: "danger"
                             });
                         }
-
                     })
                     .catch(error => console.error("Error:", error));
             });
         });
     </script>
+
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
@@ -272,13 +282,13 @@
                     "X-CSRF-TOKEN": "{{ csrf_token() }}"
                 },
                 body: JSON.stringify({
-                    amount: "{{ convertPrice($grandTotalWithShipping, true) }}", // Now numeric only
-                    currency: "{{ auth()->user()->country == 'USD' ? 'USD' : (auth()->user()->country == 'CAD' ? 'CAD' : 'AUD') }}",
+                    grandTotal: "{{ $grandTotalWithShipping }}",
+                    amount: "{{ $convertedAmount }}", // Directly using the converted amount
+                    currency: "{{ auth()->user()->country }}", // Ensure correct currency is sent
                     name: "{{ auth()->user()->name }}",
                     email: "{{ auth()->user()->email }}",
                     phone: "{{ auth()->user()->phone_number }}"
                 })
-
             })
                 .then(response => response.json())
                 .then(data => {
@@ -307,5 +317,6 @@
                 })
                 .catch(error => console.error("Error initiating payment:", error));
         });
+
     </script>
 @endsection

@@ -174,8 +174,9 @@
                                 @foreach($category->dishes as $dish)
                                     <div class="col-lg-6">
                                         <div class="menu-item d-flex align-items-center">
-                                            <img class="flex-shrink-0 img-fluid rounded"
-                                                src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}" />
+
+                                            <img src="{{ asset("dish_images/{$dish->image}") }}" alt="{{ $dish->name }}"
+                                                class="img-fluid rounded" />
 
                                             <div class="w-100 d-flex flex-column text-start ps-4">
 
@@ -277,8 +278,8 @@
                                                             style="font-size: 1.4rem !important;">
                                                             {{ convertPrice($dish->quantities->first()->discount_price ?? 0) }}
                                                         </span>
-                                                        <p
-                                                            class="text-primary text-decoration-line-through original-price-display mb-0" style="font-size: 1.3rem !important;">
+                                                        <p class="text-primary text-decoration-line-through original-price-display mb-0"
+                                                            style="font-size: 1.3rem !important;">
                                                             {{ convertPrice($dish->quantities->first()->original_price) }}
                                                         </p>
                                                     </div>

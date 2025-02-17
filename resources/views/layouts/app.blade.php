@@ -303,28 +303,28 @@
                         <h4 class="mb-4">Social Gallery</h4>
                         <div class="row g-2">
                             <div class="col-4">
-                                <img src="img/menu-01.jpg" class="img-fluid rounded-circle border border-primary p-2"
-                                    alt="" />
+                                <img src="{{asset("img/menu-01.jpg") }}"
+                                    class="img-fluid rounded-circle border border-primary p-2" alt="" />
                             </div>
                             <div class="col-4">
-                                <img src="img/menu-02.jpg" class="img-fluid rounded-circle border border-primary p-2"
-                                    alt="" />
+                                <img src="{{asset("img/menu-02.jpg") }}"
+                                    class="img-fluid rounded-circle border border-primary p-2" alt="" />
                             </div>
                             <div class="col-4">
-                                <img src="img/menu-03.jpg" class="img-fluid rounded-circle border border-primary p-2"
-                                    alt="" />
+                                <img src="{{asset("img/menu-03.jpg") }}"
+                                    class="img-fluid rounded-circle border border-primary p-2" alt="" />
                             </div>
                             <div class="col-4">
-                                <img src="img/menu-04.jpg" class="img-fluid rounded-circle border border-primary p-2"
-                                    alt="" />
+                                <img src="{{asset("img/menu-04.jpg") }}"
+                                    class="img-fluid rounded-circle border border-primary p-2" alt="" />
                             </div>
                             <div class="col-4">
-                                <img src="img/menu-05.jpg" class="img-fluid rounded-circle border border-primary p-2"
-                                    alt="" />
+                                <img src="{{asset("img/menu-05.jpg") }}"
+                                    class="img-fluid rounded-circle border border-primary p-2" alt="" />
                             </div>
                             <div class="col-4">
-                                <img src="img/menu-06.jpg" class="img-fluid rounded-circle border border-primary p-2"
-                                    alt="" />
+                                <img src="{{asset("img/menu-06.jpg") }}"
+                                    class="img-fluid rounded-circle border border-primary p-2" alt="" />
                             </div>
                         </div>
                     </div>
@@ -343,9 +343,6 @@
                                 class="fas fa-copyright text-light me-2"></i>PickleHouse</a>, All right reserved.</span>
                 </div>
                 <div class="col-md-6 my-auto text-center text-md-end text-white">
-                    <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
-                    <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
-                    <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
                     Designed By
                     <a class="border-bottom" href="#">Rajesh</a>
                 </div>
@@ -379,7 +376,6 @@
     <!-- Bootstrap Notify -->
     <script src="{{asset('admin/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
 
-    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -392,7 +388,7 @@
                 return;
             }
 
-            // Get stored values
+            // Get stored values (default to INR)
             let storedCurrency = localStorage.getItem("selectedCurrency") || "INR";
             let storedFlag = localStorage.getItem("selectedFlag") || "{{ asset('img/flags/inr.png') }}";
 
@@ -420,7 +416,7 @@
                     localStorage.setItem("selectedCurrency", selectedCurrency);
                     localStorage.setItem("selectedFlag", selectedFlagUrl);
 
-                    // Make AJAX request to update session
+                    // Make AJAX request to update session only (DO NOT update user country)
                     fetch("{{ route('set.currency') }}", {
                         method: "POST",
                         headers: {
@@ -436,7 +432,6 @@
                             }
                         })
                         .catch(error => console.error("Error updating session:", error));
-
                 });
             });
         });

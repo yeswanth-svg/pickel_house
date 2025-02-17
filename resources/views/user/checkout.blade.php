@@ -1,6 +1,21 @@
 @extends('layouts.app')
 @section('title', 'Checkout')
 @section('content')
+    <style>
+        /* Prevent Text Selection */
+        .no-select {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        /* Dim Disabled Coupons */
+        .disabled-coupon {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
     <!-- Include Animate.css for the shake effect -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
@@ -150,7 +165,7 @@
                             <!-- Dish Details -->
                             <div class="flex-grow-1">
                                 <p class="mb-1 fw-bold text-dark">{{ $item->dish->name }}</p>
-                                <p class="mb-0 text-muted" style="font-size: 0.85rem;">
+                                <p class="mb-0  fw-bold text-success" style="font-size: 0.85rem;">
                                     {{ $item->quantity->weight }} | Qty: {{ $item->cart_quantity }}
                                 </p>
                             </div>
@@ -158,7 +173,7 @@
                             <!-- Pricing Section -->
                             <div class="text-end">
                                 <p class="mb-0 fw-bold text-dark">{{ convertPrice($item->quantity->discount_price) }}</p>
-                                <p class="mb-0 text-decoration-line-through text-primary" style="font-size: 0.9rem;">
+                                <p class="mb-0 fw-bold text-decoration-line-through text-primary" style="font-size: 0.9rem;">
                                     {{ convertPrice($item->quantity->original_price) }}
                                 </p>
                             </div>
@@ -188,46 +203,45 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
+
                                 <div class="modal-body">
-                                    <!-- Coupon Input Field -->
                                     <div class="input-group mb-3">
                                         <input type="text" id="coupon_code" class="form-control"
                                             placeholder="Enter coupon code">
-                                        <button class="btn btn-secondary" onclick="applyCoupon()">Apply</button>
+                                        <button class="btn btn-primary" onclick="applyCoupon()">Apply</button>
                                     </div>
 
-                                    <!-- Available Coupons -->
-                                    <div class="coupon-list">
-                                        <h6>Available Coupons:</h6>
-                                        @foreach ($availableCoupons as $coupon)
-                                            <div
-                                                class="coupon-item p-3 border rounded d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <span class="badge bg-danger">{{ $coupon->code }}</span>
-                                                    <br>
-                                                    <!-- Check if the coupon is fixed or percentage -->
-                                                    @if ($coupon->type === 'fixed')
-                                                        <strong>Save {{ convertPrice($coupon->value) }}</strong>
-                                                    @elseif ($coupon->type === 'percentage')
-                                                        <strong>Save {{ $coupon->value }}% off</strong>
-                                                    @endif
-                                                    <br>
-                                                    <small>{{ $coupon->description }}</small>
-                                                    <br>
-                                                    <small>Expires on:
-                                                        {{ \Carbon\Carbon::parse($coupon->expiry_date)->format('d M Y | h:i A') }}</small>
-                                                </div>
+                                    <h6 class="mt-3">Available Coupons:</h6>
+                                    @foreach ($availableCoupons as $coupon)
+                                        <div class="coupon-item p-3 border rounded d-flex justify-content-between align-items-center 
+                                                                                        {{ $bestCoupon && $bestCoupon->id != $coupon->id ? 'disabled-coupon' : '' }}"
+                                            oncontextmenu="return false;"> <!-- Prevent Right-Click -->
+
+                                            <div class="no-select"> <!-- Prevent Text Selection -->
+                                                <span class="badge bg-danger">{{ $coupon->code }}</span>
+                                                <br>
+                                                @if ($coupon->type === 'fixed')
+                                                    <strong>Save {{ convertPrice($coupon->value) }}</strong>
+                                                @elseif ($coupon->type === 'percentage')
+                                                    <strong>Save {{ $coupon->value }}% off</strong>
+                                                @endif
+                                                <br>
+                                                <small>Expires on:
+                                                    {{ \Carbon\Carbon::parse($coupon->expiry_date)->format('d M Y | h:i A') }}</small>
+                                            </div>
+
+                                            @if ($bestCoupon && $bestCoupon->id == $coupon->id)
                                                 <button class="btn btn-outline-primary btn-sm"
                                                     onclick="copyCoupon('{{ $coupon->code }}')">
                                                     Copy
                                                 </button>
-                                            </div>
-                                        @endforeach
-                                    </div>
+                                            @else
+                                                <button class="btn btn-secondary btn-sm" disabled>Disabled</button>
+                                            @endif
+                                        </div>
+                                    @endforeach
                                 </div>
-                                <div class="modal-footer  text-end">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -236,7 +250,7 @@
                     <div class="mt-3">
                         <div class="d-flex justify-content-between mt-2 mb-3">
                             <span class="text-dark fw-bold">Subtotal (Original Price)</span>
-                            <span>{{ convertPrice($subtotal) }}</span>
+                            <span class="text-dark fw-bold">{{ convertPrice($subtotal) }}</span>
                         </div>
                         <div class="d-flex justify-content-between text-danger fw-bold mt-2 mb-3">
                             <span class="text-dark fw-bold">Your Savings</span>
@@ -244,15 +258,17 @@
                         </div>
                         <div class="d-flex justify-content-between mt-2 mb-3">
                             <span class="text-dark fw-bold">Total</span>
-                            <span>{{ convertPrice($discountedtotal) }}</span>
+                            <span class="text-dark fw-bold">{{ convertPrice($discountedTotal) }}</span>
                         </div>
-                        <hr>
+
                         @if($discountAmount > 0)
                             <div class="d-flex justify-content-between text-danger fw-bold">
                                 <span>Coupon Discount</span>
                                 <span class="savings">- {{ convertPrice($discountAmount) }}</span>
                             </div>
                         @endif
+                        <hr>
+
                         <div class="d-flex justify-content-between fw-bold fs-4 mt-2 mb-3">
                             <span class="text-dark fw-bold">Grand Total</span>
                             <span class="jsGrandTotal">{{ convertPrice($grandTotal) }}</span>
@@ -263,12 +279,14 @@
 
                     <!-- Checkout Benefits -->
                     <div class="mt-3">
-                        <p><i class="fas fa-truck"></i> <strong>FAST SHIPPING</strong><br>Fast shipping across 30 countries
+                        <p><i class="fas fa-truck"></i> <strong>FAST SHIPPING</strong><br>Fast shipping across 30
+                            countries
                         </p>
                         <p><i class="fas fa-lock"></i> <strong>SAFE CHECKOUT</strong><br>Our customer happiness team is
                             available 24/7</p>
                         <p><i class="fas fa-headset"></i> <strong>CUSTOMER SUPPORT</strong><br>24/7 assistance</p>
-                        <p><i class="fas fa-globe"></i> <strong>NO CUSTOM DUTIES</strong><br>Enjoy no custom duties across
+                        <p><i class="fas fa-globe"></i> <strong>NO CUSTOM DUTIES</strong><br>Enjoy no custom duties
+                            across
                             any country</p>
                     </div>
 

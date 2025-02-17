@@ -14,6 +14,7 @@ class Order extends Model
         'dish_id',
         'user_id',
         'quantity_id',
+        'spice_level',
         'order_stage',
         'original_price',
         'discount_price',
@@ -24,7 +25,9 @@ class Order extends Model
         'razorpay_payment_id',
         'cart_quantity',
         'type_of_shipping',
-        'reward_message'
+        'reward_message',
+        'cancellation_reason',
+        'shipping_cost',
     ];
 
     public function dish()

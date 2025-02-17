@@ -22,25 +22,23 @@
     <div class="list-group list-group-flush">
         <a href="{{ route('dashboard') }}"
             class="nav-link list-group-item list-group-item-action {{ request()->is('dashboard') ? 'active' : '' }}">
-            <i class="bi bi-house-door"></i> Dashboard
+            <i class="bi bi-house-door"></i>&nbsp; Dashboard
+        </a>
+        <a href="{{ route('order.history') }}"
+            class="list-group-item list-group-item-action {{ request()->is('order*') ? 'active' : '' }}">
+            <i class="bi bi-box"></i> &nbsp; Orders History
+        </a>
+
+        <a href="{{route('referrals')}}"
+            class="nav-link list-group-item list-group-item-action {{ request()->is('referrals') ? 'active' : '' }}">
+            <i class="bi bi-share"></i>&nbsp; Referrals
         </a>
         <a href="{{ route('profile.edit') }}"
             class="nav-link list-group-item list-group-item-action {{ request()->is('profile') ? 'active' : '' }}">
-            <i class="bi bi-person"></i> Profile
-        </a>
-        <a href="#" class="list-group-item list-group-item-action {{ request()->is('orders') ? 'active' : '' }}">
-            <i class="bi bi-box"></i> Orders
-        </a>
-        <a href="{{route('referrals')}}"
-            class="nav-link list-group-item list-group-item-action {{ request()->is('referrals') ? 'active' : '' }}">
-            <i class="bi bi-share"></i> Referrals
-        </a>
-        <a href="#"
-            class="nav-link list-group-item list-group-item-action {{ request()->is('settings') ? 'active' : '' }}">
-            <i class="bi bi-gear"></i> Settings
+            <i class="bi bi-person"></i>&nbsp;Edit Profile
         </a>
         <a href="{{ route('logout') }}" class="nav-link list-group-item list-group-item-action text-danger">
-            <i class="bi bi-box-arrow-right"></i> Logout
+            <i class="bi bi-box-arrow-right"></i>&nbsp; Logout
         </a>
     </div>
 </div>

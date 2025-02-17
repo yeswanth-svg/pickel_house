@@ -724,7 +724,7 @@ h6,
     .menu-item img {
         width: 80px;
         height: 80px;
-        margin-bottom: auto !important; 
+        margin-bottom: auto !important;
         margin-top: auto;
     }
 
@@ -938,6 +938,14 @@ input[type="number"] {
     /* Bootstrap Red */
     font-weight: bold;
     background: rgba(239, 0, 0, 0.1);
+    padding: 6px;
+}
+
+.adding {
+    color: green !important;
+    /* Bootstrap Red */
+    font-weight: bold;
+    background: rgb(81 255 79 / 10%);
     padding: 6px;
 }
 

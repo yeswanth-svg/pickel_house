@@ -41,19 +41,14 @@ Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
 Route::post('/set-currency', function (Request $request) {
     $currency = $request->currency;
-
-    if (Auth::check()) {
-        // If the user is logged in, update their preferred currency
-        $user = Auth::user();
-        $user->country = $currency;  // Assuming `country` stores the currency type
-        $user->save();
-    }
-
-    // Also store in session for immediate effect
+    // Set country in the session after login
+    session(['country' => auth()->user()->country]);
+    // Store the selected currency in the session only
     Session::put('selected_currency', $currency);
 
     return response()->json(['success' => true, 'stored_currency' => Session::get('selected_currency')]);
 })->name('set.currency');
+
 
 
 
@@ -82,6 +77,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/referrals', [UserDashboardController::class, 'referrals'])->name('referrals');
+    Route::get('/order/histroy', [UserDashboardController::class, 'order_history'])->name('order.history');
+    Route::put('/orders/{order}/cancel', [UserDashboardController::class, 'cancelOrder'])->name('orders.cancel');
+
+
+
+
+
+
+
+
 
     //cart routes
     Route::post('/add-to-cart', [UserOrderController::class, 'addToCart'])->name('add.to.cart');
