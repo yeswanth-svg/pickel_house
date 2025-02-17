@@ -2,6 +2,131 @@
 @section('title', 'Pickel House')
 @section('content')
 
+    <style>
+        /* Menu Item */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            /* Spacing between image and content */
+            padding: 15px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        /* Image Styling (Fixed Size) */
+        .menu-item img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            flex-shrink: 0;
+            /* Prevents shrinking */
+        }
+
+        /* Content Layout */
+        .menu-item .w-100 {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        /* Dish Name */
+        .menu-item h4 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+        }
+
+        /* Quantity & Spice Level Section */
+        .menu-item .d-flex.align-items-center {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* Price & Cart Section */
+        .price-section {
+            text-align: right;
+            min-width: 120px;
+            white-space: nowrap;
+        }
+
+        /* Discounted Price */
+        .discount-price-display {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: green;
+        }
+
+        /* Original Price (Strikethrough) */
+        .original-price-display {
+            font-size: 1.2rem;
+            color: red;
+            text-decoration: line-through;
+            margin-top: -5px;
+            /* Reduce gap between price and discount */
+        }
+
+        /* Mobile Responsive Layout */
+        @media (max-width: 768px) {
+            .menu-item {
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+            }
+
+            /* Image remains the same size */
+            .menu-item img {
+                width: 150px;
+                height: 150px;
+                margin-bottom: 10px;
+            }
+
+            /* Content stacks below image */
+            .menu-item .w-100 {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+
+            /* Ensure price moves below image */
+            .price-section {
+                order: 2;
+                text-align: left;
+                margin-top: 5px;
+                width: 100%;
+            }
+
+            /* Dish Name Above */
+            .menu-item h4 {
+                order: 1;
+                font-size: 16px;
+            }
+
+            /* Add Button Positioned Correctly */
+            .add-button {
+                order: 3;
+                align-self: flex-start;
+                background: #fff;
+                border: 1px solid red;
+                color: red;
+                padding: 6px 14px;
+                font-weight: bold;
+                border-radius: 5px;
+                cursor: pointer;
+                text-align: center;
+                display: inline-block;
+                margin-top: 8px;
+            }
+        }
+    </style>
+
     <!-- Hero Start -->
     <div class="container-fluid bg-light py-6 my-6 mt-0">
         <div class="container">
@@ -273,13 +398,11 @@
                                                     @endauth
 
                                                     <!-- Pricing -->
-                                                    <div class="text-end">
-                                                        <span class="fs-6 fw-bold text-success discount-price-display"
-                                                            style="font-size: 1.4rem !important;">
+                                                    <div class="text-end price-section">
+                                                        <span class="discount-price-display">
                                                             {{ convertPrice($dish->quantities->first()->discount_price ?? 0) }}
                                                         </span>
-                                                        <p class="text-primary text-decoration-line-through original-price-display mb-0"
-                                                            style="font-size: 1.3rem !important;">
+                                                        <p class="original-price-display mb-0">
                                                             {{ convertPrice($dish->quantities->first()->original_price) }}
                                                         </p>
                                                     </div>
