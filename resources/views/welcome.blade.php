@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Pickel House')
 @section('content')
-
     <style>
         /* Menu Item */
         .menu-item {
@@ -24,6 +23,7 @@
             border-radius: 8px;
             border: 2px solid #ddd;
             flex-shrink: 0;
+            margin-top: -22px;
             /* Prevents shrinking */
         }
 
@@ -37,9 +37,8 @@
 
         /* Dish Name */
         .menu-item h4 {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
+            font-size: 21px;
+            font-weight: bold !important;
             margin: 0;
         }
 
@@ -49,6 +48,8 @@
             flex-wrap: wrap;
             gap: 10px;
         }
+
+
 
         /* Price & Cart Section */
         .price-section {
@@ -73,56 +74,81 @@
             /* Reduce gap between price and discount */
         }
 
-        /* Mobile Responsive Layout */
+        .menu-item .select-tag1 {
+            width: 100px;
+        }
+
+        .menu-item .select-tag2 {
+            width: 120px;
+        }
+
         @media (max-width: 768px) {
             .menu-item {
-                flex-direction: column;
+                flex-direction: row-reverse;
+                /* Image & price on the right */
                 align-items: flex-start;
-                text-align: left;
             }
 
-            /* Image remains the same size */
             .menu-item img {
-                width: 150px;
-                height: 150px;
-                margin-bottom: 10px;
+                width: 100px;
+                /* Smaller image for mobile */
+                height: 100px;
+                object-fit: cover;
+                margin-left: 10px;
+                position: relative;
+                top: -7pc;
+                /* Space between text and image */
             }
 
-            /* Content stacks below image */
-            .menu-item .w-100 {
-                display: flex;
-                flex-direction: column;
-                width: 100%;
+            .menu-item .price-section {
+                text-align: right;
+                /* Align price to the right */
+                min-width: 80px;
             }
 
-            /* Ensure price moves below image */
-            .price-section {
-                order: 2;
-                text-align: left;
-                margin-top: 5px;
-                width: 100%;
+
+            .menu-item .text-start {
+                flex-grow: 1;
             }
 
-            /* Dish Name Above */
+            .menu-item .input-group {
+                max-width: 90px;
+                /* Adjust quantity selector size */
+            }
+
+            .menu-item .btn {
+                font-size: 12px;
+                /* Smaller buttons */
+                padding: 4px 6px;
+            }
+
+            .menu-item .prices {
+                position: relative;
+                right: -11pc;
+                top: -3pc;
+            }
+
+            .menu-item #cart-process {
+                display: flex !important;
+                flex: none;
+                position: relative;
+                right: 2pc;
+            }
+
+            .menu-item .select-tags {
+                display: flex !important;
+                flex: none;
+                position: relative;
+                right: 2pc;
+            }
+
             .menu-item h4 {
-                order: 1;
-                font-size: 16px;
+                position: relative;
+                right: 2pc;
             }
 
-            /* Add Button Positioned Correctly */
-            .add-button {
-                order: 3;
-                align-self: flex-start;
-                background: #fff;
-                border: 1px solid red;
-                color: red;
-                padding: 6px 14px;
-                font-weight: bold;
-                border-radius: 5px;
-                cursor: pointer;
-                text-align: center;
-                display: inline-block;
-                margin-top: 8px;
+            .menu-item .select-tag1 {
+                width: 80px;
             }
         }
     </style>
@@ -299,10 +325,10 @@
                                 @foreach($category->dishes as $dish)
                                     <div class="col-lg-6">
                                         <div class="menu-item d-flex align-items-center">
-
-                                            <img src="{{ asset("dish_images/{$dish->image}") }}" alt="{{ $dish->name }}"
-                                                class="img-fluid rounded" />
-
+                                            <div class="ratio ratio-1x1" style="width: 150px;object-fit: cover;">
+                                                <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
+                                                    class="img-fluid rounded" />
+                                            </div>
                                             <div class="w-100 d-flex flex-column text-start ps-4">
 
                                                 <!-- Dish Name & Quantity Selector -->
@@ -315,9 +341,9 @@
                                                     @if($dish->quantities->isNotEmpty())
 
                                                         <!-- Quantity & Spice Selection -->
-                                                        <div class="d-flex align-items-center gap-2">
-                                                            <select class="quantity-selector form-select form-select-sm"
-                                                                data-dish-id="{{ $dish->id }}" style="width: 100px;">
+                                                        <div class="d-flex align-items-center gap-2 select-tags">
+                                                            <select class="quantity-selector form-select form-select-sm select-tag1"
+                                                                data-dish-id="{{ $dish->id }}">
                                                                 @foreach($dish->quantities as $q)
                                                                     <option value="{{ $q->id }}"
                                                                         data-discount-price="{{ convertPrice($q->discount_price) }}"
@@ -329,7 +355,7 @@
                                                             </select>
 
                                                             <!-- Spice Level -->
-                                                            <select class="form-select form-select-sm" style="width: 120px;">
+                                                            <select class="form-select form-select-sm select-tag2">
                                                                 <option>Spice Level</option>
                                                                 <option>Mild 🌶️</option>
                                                                 <option>Medium 🌶️🌶️</option>
@@ -344,7 +370,7 @@
                                                     @auth
 
                                                         @if($dish->quantities->isNotEmpty())
-                                                            <div class="d-flex align-items-center gap-2">
+                                                            <div class="d-flex align-items-center gap-2" id="cart-process">
 
                                                                 <!-- Wishlist Button -->
                                                                 <form id="add-to-wishlist-form-{{ $dish->id }}"
@@ -398,11 +424,13 @@
                                                     @endauth
 
                                                     <!-- Pricing -->
-                                                    <div class="text-end price-section">
-                                                        <span class="discount-price-display">
+                                                    <div class="text-start prices">
+                                                        <span class="fs-6 fw-bold text-success discount-price-display"
+                                                            style="font-size: 1.4rem !important;">
                                                             {{ convertPrice($dish->quantities->first()->discount_price ?? 0) }}
                                                         </span>
-                                                        <p class="original-price-display mb-0">
+                                                        <p class="text-primary text-decoration-line-through original-price-display mb-0"
+                                                            style="font-size: 1.3rem !important;">
                                                             {{ convertPrice($dish->quantities->first()->original_price) }}
                                                         </p>
                                                     </div>
