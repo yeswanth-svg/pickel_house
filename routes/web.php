@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ReferalController;
 use App\Http\Controllers\Admin\RewardController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\ShippingZonesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OrderController as UserOrderController;
@@ -176,6 +177,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('orders', OrderController::class);
     Route::resource('settings', SettingsController::class);
     Route::resource('rewards', RewardController::class);
+    Route::resource('shipping_zones', ShippingZonesController::class);
+
 
 });
 

@@ -234,6 +234,14 @@
 
                         </li>
 
+                        <li class="nav-item {{request()->is('admin/shipping_zones*') ? 'active' : ''}}">
+                            <a href="{{route('admin.shipping_zones.index')}}">
+                            <i class="fas fa-globe-americas"></i>
+                                <p>Shipping Zones</p>
+                            </a>
+
+                        </li>
+
                         <li class="nav-item {{request()->is('admin/settings*') ? 'active' : ''}}">
                             <a href="{{route('admin.settings.index')}}">
                                 <i class="fas fa-cog"></i>

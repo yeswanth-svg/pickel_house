@@ -261,18 +261,70 @@ class CheckoutController extends Controller
         // Determine Shipping Zone
         $totalWeight = (float) $cartItems->sum(fn($item) => (float) $item->quantity->weight * $item->cart_quantity);
 
+
+        // Fetch the best matching weight bracket
         $shippingZone = DB::table('shipping_zones')
             ->where('country', $country)
             ->where('min_weight', '<=', $totalWeight)
-            ->where(function ($query) use ($totalWeight) {
-                $query->where('max_weight', '>=', $totalWeight)
-                    ->orWhereNull('max_weight');
-            })
-            ->orderBy('max_weight', 'asc')
+            ->orderBy('min_weight', 'desc')
             ->first();
 
-        $priorityShipping = $shippingZone->priority_rate;
-        $standardShipping = $shippingZone->standard_rate;
+        if ($shippingZone) {
+            \Log::info("Shipping Zone Found: Min Weight = {$shippingZone->min_weight}, Max Weight = " . ($shippingZone->max_weight ?? 'NULL'));
+            \Log::info("Base Priority Rate: {$shippingZone->priority_rate}, Base Standard Rate: {$shippingZone->standard_rate}");
+
+            $priorityShipping = (float) $shippingZone->priority_rate;
+            $standardShipping = (float) $shippingZone->standard_rate;
+
+            // Fetch the rate for exactly 1 kg
+            $oneKgRate = DB::table('shipping_zones')
+                ->where('country', $country)
+                ->where('min_weight', 1) // Get the 1kg price
+                ->first();
+
+            if ($oneKgRate) {
+                $perKgChargePriority = (float) $oneKgRate->priority_rate;
+                $perKgChargeStandard = (float) $oneKgRate->standard_rate;
+                \Log::info("Using 1kg Rate: Priority = {$perKgChargePriority}, Standard = {$perKgChargeStandard}");
+            } else {
+                // Fallback: Use the per kg price from the current shipping zone
+                if ($shippingZone->max_weight && $shippingZone->max_weight > $shippingZone->min_weight) {
+                    $perKgChargePriority = $shippingZone->priority_rate / ($shippingZone->max_weight - $shippingZone->min_weight);
+                    $perKgChargeStandard = $shippingZone->standard_rate / ($shippingZone->max_weight - $shippingZone->min_weight);
+                    \Log::info("Calculated Per KG Rate from Bracket: Priority = {$perKgChargePriority}, Standard = {$perKgChargeStandard}");
+                } else {
+                    // If there's no max weight, assume a fixed rate per kg
+                    $perKgChargePriority = $shippingZone->priority_rate;
+                    $perKgChargeStandard = $shippingZone->standard_rate;
+                    \Log::info("No Max Weight Defined, Using Flat Rate Per KG: Priority = {$perKgChargePriority}, Standard = {$perKgChargeStandard}");
+                }
+            }
+
+            // Handle excess weight
+            $excessWeight = $totalWeight - $shippingZone->min_weight;
+            \Log::info("Excess Weight = {$excessWeight} KG");
+
+            if ($excessWeight > 0) {
+                \Log::info("Before Excess Charge - Priority: {$priorityShipping}, Standard: {$standardShipping}");
+
+                $priorityShipping += $excessWeight * $perKgChargePriority;
+                $standardShipping += $excessWeight * $perKgChargeStandard;
+
+                \Log::info("After Excess Charge - Priority: {$priorityShipping}, Standard: {$standardShipping}");
+            }
+
+            \Log::info("====================================================");
+            \Log::info("FINAL SHIPPING COSTS");
+            \Log::info("Total Weight: " . number_format($totalWeight, 2));
+            \Log::info("Final Priority Rate: " . number_format($priorityShipping, 2));
+            \Log::info("Final Standard Rate: " . number_format($standardShipping, 2));
+            \Log::info("====================================================");
+        }
+
+
+
+
+
 
         // Determine selected shipping method (default to priority shipping)
         $selectedShipping = $cartItems->first()->type_of_shipping ?? 'priority_shipping';
