@@ -35,6 +35,7 @@ class WishlistController extends Controller
                 'quantity_id' => $request->quantity_id,
                 'total_amount' => $request->total_amount,
                 'cart_quantity' => 1,
+                'spice_level' => $request->spice_level ?: 'mild'
             ]);
 
             return response()->json([
@@ -65,7 +66,7 @@ class WishlistController extends Controller
                     'dish_id' => optional($item->dish)->id, // Use `optional` to handle null
                     'dish_name' => optional($item->dish)->name,
                     'quantity_id' => optional($item->quantity)->id,
-                    'quantity' => optional($item->quantity)->quantity,
+                    'quantity' => optional($item->quantity)->weight,
                     'discount_price' => convertPrice(optional($item->quantity)->discount_price),
                     'original_price' => convertPrice(optional($item->quantity)->original_price), // Convert price // Assuming `price` is in the `dishes` table
                 ];

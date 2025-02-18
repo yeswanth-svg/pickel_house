@@ -26,20 +26,42 @@
                             style="display: flex; align-items: center; gap: 1rem; padding: 10px; border-radius: 8px; background: #f9f9f9;">
                             <img src="{{ asset('dish_images/' . $item->dish->image) }}" alt="{{ $item->dish->name }}"
                                 style="width: 80px; height: 80px; border-radius: 8px; object-fit: cover;">
+
                             <div style="flex: 1;">
-                                <h3 style="margin: 0; font-size: 1rem; font-weight: bold; color: #333;">{{ $item->dish->name }}
+                                <h3 style="margin: 0; font-size: 1.2rem; font-weight: bold; color: #333;">
+                                    {{ $item->dish->name }}
                                 </h3>
-                                <p style="margin: 4px 0; font-size: 0.9rem; color: #777;">
-                                    <i class="fas fa-weight-hanging" style="color: #555;"></i> {{ $item->quantity->weight }}
+
+                                <p style="margin: 4px 0; font-size: 1rem;">
+                                    <i class="fas fa-weight-hanging" style="color: #007bff;"></i> {{ $item->quantity->weight }}
                                 </p>
-                                <p style="margin: 4px 0; font-size: 0.9rem; color: #777;">
-                                    <i class="fas fa-shopping-bag" style="color: #555;"></i> Quantity:
+
+                                <p style="margin: 4px 0; font-size: 1rem;">
+                                    <i class="fas fa-shopping-bag" style="color: #28a745;"></i> Quantity:
                                     {{ $item->cart_quantity }}
                                 </p>
-                                <p style="margin: 4px 0; font-size: 0.9rem; color: #777;">
-                                    <i class="fas fa-truck" style="color: #555;"></i> Ready to dispatch in 3 - 5 business days
+
+                                <p style="margin: 4px 0; font-size: 0.9rem;">
+                                    🌶️ Spice Level:
+                                    @if ($item->spice_level == 'mild')
+                                        <span class="badge bg-success p-2">🌱 Mild</span>
+                                    @elseif ($item->spice_level == 'medium')
+                                        <span class="badge bg-warning text-dark p-2">🌶️ Medium</span>
+                                    @elseif ($item->spice_level == 'spicy')
+                                        <span class="badge bg-danger p-2">🔥 Spicy</span>
+                                    @elseif ($item->spice_level == 'extra_spicy')
+                                        <span class="badge bg-dark text-light p-2">☠️ Extra Spicy</span>
+                                    @endif
+                                </p>
+
+
+                                <p style="margin: 4px 0; font-size: 1rem;">
+                                    <i class="fas fa-truck" style="color: #ffc107;"></i> Ready to dispatch in 3 - 5 business
+                                    days
                                 </p>
                             </div>
+
+
                         </div>
 
 
@@ -61,7 +83,7 @@
                             <button type="submit" class="trash-button">
                                 <i class="fas fa-trash-alt"
                                     style="    font-size: 1.2rem;
-                                                                                                                                                                                                                                                                                                                                                                padding: 2px;"></i>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    padding: 2px;"></i>
                             </button>
                         </form>
                     </div>
@@ -84,7 +106,6 @@
                                 @endif
 
                                 @if($nextThreshold)
-                                    <br>
                                     Shop for <span class="font-weight-bold text-primary">
                                         {{ convertPrice($remainingForNextReward) }}</span>
                                     more to unlock <span
@@ -122,9 +143,20 @@
                             <span class="fw-bold fs-4">{{ convertPrice($finalTotal) }}</span>
                         </div>
 
-                        <a href="{{ url('/checkout') }}" class="btn btn-primary btn-block mt-3">
-                            CHECKOUT
-                        </a>
+                        @if (!$isWeightValid)
+                            <div class="alert alert-warning mt-3">
+                                {{ $warningMessage }} .Minimun Weight Should Be:<span class="savings">"{{ $weight }}"</span>
+                                <!-- Display dynamic warning message -->
+                            </div>
+                            <button class="btn btn-primary btn-block mt-3" disabled>
+                                CHECKOUT
+                            </button>
+                        @else
+                            <a href="{{ url('/checkout') }}" class="btn btn-primary btn-block mt-3">
+                                CHECKOUT
+                            </a>
+                        @endif
+
 
                         <a href="{{ url('/') }}" class="btn btn-outline-primary btn-block mt-2">
                             CONTINUE SHOPPING

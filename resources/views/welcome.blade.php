@@ -17,12 +17,8 @@
 
         /* Image Styling (Fixed Size) */
         .menu-item img {
-            width: 150px;
             height: 150px;
             object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid #ddd;
-            flex-shrink: 0;
             margin-top: -22px;
             /* Prevents shrinking */
         }
@@ -356,11 +352,11 @@
 
                                                             <!-- Spice Level -->
                                                             <select class="form-select form-select-sm select-tag2">
-                                                                <option>Spice Level</option>
-                                                                <option>Mild 🌶️</option>
-                                                                <option>Medium 🌶️🌶️</option>
-                                                                <option>Hot 🌶️🌶️🌶️</option>
-                                                                <option>Very Hot 🔥</option>
+                                                                <option value="">Spice Level</option>
+                                                                <option value="mild">Mild 🌶️</option>
+                                                                <option value="medium">Medium 🌶️🌶️</option>
+                                                                <option value="spicy">Spicy 🌶️🌶️🌶️</option>
+                                                                <option value="extra_spicy">Extra Spicy 🔥</option>
                                                             </select>
                                                         </div>
 
@@ -381,6 +377,7 @@
                                                                         value="{{ $dish->quantities->first()->id }}">
                                                                     <input type="hidden" name="total_amount" class="price-input1"
                                                                         value="{{ $dish->quantities->first()->original_price }}">
+                                                                    <input type="hidden" name="spice_level" class="spice_level1">
                                                                     <button type="button"
                                                                         class="btn btn-outline-warning btn-sm add-to-wishlist"
                                                                         data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip"
@@ -396,6 +393,7 @@
                                                                     <input type="hidden" name="dish_id" value="{{ $dish->id }}">
                                                                     <input type="hidden" name="quantity_id" class="quantity-input2"
                                                                         value="{{ $dish->quantities->first()->id }}">
+                                                                    <input type="hidden" name="spice_level" class="spice_level2">
 
                                                                     <!-- Quantity Counter -->
                                                                     <div class="input-group input-group-sm" style="width: 100px;">
@@ -773,16 +771,12 @@
             document.querySelectorAll('.quantity-selector').forEach(selector => {
                 selector.addEventListener('change', function () {
                     let selectedOption = this.options[this.selectedIndex];
-
-                    // Fetch values
                     let original_price = selectedOption.getAttribute('data-original-price');
                     let discount_price = selectedOption.getAttribute('data-discount-price');
                     let normal_price = selectedOption.getAttribute('data-normal-price');
                     let menuItem = this.closest('.menu-item');
+                    if (!menuItem) return;
 
-                    if (!menuItem) return; // Avoid errors if menu-item is not found
-
-                    // Update displayed prices safely
                     let original_price_display = menuItem.querySelector('.original-price-display');
                     if (original_price_display) {
                         original_price_display.textContent = original_price;
@@ -793,19 +787,46 @@
                         discount_price_display.textContent = discount_price;
                     }
 
-                    // Update hidden input fields in the form
-                    let form = menuItem.querySelector('.add-to-cart-form');
-                    if (form) {
-                        let quantityInput = form.querySelector('.quantity-input2');
-                        let priceInput = form.querySelector('.price-input2');
+                    let wishlistForm = menuItem.querySelector('.add-to-wishlist-form');
+                    let cartForm = menuItem.querySelector('.add-to-cart-form');
 
-                        if (quantityInput) quantityInput.value = selectedOption.value;
-                        if (priceInput) priceInput.value = normal_price;
+                    if (wishlistForm) {
+                        let quantityInputWishlist = wishlistForm.querySelector('.quantity-input1');
+                        let priceInputWishlist = wishlistForm.querySelector('.price-input1');
+                        if (quantityInputWishlist) quantityInputWishlist.value = selectedOption.value;
+                        if (priceInputWishlist) priceInputWishlist.value = normal_price;
+                    }
+
+                    if (cartForm) {
+                        let quantityInputCart = cartForm.querySelector('.quantity-input2');
+                        let priceInputCart = cartForm.querySelector('.price-input2');
+                        if (quantityInputCart) quantityInputCart.value = selectedOption.value;
+                        if (priceInputCart) priceInputCart.value = normal_price;
+                    }
+                });
+            });
+
+            document.querySelectorAll('.select-tag2').forEach(spiceSelector => {
+                spiceSelector.addEventListener('change', function () {
+                    let selectedSpiceLevel = this.value;
+                    let menuItem = this.closest('.menu-item');
+                    if (!menuItem) return;
+
+                    let wishlistForm = menuItem.querySelector('.add-to-wishlist-form');
+                    let cartForm = menuItem.querySelector('.add-to-cart-form');
+
+                    if (wishlistForm) {
+                        let spiceInputWishlist = wishlistForm.querySelector('.spice_level1');
+                        if (spiceInputWishlist) spiceInputWishlist.value = selectedSpiceLevel;
+                    }
+
+                    if (cartForm) {
+                        let spiceInputCart = cartForm.querySelector('.spice_level2');
+                        if (spiceInputCart) spiceInputCart.value = selectedSpiceLevel;
                     }
                 });
             });
         });
-
     </script>
 
     <script>

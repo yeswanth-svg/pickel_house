@@ -74,6 +74,7 @@ class OrderController extends Controller
                 'discount_price' => $discountPrice, // Save the admin-set price
                 'total_amount' => $itemTotalAmount, // Total based on discount_price
                 'order_stage' => 'in_cart',
+                'spice_level' => $request->spice_level ?: 'mild',
             ]);
         }
 
@@ -111,6 +112,63 @@ class OrderController extends Controller
         $discountTotal = $cartItems->sum(fn($item) => (($item->quantity->original_price ?? 0) - ($item->quantity->discount_price ?? 0)) * $item->cart_quantity);
         $finalTotal = $cartItems->sum(fn($item) => ($item->quantity->discount_price ?? 0) * $item->cart_quantity);
 
+        $totalWeight = $cartItems->sum(function ($item) {
+            // Extract weight and convert to grams
+            $weight = $item->quantity->weight;
+
+            // Check for 'g' (grams) or 'kg' (kilograms) format
+            preg_match('/(\d+)\s*(g|kg)/', $weight, $matches);
+
+            // Initialize the item weight in grams
+            $itemWeightInGrams = 0;
+
+            if (isset($matches[1])) {
+                // If it's in grams
+                if ($matches[2] == 'g') {
+                    $itemWeightInGrams = $matches[1]; // Extracted weight in grams
+                }
+                // If it's in kilograms, convert to grams
+                elseif ($matches[2] == 'kg') {
+                    $itemWeightInGrams = $matches[1] * 1000; // Convert kg to grams
+                }
+            }
+
+            // Multiply by cart quantity to get the total weight for this item
+            $itemTotalWeight = $itemWeightInGrams * $item->cart_quantity;
+
+            // Debug: Output item weight and total weight for each cart item
+            \Log::info("Item weight: $itemWeightInGrams, Cart quantity: {$item->cart_quantity}, Total weight for this item: $itemTotalWeight");
+
+            return $itemTotalWeight;
+        });
+
+        // Debugging total weight calculation
+        \Log::info("Total weight: $totalWeight");
+
+
+
+
+
+        // Fetch the minimum order weight from the settings table
+        $minimumOrderWeightSetting = Setting::where('key', 'minimun_order_weight')->first();
+        $minimumOrderWeight = isset($minimumOrderWeightSetting) ? (int) preg_replace('/\D/', '', $minimumOrderWeightSetting->value) : 0;
+
+        // If the minimum order weight is in kg, convert it to grams
+        if (strpos($minimumOrderWeightSetting->value, 'kg') !== false) {
+            $minimumOrderWeight *= 1000;  // Convert kg to grams
+        }
+
+ 
+
+        // Fetch the warning message from the settings table
+        $warningMessageSetting = Setting::where('key', 'minimun_order_weight')->first();
+        $weight = Setting::where('key', 'minimun_order_weight')->first();
+        $weight = $weight ? $weight->value : '0g'; // Default weight in grams
+        $warningMessage = $warningMessageSetting ? $warningMessageSetting->content : 'Your cart does not meet the minimum weight requirement.';
+
+        // Check if the cart weight meets the minimum order weight
+        $isWeightValid = $totalWeight >= $minimumOrderWeight;
+
         // Fetch rewards dynamically
         $rewards = Reward::orderBy('min_cart_value', 'asc')->get();
 
@@ -139,9 +197,15 @@ class OrderController extends Controller
             'finalTotal',
             'eligibleReward',
             'nextThreshold',
-            'remainingForNextReward'
+            'remainingForNextReward',
+            'totalWeight',
+            'minimumOrderWeight',
+            'weight',
+            'isWeightValid',
+            'warningMessage' // Pass the warning message to the view
         ));
     }
+
 
 
 
@@ -217,7 +281,7 @@ class OrderController extends Controller
 
 
 
-  
+
 
     public function order_confirmation()
     {

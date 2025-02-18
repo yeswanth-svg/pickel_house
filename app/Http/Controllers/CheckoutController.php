@@ -259,7 +259,7 @@ class CheckoutController extends Controller
         $country = $userAddress ? $userAddress->country : null;
 
         // Determine Shipping Zone
-        $totalWeight = (float) $cartItems->sum(fn($item) => (float) $item->quantity->weight);
+        $totalWeight = (float) $cartItems->sum(fn($item) => (float) $item->quantity->weight * $item->cart_quantity);
 
         $shippingZone = DB::table('shipping_zones')
             ->where('country', $country)

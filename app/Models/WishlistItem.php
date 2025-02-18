@@ -15,7 +15,8 @@ class WishlistItem extends Model
         'user_id',
         'quantity_id',
         'total_amount',
-        'cart_quantity'
+        'cart_quantity',
+        'spice_level'
     ];
 
 
