@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Pickel House')
 @section('content')
-    <style>
+        <style>
         /* Menu Item */
         .menu-item {
             display: flex;
@@ -305,53 +305,57 @@
             <div class="tab-class text-center">
                 <ul class="nav nav-pills d-inline-flex justify-content-center mb-5">
                     @foreach($categories as $key => $category)
-                        <li class="nav-item p-2">
+                                <li class="nav-item p-2">
                             <a class="d-flex py-2 mx-2 border border-primary bg-white rounded-pill category-tab {{ $key === 0 ? 'active' : '' }}"
                                 data-bs-toggle="pill" href="#tab-{{ $category->id }}" data-category-id="{{ $category->id }}">
                                 <span class="text-dark" style="width: 150px">{{ $category->category_name }}</span>
                             </a>
                         </li>
                     @endforeach
-                </ul>
+                    </ul>
 
                 <div class="tab-content">
                     @foreach($categories as $key => $category)
-                        <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
+                                <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
                             <div class="row g-4">
                                 @foreach($category->dishes as $dish)
-                                    <div class="col-lg-6">
-                                        <div class="menu-item d-flex align-items-center">
-                                            <div class="ratio ratio-1x1" style="width: 150px;object-fit: cover;">
+                                                <div class="col-lg-6">
+                                        <div class="menu-item d-flex align-items-center position-relative">
+                                            <div class="ratio ratio-1x1"
+                                                style="width: 150px; object-fit: cover; position: relative;">
                                                 <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
-                                                    class="img-fluid rounded" />
+                                                    class="img-fluid rounded {{ $dish->availability_status === 'out_of_stock' ? 'opacity-50' : '' }}" />
+
+                                                @if($dish->availability_status === 'out_of_stock')
+                                                    <div
+                                                        class="position-absolute top-50 start-50 translate-middle bg-danger text-white p-2 rounded">
+                                                        Out of Stock
+                                                    </div>
+                                                @endif
+
                                             </div>
                                             <div class="w-100 d-flex flex-column text-start ps-4">
-
-                                                <!-- Dish Name & Quantity Selector -->
                                                 <h4 class="d-flex align-items-center">
                                                     {{ $dish->name }}
-
                                                 </h4>
+
                                                 <div
                                                     class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2 mt-2">
                                                     @if($dish->quantities->isNotEmpty())
-
-                                                        <!-- Quantity & Spice Selection -->
                                                         <div class="d-flex align-items-center gap-2 select-tags">
                                                             <select class="quantity-selector form-select form-select-sm select-tag1"
-                                                                data-dish-id="{{ $dish->id }}">
+                                                                data-dish-id="{{ $dish->id }}" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
                                                                 @foreach($dish->quantities as $q)
-                                                                    <option value="{{ $q->id }}"
+                                                                                        <option value="{{ $q->id }}"
                                                                         data-discount-price="{{ convertPrice($q->discount_price) }}"
                                                                         data-original-price="{{ convertPrice($q->original_price) }}"
                                                                         data-normal-price="{{ $q->discount_price }}">
                                                                         {{ $q->weight }}
                                                                     </option>
                                                                 @endforeach
-                                                            </select>
+                                                                            </select>
 
-                                                            <!-- Spice Level -->
-                                                            <select class="form-select form-select-sm select-tag2">
+                                                            <select class="form-select form-select-sm select-tag2" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
                                                                 <option value="">Spice Level</option>
                                                                 <option value="mild">Mild 🌶️</option>
                                                                 <option value="medium">Medium 🌶️🌶️</option>
@@ -359,16 +363,13 @@
                                                                 <option value="extra_spicy">Extra Spicy 🔥</option>
                                                             </select>
                                                         </div>
-
                                                     @endif
 
 
                                                     @auth
 
-                                                        @if($dish->quantities->isNotEmpty())
+                                                        @if($dish->quantities->isNotEmpty() && $dish->availability_status !== 'out_of_stock')
                                                             <div class="d-flex align-items-center gap-2" id="cart-process">
-
-                                                                <!-- Wishlist Button -->
                                                                 <form id="add-to-wishlist-form-{{ $dish->id }}"
                                                                     class="add-to-wishlist-form">
                                                                     @csrf
@@ -386,7 +387,6 @@
                                                                     </button>
                                                                 </form>
 
-                                                                <!-- Cart Quantity & Add to Cart -->
                                                                 <form id="add-to-cart-form-{{$dish->id}}"
                                                                     class="add-to-cart-form d-flex align-items-center">
                                                                     @csrf
@@ -395,7 +395,6 @@
                                                                         value="{{ $dish->quantities->first()->id }}">
                                                                     <input type="hidden" name="spice_level" class="spice_level2">
 
-                                                                    <!-- Quantity Counter -->
                                                                     <div class="input-group input-group-sm" style="width: 100px;">
                                                                         <button type="button"
                                                                             class="btn btn-outline-secondary btn-sm decrease-qty">−</button>
@@ -406,7 +405,6 @@
                                                                             class="btn btn-outline-secondary btn-sm increase-qty">+</button>
                                                                     </div>
 
-                                                                    <!-- Add to Cart Button -->
                                                                     <button type="button" class="btn btn-primary btn-sm add-to-cart m-2"
                                                                         data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip"
                                                                         data-bs-placement="top" title="Add to Cart">
@@ -421,7 +419,6 @@
 
                                                     @endauth
 
-                                                    <!-- Pricing -->
                                                     <div class="text-start prices">
                                                         <span class="fs-6 fw-bold text-success discount-price-display"
                                                             style="font-size: 1.4rem !important;">
@@ -437,10 +434,11 @@
                                         </div>
                                     </div>
                                 @endforeach
-                            </div>
+
+                                    </div>
                         </div>
                     @endforeach
-                </div>
+                    </div>
             </div>
         </div>
     </div>
