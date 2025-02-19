@@ -67,9 +67,9 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label class="fs-5 fw-bold text-primary">Total Amount</label>
+                                    <label class="fs-5 fw-bold text-primary">Grand Total</label>
                                     <p class="text-dark border rounded px-3 py-2">
-                                        {{  !empty($order->total_amount) ? formatCurrency($order->total_amount) : '-' }}
+                                        {{  !empty($order->total_amount) ? formatCurrency(($order->total_amount + $order->shipping_cost) - $order->coupon_discount) : '-' }}
                                     </p>
                                 </div>
 

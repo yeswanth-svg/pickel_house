@@ -18,6 +18,7 @@ use App\Http\Controllers\RazorpayController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\UserSupportTicketsController;
 use App\Http\Controllers\WishlistController;
 use App\Models\UserAddress;
 use Illuminate\Support\Facades\Route;
@@ -138,6 +139,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/order/confimartion', [UserOrderController::class, 'order_confirmation'])->name('order.confirmation');
     //checout routes and payment routes
+
+
+    //support tickets routes
+    Route::resource('support-tickets', UserSupportTicketsController::class);
+    Route::post('/support-tickets/{ticket}/messages', [UserSupportTicketsController::class, 'sendMessage'])->name('support.tickets.message');
 
 });
 

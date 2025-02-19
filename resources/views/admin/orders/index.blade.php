@@ -57,7 +57,9 @@
                                         <th>Username</th>
                                         <th>User Address</th>
                                         <th>Dish Name</th>
-                                        <th>Total Amount</th>
+                                        <th>Grand Total <i class="fas fa-info-circle" data-bs-toggle="tooltip"
+                                                title="Grand Total Consits of Total Amount + Shipping Cost - Coupon Discount"
+                                                data-bs-placement="top"></i></th>
                                         <th>Quantity</th>
                                         <th>No.of.Items</th>
                                         <th>Order Stage</th>
@@ -70,19 +72,19 @@
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$order->user->name}}</td>
-                                        @php
-                                            $address = json_decode($order->selected_address, true);
-                                            $fullAddress = '';
-                                            if (is_array($address)) {
-                                                $fullAddress = "{$address['label']} ({$address['address_line_1']}, {$address['address_line_2']}, {$address['city']})";
-                                            }
-                                        @endphp
-
                                         <td onclick="toggleAddress(this)" style="cursor: pointer;">
-                                            <span class="short-address">
-                                                {{ Str::limit($fullAddress, 20) }}
+                                            @php 
+                                                $address = $order->selected_address ? json_decode($order->selected_address, true) : null;
+                                            @endphp
+                                            <span
+                                                class="short-address">{{ Str::limit($address['address'] ?? 'No Address', 30) }}</span>
+                                            <span class="full-address d-none">
+                                                {{ $address['address'] ?? 'No Address' }},
+                                                {{ $address['city'] ?? 'No City' }},
+                                                {{ $address['state'] ?? 'No State' }} -
+                                                {{ $address['zip_code'] ?? 'No Zip' }},
+                                                Phone: {{ $address['phone_number'] ?? 'No Phone' }}
                                             </span>
-                                            <span class="full-address d-none">{{ $fullAddress }}</span>
                                         </td>
 
 
@@ -90,7 +92,7 @@
 
                                         <td>{{ $order->dish->name }}</td>
 
-                                        <td>{{ !empty($order->total_amount) ? formatCurrency($order->total_amount) : '-' }}
+                                        <td>{{ !empty($order->total_amount) ? formatCurrency(($order->total_amount + $order->shipping_cost) - $order->coupon_discount) : '-' }}
                                         </td>
                                         <td>{{$order->quantity->weight}}</td>
                                         <td>{{$order->cart_quantity}}</td>
@@ -112,6 +114,7 @@
                                                             'delivered' => 'Delivered',
                                                             'completed' => 'Completed',
                                                             'cancelled' => 'Cancelled',
+                                                            'removed_from_cart' => 'Removed From Cart',
                                                         ];
                                                     @endphp
                                                     @foreach ($orderStages as $key => $label)
@@ -184,6 +187,19 @@
 <!-- Datatables -->
 <script src="{{asset('admin/js/plugin/datatables/datatables.min.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+
+</script>
+
+
 <script>
     $(document).ready(function () {
         // Add Row
@@ -267,17 +283,15 @@
     });
 
 </script>
+
 <script>
     function toggleAddress(tdElement) {
         let shortAddress = tdElement.querySelector('.short-address');
         let fullAddress = tdElement.querySelector('.full-address');
 
-        if (fullAddress.classList.contains('d-none')) {
-            fullAddress.classList.remove('d-none');
-            shortAddress.classList.add('d-none');
-        } else {
-            fullAddress.classList.add('d-none');
-            shortAddress.classList.remove('d-none');
+        if (fullAddress && shortAddress) {
+            fullAddress.classList.toggle('d-none');
+            shortAddress.classList.toggle('d-none');
         }
     }
 </script>

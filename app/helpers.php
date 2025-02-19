@@ -169,6 +169,27 @@ function getPaymentStateColor($state)
     ][$state] ?? 'secondary';
 }
 
+function getTicketStatus($status)
+{
+    return [
+        'open' => 'warning',
+        'in_progress' => 'info',
+        'resolved' => 'danger',
+        'closed' => 'success',
+    ][$status] ?? 'secondary';
+}
+
+function getTicketPriority($priority)
+{
+
+    return [
+        'low' => 'warning',
+        'medium' => 'info',
+        'high' => 'danger',
+        'urgent' => 'danger',
+    ][$priority] ?? 'secondary';
+}
+
 
 
 

@@ -56,7 +56,7 @@
                                         <th>Username</th>
                                         <th>User Address</th>
                                         <th>Dish Name</th>
-                                        <th>Total Amount</th>
+                                        <th>Grand Total</th>
                                         <th>Quantity</th>
                                         <th>No.of.Items</th>
                                         <th>Status</th>
@@ -69,25 +69,25 @@
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$order->user->name}}</td>
-                                        @php
-                                            $address = json_decode($order->selected_address, true);
-                                            $fullAddress = '';
-                                            if (is_array($address)) {
-                                                $fullAddress = "{$address['label']} ({$address['address_line_1']}, {$address['address_line_2']}, {$address['city']})";
-                                            }
-                                        @endphp
-
                                         <td onclick="toggleAddress(this)" style="cursor: pointer;">
-                                            <span class="short-address">
-                                                {{ Str::limit($fullAddress, 20) }}
+                                            @php 
+                                                $address = $order->selected_address ? json_decode($order->selected_address, true) : null;
+                                            @endphp
+                                            <span
+                                                class="short-address">{{ Str::limit($address['address'] ?? 'No Address', 30) }}</span>
+                                            <span class="full-address d-none">
+                                                {{ $address['address'] ?? 'No Address' }},
+                                                {{ $address['city'] ?? 'No City' }},
+                                                {{ $address['state'] ?? 'No State' }} -
+                                                {{ $address['zip_code'] ?? 'No Zip' }},
+                                                Phone: {{ $address['phone_number'] ?? 'No Phone' }}
                                             </span>
-                                            <span class="full-address d-none">{{ $fullAddress }}</span>
                                         </td>
 
 
                                         <td>{{ $order->dish->name }}</td>
 
-                                        <td>{{ !empty($order->total_amount) ? formatCurrency($order->total_amount) : '-' }}
+                                        <td>{{ !empty($order->total_amount) ? formatCurrency(($order->total_amount + $order->shipping_cost) - $order->coupon_discount) : '-' }}
                                         </td>
                                         <td>{{$order->quantity->weight}}</td>
                                         <td>{{$order->cart_quantity}}</td>
