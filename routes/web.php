@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ReferalController;
 use App\Http\Controllers\Admin\RewardController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ShippingZonesController;
+use App\Http\Controllers\Admin\TicketCategoriesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OrderController as UserOrderController;
@@ -28,6 +29,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Admin\SupportTicketController;
 
 
 
@@ -176,14 +178,17 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::get('/orders/payment/refunded', [OrderController::class, 'paymentRefunded'])->name('orders.payment.refunded');
     Route::get('/orders/payment/partially_refunded', [OrderController::class, 'paymentPartiallyRefunded'])->name('orders.payment.partially_refunded');
     Route::get('/orders/payment/chargeback', [OrderController::class, 'paymentChargeback'])->name('orders.payment.chargeback');
-    Route::put('/admin/orders/{id}/update-status', [OrderController::class, 'updateOrderStatus'])->name('orders.update_status');
-    Route::put('/admin/orders/{id}/update-payment-status', [OrderController::class, 'updatePaymentStatus'])->name('orders.update_payment_status');
+    Route::put('/orders/{id}/update-status', [OrderController::class, 'updateOrderStatus'])->name('orders.update_status');
+    Route::put('/orders/{id}/update-payment-status', [OrderController::class, 'updatePaymentStatus'])->name('orders.update_payment_status');
 
 
     Route::resource('orders', OrderController::class);
     Route::resource('settings', SettingsController::class);
     Route::resource('rewards', RewardController::class);
     Route::resource('shipping_zones', ShippingZonesController::class);
+    Route::resource('tickets', SupportTicketController::class);
+    Route::put('/tickets/{id}/status-update', [SupportTicketController::class, 'change_status'])->name('tickets.change.status');
+    Route::resource('tickets-categories', TicketCategoriesController::class);
 
 
 });

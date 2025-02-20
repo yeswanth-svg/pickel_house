@@ -28,6 +28,7 @@ class UserSupportTicketsController extends Controller
 
     public function store(Request $request)
     {
+        
         $request->validate([
             'subject' => 'required|string|max:255',
             'category_id' => 'required|exists:ticket_categories,id',
@@ -36,14 +37,14 @@ class UserSupportTicketsController extends Controller
             'attachments.*' => 'file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
-        $ticket = Ticket::create([
-            'user_id' => auth()->id(),
-            'subject' => $request->subject,
-            'category_id' => $request->category_id,
-            'priority' => $request->priority,
-            'description' => $request->description,
-            'status' => 'open',
-        ]);
+        $ticket = new Ticket();
+        $ticket->user_id = auth()->id();
+        $ticket->subject = $request->subject;
+        $ticket->category_id = $request->category_id; // Ensure it's assigned
+        $ticket->priority = $request->priority;
+        $ticket->description = $request->description;
+        $ticket->status = 'open';
+        $ticket->save();
 
         // Handle attachments if uploaded
         if ($request->hasFile('attachments')) {

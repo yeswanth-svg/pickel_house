@@ -10,6 +10,24 @@
         white-space: nowrap;
         /* Prevents text wrapping inside cells */
     }
+
+    /* Optional: Adjust cell padding for better readability on smaller screens */
+    .table td,
+    .table th {
+        padding: 0.5rem;
+    }
+
+    .dataTables_scrollBody thead tr {
+        visibility: hidden;
+        /* Hides the duplicate header */
+    }
+
+    .dataTables_scrollBody thead tr th {
+        height: 0;
+        padding: 0;
+        border: none;
+        visibility: hidden;
+    }
 </style>
 
 <div class="container">

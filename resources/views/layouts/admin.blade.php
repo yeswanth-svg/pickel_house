@@ -236,7 +236,7 @@
 
                         <li class="nav-item {{request()->is('admin/shipping_zones*') ? 'active' : ''}}">
                             <a href="{{route('admin.shipping_zones.index')}}">
-                            <i class="fas fa-globe-americas"></i>
+                                <i class="fas fa-globe-americas"></i>
                                 <p>Shipping Zones</p>
                             </a>
 
@@ -247,8 +247,39 @@
                                 <i class="fas fa-cog"></i>
                                 <p>Settings</p>
                             </a>
-
                         </li>
+                        
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#ticket"
+                                aria-expanded="{{ request()->is('admin/tickets') || request()->is('admin/tickets/*') || request()->is('admin/tickets-categories/*') ? 'true' : 'false' }}"
+                                aria-controls="ticket">
+                                <i class="fas fa-ticket-alt"></i>
+                                <p>Support Tickets</p>
+                                <span class="caret"></span>
+                            </a>
+
+                            <!-- Show only for ticket routes -->
+                            <div class="collapse {{ request()->is('admin/tickets') || request()->is('admin/tickets/*') ? 'show' : '' }}"
+                                id="ticket">
+                                <ul class="nav nav-collapse">
+                                    <li
+                                        class="{{ request()->is('admin/tickets') || request()->is('admin/tickets/*') && !request()->is('admin/tickets-categories*') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.tickets.index') }}">
+                                            <span class="sub-item">All Tickets</span>
+                                        </a>
+                                    </li>
+                                    <li
+                                        class="{{ request()->is('admin/tickets-categories') || request()->is('admin/tickets-categories/*') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.tickets-categories.index') }}">
+                                            <span class="sub-item">Tickets Category</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+
+
 
                     </ul>
                 </div>
