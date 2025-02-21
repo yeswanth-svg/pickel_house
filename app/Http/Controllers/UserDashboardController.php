@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Newsletter;
 use App\Models\Order;
 use App\Models\Referral;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UserDashboardController extends Controller
 {
@@ -50,6 +52,31 @@ class UserDashboardController extends Controller
             'success' => true,
             'message' => 'Order has been cancelled successfully.'
         ]);
+    }
+
+    public function subscribe(Request $request)
+    {
+        $request->validate(['email' => 'required|email|unique:newsletters']);
+
+        Newsletter::create([
+            'email' => $request->email,
+            'unsubscribe_token' => Str::random(32), // Generate a unique token
+        ]);
+
+        return back()->with('success', 'Subscribed successfully!');
+    }
+
+    public function unsubscribe($token)
+    {
+        $subscriber = Newsletter::where('unsubscribe_token', $token)->first();
+
+        if (!$subscriber) {
+            return redirect('/')->with('error', 'Invalid unsubscribe link.');
+        }
+
+        $subscriber->delete();
+
+        return redirect('/')->with('success', 'You have unsubscribed successfully.');
     }
 
 

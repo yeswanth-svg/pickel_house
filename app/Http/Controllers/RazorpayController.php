@@ -97,6 +97,7 @@ class RazorpayController extends Controller
             }
             $user->notify(new OrderPlacedNotification($orderDetails));
 
+
             return redirect()->route('order.confirmation')->with('success', 'Payment Successful! Your order is confirmed.');
 
         } catch (\Exception $e) {

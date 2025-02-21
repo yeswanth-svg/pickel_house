@@ -196,7 +196,7 @@
         // Add Row
         $("#add-row").DataTable({
             pageLength: 10,
-            scrollX: false,  // Enables horizontal scrolling
+            scrollX: true,  // Enables horizontal scrolling
             autoWidth: true,  // Prevents auto-adjusting column widths
             fixedHeader: false, // Keeps the header fixed while scrolling
         });

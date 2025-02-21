@@ -72,6 +72,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Order Id</th>
                                         <th>Username</th>
                                         <th>User Address</th>
                                         <th>Dish Name</th>
@@ -89,6 +90,7 @@
                                     @forelse ($orders as $order)
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
+                                        <td>{{$order->id}}</td>
                                         <td>{{$order->user->name}}</td>
                                         <td onclick="toggleAddress(this)" style="cursor: pointer;">
                                             @php 
@@ -143,27 +145,22 @@
                                         </td>
 
                                         <td>
-                                            <form action="{{ route('admin.orders.update_payment_status', $order->id) }}"
-                                                method="POST" class="status-form">
-                                                @csrf
-                                                @method('PUT')
-                                                <select name="payment_state" class="form-select status-select"
-                                                    onchange="this.form.submit()">
-                                                    @php
-                                                        $paymentStates = [
-                                                            'pending' => 'Pending',
-                                                            'processing' => 'Processing',
-                                                            'failed' => 'Failed',
-                                                            'completed' => 'Completed',
-                                                        ];
-                                                    @endphp
-                                                    @foreach ($paymentStates as $key => $label)
-                                                        <option value="{{ $key }}" {{ $order->payment_status == $key ? 'selected' : '' }}>{{ $label }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </form>
+                                            @php
+                                                $paymentStateStyles = [
+                                                    'pending' => 'bg-warning text-dark',
+                                                    'processing' => 'bg-primary text-white',
+                                                    'failed' => 'bg-danger text-white',
+                                                    'completed' => 'bg-success text-white',
+                                                    'refunded' => 'bg-info text-white',
+                                                    'partially_refunded' => 'bg-secondary text-white',
+                                                    'chargeback' => 'bg-dark text-white',
+                                                ];
+                                            @endphp
+                                            <span
+                                                class="badge {{ $paymentStateStyles[$order->payment_state] ?? 'bg-secondary text-white' }}">
+                                                {{ ucfirst(str_replace('_', ' ', $order->payment_state)) }}
+                                            </span>
                                         </td>
-
 
 
                                         <td>
@@ -223,7 +220,7 @@
         // Add Row
         $("#add-row").DataTable({
             pageLength: 10,
-            scrollX: false,  // Enables horizontal scrolling
+            scrollX: true,  // Enables horizontal scrolling
             autoWidth: true,  // Prevents auto-adjusting column widths
             fixedHeader: false, // Keeps the header fixed while scrolling
         });

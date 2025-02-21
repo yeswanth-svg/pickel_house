@@ -2,149 +2,154 @@
 @section('title', 'Pickel House')
 @section('content')
 
-<style>
-    /* Menu Item */
-    .menu-item {
-        display: flex;
-        align-items: center;
-        gap: 15px; /* Spacing between image and content */
-        padding: 15px;
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    }
-
-    /* Image Styling (Fixed Size) */
-    .menu-item img {
-        
-        width: 150px;
-        object-fit: cover;
-        flex-shrink: 0; /* Prevents image shrinking */
-    }
-
-    /* Content Layout */
-    .menu-item .w-100 {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        width: 100%;
-    }
-
-    /* Dish Name */
-    .menu-item h4 {
-        font-size: 21px;
-        font-weight: bold !important;
-        margin: 0;
-    }
-
-    /* Quantity & Spice Level Section */
-    .menu-item .d-flex.align-items-center {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    /* Price & Cart Section */
-    .price-section {
-        text-align: right;
-        min-width: 120px;
-        white-space: nowrap;
-    }
-
-    /* Discounted Price */
-    .discount-price-display {
-        font-size: 1.4rem;
-        font-weight: bold;
-        color: green;
-    }
-
-    /* Original Price (Strikethrough) */
-    .original-price-display {
-        font-size: 1.2rem;
-        color: red;
-        text-decoration: line-through;
-        margin-top: -5px; /* Reduce gap between price and discount */
-    }
-
-    .menu-item .select-tag1 {
-        width: 100px;
-    }
-
-    .menu-item .select-tag2 {
-        width: 120px;
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
+    <style>
+        /* Menu Item */
         .menu-item {
-            flex-direction: row;
+            display: flex;
             align-items: center;
-            text-align: left;
-            gap: 10px;
+            gap: 15px;
+            /* Spacing between image and content */
+            padding: 15px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
 
+        /* Image Styling (Fixed Size) */
         .menu-item img {
-            width: 100px; /* Render as 100x100 on mobile */
-            height: 100px;
-            max-width: 150px; /* Ensure it never exceeds original size */
+
+            width: 150px;
             object-fit: cover;
             flex-shrink: 0;
+            /* Prevents image shrinking */
         }
 
+        /* Content Layout */
         .menu-item .w-100 {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             width: 100%;
         }
 
-        .menu-item .price-section {
-            text-align: left;
-            min-width: unset;
-        }
-
-        .menu-item .text-start {
-            flex-grow: 1;
-        }
-
-        .menu-item .input-group {
-            max-width: 90px;
-        }
-
-        .menu-item .btn {
-            font-size: 12px;
-            padding: 4px 6px;
-        }
-
-        .menu-item .prices {
-            position: static;
-            margin-top: 5px;
-        }
-
-        .menu-item #cart-process {
-            display: flex !important;
-            flex: none;
-            position: static;
-        }
-
-        .menu-item .select-tags {
-            display: flex !important;
-            flex: none;
-            position: static;
-        }
-
+        /* Dish Name */
         .menu-item h4 {
-            position: static;
-            font-size: 18px;
+            font-size: 21px;
+            font-weight: bold !important;
+            margin: 0;
+        }
+
+        /* Quantity & Spice Level Section */
+        .menu-item .d-flex.align-items-center {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* Price & Cart Section */
+        .price-section {
+            text-align: right;
+            min-width: 120px;
+            white-space: nowrap;
+        }
+
+        /* Discounted Price */
+        .discount-price-display {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: green;
+        }
+
+        /* Original Price (Strikethrough) */
+        .original-price-display {
+            font-size: 1.2rem;
+            color: red;
+            text-decoration: line-through;
+            margin-top: -5px;
+            /* Reduce gap between price and discount */
         }
 
         .menu-item .select-tag1 {
-            width: 80px;
+            width: 100px;
         }
 
         .menu-item .select-tag2 {
-            width: 90px;
+            width: 120px;
         }
-    }
-</style>
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .menu-item {
+                flex-direction: row;
+                align-items: center;
+                text-align: left;
+                gap: 10px;
+            }
+
+            .menu-item img {
+                width: 120px;
+                /* Render as 100x100 on mobile */
+                height: 120px;
+                max-width: 150px;
+                /* Ensure it never exceeds original size */
+                object-fit: cover;
+            }
+
+            .menu-item .w-100 {
+                width: 100%;
+            }
+
+            .menu-item .price-section {
+                text-align: left;
+                min-width: unset;
+            }
+
+            .menu-item .text-start {
+                flex-grow: 1;
+            }
+
+            .menu-item .input-group {
+                max-width: 90px;
+            }
+
+            .menu-item .btn {
+                font-size: 12px;
+                padding: 4px 6px;
+            }
+
+            .menu-item .prices {
+                position: static;
+                margin-top: 5px;
+                margin-left: 1pc;
+            }
+
+            .menu-item #cart-process {
+                display: flex !important;
+                flex: none;
+                position: static;
+            }
+
+            .menu-item .select-tags {
+                display: flex !important;
+                flex: none;
+                position: static;
+            }
+
+            .menu-item h4 {
+                position: static;
+                font-size: 18px;
+            }
+
+            .menu-item .select-tag1 {
+                width: 80px;
+            }
+
+            .menu-item .select-tag2 {
+                width: 90px;
+            }
+        }
+    </style>
 
 
     <!-- Hero Start -->
@@ -158,9 +163,9 @@
                         Flavors of Pickles
                     </h1>
                     <div class="d-flex justify-content-start align-items-start">
-                        <a href="" class="btn btn-primary border-0 rounded-pill py-3  px-md-5 me-4">Order
+                        <a href="{{ route('menu')}}" class="btn btn-primary border-0 rounded-pill py-3  px-md-5 me-4">Order
                             Now</a>
-                        <a href="" class="btn btn-primary border-0 rounded-pill py-3  px-md-5">Explore
+                        <a href="#welcome_menu" class="btn btn-primary border-0 rounded-pill py-3  px-md-5">Explore
                             Flavors</a>
                     </div>
 
@@ -291,7 +296,7 @@
     <!-- Fact End -->
 
     <!-- Menu Start -->
-    <div class="container-fluid menu py-6">
+    <div class="container-fluid menu py-6" id="welcome_menu">
         <div class="container">
             <div class="text-center">
                 <small
@@ -312,7 +317,7 @@
                     @endforeach
                 </ul>
 
-                <div class="tab-content"> 
+                <div class="tab-content">
                     @foreach($categories as $key => $category)
                         <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
                             <div class="row g-4">

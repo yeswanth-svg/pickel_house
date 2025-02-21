@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CuponController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DishController;
 use App\Http\Controllers\Admin\DishQuantities;
+use App\Http\Controllers\Admin\NewsLetterController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ReferalController;
 use App\Http\Controllers\Admin\RewardController;
@@ -38,6 +39,7 @@ use Illuminate\Support\Facades\Mail;
 
 
 
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-us', [HomeController::class, 'about_us'])->name('about-us');
 Route::get('/menu', [HomeController::class, 'menu'])->name('menu');
@@ -53,14 +55,10 @@ Route::post('/set-currency', function (Request $request) {
     return response()->json(['success' => true, 'stored_currency' => Session::get('selected_currency')]);
 })->name('set.currency');
 
-Route::get('/send-test-email', function () {
-    Mail::raw('This is a test email from Laravel using Gmail SMTP.', function ($message) {
-        $message->to('mallayeswanth23@gmail.com')
-            ->subject('Test Email from Laravel');
-    });
 
-    return 'Test email sent!';
-});
+
+
+
 
 
 
@@ -92,7 +90,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/referrals', [UserDashboardController::class, 'referrals'])->name('referrals');
     Route::get('/order/histroy', [UserDashboardController::class, 'order_history'])->name('order.history');
     Route::put('/orders/{order}/cancel', [UserDashboardController::class, 'cancelOrder'])->name('orders.cancel');
+    Route::post('/newsletter/subscribe', [UserDashboardController::class, 'subscribe'])->name('newsletter.subscribe');
 
+    Route::get('/newsletter/unsubscribe/{token}', [UserDashboardController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
 
 
@@ -217,6 +217,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
         return response()->json(['unreadCount' => $unreadCount]);
     })->name('notifications.count');
+
+    Route::resource('newsletter', NewsLetterController::class);
+    Route::post('/newsletter/send', [NewsletterController::class, 'sendNewsletter'])->name('sendNewsLetter');
 
 
 });

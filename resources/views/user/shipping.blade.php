@@ -148,14 +148,50 @@
 
 
                     <!-- Checkout Benefits -->
-                    <div class="mt-3">
-                        <p><i class="fas fa-truck"></i> <strong>FAST SHIPPING</strong><br>Fast shipping across 30 countries
-                        </p>
-                        <p><i class="fas fa-lock"></i> <strong>SAFE CHECKOUT</strong><br>Our customer happiness team is
-                            available 24/7</p>
-                        <p><i class="fas fa-headset"></i> <strong>CUSTOMER SUPPORT</strong><br>24/7 assistance</p>
-                        <p><i class="fas fa-globe"></i> <strong>NO CUSTOM DUTIES</strong><br>Enjoy no custom duties across
-                            any country</p>
+                    <div class="mt-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="d-flex justify-content-center align-items-center"
+                                style="width: 50px; height: 50px; border-radius: 25px; background-color: #e0e0e0; color: #007bff;">
+                                <i class="fas fa-truck fa-lg"></i>
+                            </span>
+                            <div class="ms-3">
+                                <strong class="text-dark">FAST SHIPPING</strong>
+                                <p class="text-muted mb-0">Fast shipping across 30 countries</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="d-flex justify-content-center align-items-center"
+                                style="width: 50px; height: 50px; border-radius: 25px; background-color: #e0e0e0; color: #28a745;">
+                                <i class="fas fa-lock fa-lg"></i>
+                            </span>
+                            <div class="ms-3">
+                                <strong class="text-dark">SAFE CHECKOUT</strong>
+                                <p class="text-muted mb-0">Our customer happiness team is available 24/7</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="d-flex justify-content-center align-items-center"
+                                style="width: 50px; height: 50px; border-radius: 25px; background-color: #e0e0e0; color: #dc3545;">
+                                <i class="fas fa-headset fa-lg"></i>
+                            </span>
+                            <div class="ms-3">
+                                <strong class="text-dark">CUSTOMER SUPPORT</strong>
+                                <p class="text-muted mb-0">24/7 assistance</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center">
+                            <span class="d-flex justify-content-center align-items-center"
+                                style="width: 50px; height: 50px; border-radius: 25px; background-color: #e0e0e0; color: #ffc107;">
+                                <i class="fas fa-globe fa-lg"></i>
+                            </span>
+                            <div class="ms-3">
+                                <strong class="text-dark">NO CUSTOM DUTIES</strong>
+                                <p class="text-muted mb-0">Enjoy no custom duties across any country</p>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
