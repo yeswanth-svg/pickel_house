@@ -1,153 +1,151 @@
 @extends('layouts.app')
 @section('title', 'Pickel House')
 @section('content')
-        <style>
-        /* Menu Item */
+
+<style>
+    /* Menu Item */
+    .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 15px; /* Spacing between image and content */
+        padding: 15px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    /* Image Styling (Fixed Size) */
+    .menu-item img {
+        
+        width: 150px;
+        object-fit: cover;
+        flex-shrink: 0; /* Prevents image shrinking */
+    }
+
+    /* Content Layout */
+    .menu-item .w-100 {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    /* Dish Name */
+    .menu-item h4 {
+        font-size: 21px;
+        font-weight: bold !important;
+        margin: 0;
+    }
+
+    /* Quantity & Spice Level Section */
+    .menu-item .d-flex.align-items-center {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* Price & Cart Section */
+    .price-section {
+        text-align: right;
+        min-width: 120px;
+        white-space: nowrap;
+    }
+
+    /* Discounted Price */
+    .discount-price-display {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: green;
+    }
+
+    /* Original Price (Strikethrough) */
+    .original-price-display {
+        font-size: 1.2rem;
+        color: red;
+        text-decoration: line-through;
+        margin-top: -5px; /* Reduce gap between price and discount */
+    }
+
+    .menu-item .select-tag1 {
+        width: 100px;
+    }
+
+    .menu-item .select-tag2 {
+        width: 120px;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
         .menu-item {
-            display: flex;
+            flex-direction: row;
             align-items: center;
-            gap: 15px;
-            /* Spacing between image and content */
-            padding: 15px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-
-        /* Image Styling (Fixed Size) */
-        .menu-item img {
-            height: 150px;
-            object-fit: cover;
-            margin-top: -22px;
-            /* Prevents shrinking */
-        }
-
-        /* Content Layout */
-        .menu-item .w-100 {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        /* Dish Name */
-        .menu-item h4 {
-            font-size: 21px;
-            font-weight: bold !important;
-            margin: 0;
-        }
-
-        /* Quantity & Spice Level Section */
-        .menu-item .d-flex.align-items-center {
-            display: flex;
-            flex-wrap: wrap;
+            text-align: left;
             gap: 10px;
         }
 
-
-
-        /* Price & Cart Section */
-        .price-section {
-            text-align: right;
-            min-width: 120px;
-            white-space: nowrap;
+        .menu-item img {
+            width: 100px; /* Render as 100x100 on mobile */
+            height: 100px;
+            max-width: 150px; /* Ensure it never exceeds original size */
+            object-fit: cover;
+            flex-shrink: 0;
         }
 
-        /* Discounted Price */
-        .discount-price-display {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: green;
+        .menu-item .w-100 {
+            width: 100%;
         }
 
-        /* Original Price (Strikethrough) */
-        .original-price-display {
-            font-size: 1.2rem;
-            color: red;
-            text-decoration: line-through;
-            margin-top: -5px;
-            /* Reduce gap between price and discount */
+        .menu-item .price-section {
+            text-align: left;
+            min-width: unset;
+        }
+
+        .menu-item .text-start {
+            flex-grow: 1;
+        }
+
+        .menu-item .input-group {
+            max-width: 90px;
+        }
+
+        .menu-item .btn {
+            font-size: 12px;
+            padding: 4px 6px;
+        }
+
+        .menu-item .prices {
+            position: static;
+            margin-top: 5px;
+        }
+
+        .menu-item #cart-process {
+            display: flex !important;
+            flex: none;
+            position: static;
+        }
+
+        .menu-item .select-tags {
+            display: flex !important;
+            flex: none;
+            position: static;
+        }
+
+        .menu-item h4 {
+            position: static;
+            font-size: 18px;
         }
 
         .menu-item .select-tag1 {
-            width: 100px;
+            width: 80px;
         }
 
         .menu-item .select-tag2 {
-            width: 120px;
+            width: 90px;
         }
+    }
+</style>
 
-        @media (max-width: 768px) {
-            .menu-item {
-                flex-direction: row-reverse;
-                /* Image & price on the right */
-                align-items: flex-start;
-            }
-
-            .menu-item img {
-                width: 100px;
-                /* Smaller image for mobile */
-                height: 100px;
-                object-fit: cover;
-                margin-left: 10px;
-                position: relative;
-                top: -7pc;
-                /* Space between text and image */
-            }
-
-            .menu-item .price-section {
-                text-align: right;
-                /* Align price to the right */
-                min-width: 80px;
-            }
-
-
-            .menu-item .text-start {
-                flex-grow: 1;
-            }
-
-            .menu-item .input-group {
-                max-width: 90px;
-                /* Adjust quantity selector size */
-            }
-
-            .menu-item .btn {
-                font-size: 12px;
-                /* Smaller buttons */
-                padding: 4px 6px;
-            }
-
-            .menu-item .prices {
-                position: relative;
-                right: -11pc;
-                top: -3pc;
-            }
-
-            .menu-item #cart-process {
-                display: flex !important;
-                flex: none;
-                position: relative;
-                right: 2pc;
-            }
-
-            .menu-item .select-tags {
-                display: flex !important;
-                flex: none;
-                position: relative;
-                right: 2pc;
-            }
-
-            .menu-item h4 {
-                position: relative;
-                right: 2pc;
-            }
-
-            .menu-item .select-tag1 {
-                width: 80px;
-            }
-        }
-    </style>
 
     <!-- Hero Start -->
     <div class="container-fluid bg-light py-6 my-6 mt-0">
@@ -305,21 +303,21 @@
             <div class="tab-class text-center">
                 <ul class="nav nav-pills d-inline-flex justify-content-center mb-5">
                     @foreach($categories as $key => $category)
-                                <li class="nav-item p-2">
+                        <li class="nav-item p-2">
                             <a class="d-flex py-2 mx-2 border border-primary bg-white rounded-pill category-tab {{ $key === 0 ? 'active' : '' }}"
                                 data-bs-toggle="pill" href="#tab-{{ $category->id }}" data-category-id="{{ $category->id }}">
                                 <span class="text-dark" style="width: 150px">{{ $category->category_name }}</span>
                             </a>
                         </li>
                     @endforeach
-                    </ul>
+                </ul>
 
-                <div class="tab-content">
+                <div class="tab-content"> 
                     @foreach($categories as $key => $category)
-                                <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
+                        <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
                             <div class="row g-4">
                                 @foreach($category->dishes as $dish)
-                                                <div class="col-lg-6">
+                                    <div class="col-lg-6">
                                         <div class="menu-item d-flex align-items-center position-relative">
                                             <div class="ratio ratio-1x1"
                                                 style="width: 150px; object-fit: cover; position: relative;">
@@ -346,14 +344,14 @@
                                                             <select class="quantity-selector form-select form-select-sm select-tag1"
                                                                 data-dish-id="{{ $dish->id }}" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
                                                                 @foreach($dish->quantities as $q)
-                                                                                        <option value="{{ $q->id }}"
+                                                                    <option value="{{ $q->id }}"
                                                                         data-discount-price="{{ convertPrice($q->discount_price) }}"
                                                                         data-original-price="{{ convertPrice($q->original_price) }}"
                                                                         data-normal-price="{{ $q->discount_price }}">
                                                                         {{ $q->weight }}
                                                                     </option>
                                                                 @endforeach
-                                                                            </select>
+                                                            </select>
 
                                                             <select class="form-select form-select-sm select-tag2" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
                                                                 <option value="">Spice Level</option>
@@ -435,10 +433,10 @@
                                     </div>
                                 @endforeach
 
-                                    </div>
+                            </div>
                         </div>
                     @endforeach
-                    </div>
+                </div>
             </div>
         </div>
     </div>
