@@ -141,11 +141,6 @@ class OrderController extends Controller
         });
 
 
-
-
-
-
-
         // Fetch the minimum order weight from the settings table
         $minimumOrderWeightSetting = Setting::where('key', 'minimun_order_weight')->first();
         $minimumOrderWeight = isset($minimumOrderWeightSetting) ? (int) preg_replace('/\D/', '', $minimumOrderWeightSetting->value) : 0;
