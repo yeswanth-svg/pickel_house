@@ -594,7 +594,7 @@
                                     <form method="Post" action="/delete-wishlist-item/${item.id}">
                                     @method("DELETE")
                                     @csrf
-                                     <button type="button" class="btn btn-danger">
+                                     <button type="submit" class="btn btn-danger">
                                             <i class="fas fa-trash-alt"></i> 
                                         </button>
                                     </form>
