@@ -103,7 +103,8 @@
                         $shippingCost = $selectedShipping == 'priority_shipping' ? $priorityShipping : $standardShipping;
                         $grandTotalWithShipping = $grandTotal + $shippingCost;
 
-                        $convertedAmount = PaymentPrice($discountAmount + $shippingCost, true); // Now only once
+                        $convertedAmount = PaymentPrice($grandTotal + $shippingCost, true); // Now only once
+
                     @endphp
 
                     <div class="mt-3">
@@ -163,66 +164,6 @@
     </div>
 
 
-    <script>
-        function copyCoupon(code) {
-            document.getElementById('coupon_code').value = code;
-        }
-
-        function applyCoupon() {
-            let couponCode = document.getElementById('coupon_code').value;
-            if (!couponCode) {
-                $.notify({ message: 'Please enter a coupon code!' }, { type: 'danger', placement: { from: 'top', align: 'right' } });
-                return;
-            }
-
-            $.ajax({
-                type: "POST",
-                url: "/apply-coupon",
-                data: {
-                    promo_code: $('#coupon_code').val(),
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function (response) {
-                    if (response.success) {
-                        // Show success notification
-                        $.notify({
-                            message: "Coupon Applied: " + response.discount,
-                            title: "Success",
-                            icon: "fa fa-check"
-                        }, {
-                            type: "success"
-                        });
-
-                        // Refresh the page after a short delay (e.g., 1.5 seconds)
-                        setTimeout(function () {
-                            location.reload();
-                        }, 1500);
-                    } else {
-                        // Show error notification
-                        $.notify({
-                            message: response.message,
-                            title: "Error",
-                            icon: "fa fa-times"
-                        }, {
-                            type: "danger"
-                        });
-                    }
-                },
-                error: function () {
-                    $.notify({
-                        message: "Something went wrong!",
-                        title: "Error",
-                        icon: "fa fa-times"
-                    }, {
-                        type: "danger"
-                    });
-                }
-            });
-
-
-        }
-
-    </script>
 
     <script>
         document.querySelectorAll('input[name="shipping"]').forEach(input => {

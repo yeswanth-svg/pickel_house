@@ -1,0 +1,42 @@
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
+
+class OrderPlacedNotification extends Notification
+{
+    use Queueable;
+
+    private $orderDetails;
+
+    public function __construct($orderDetails)
+    {
+        $this->orderDetails = $orderDetails;
+    }
+
+    public function via($notifiable)
+    {
+        return ['mail']; // You can also add 'database', 'slack', etc.
+    }
+
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)
+            ->subject('New Order Received - ' . $this->orderDetails['order_id'])
+            ->greeting('Hello Admin,')
+            ->line('A new order has been placed by ' . $this->orderDetails['user_name'] . '.')
+            ->line('Order ID: ' . $this->orderDetails['order_id'])
+            ->line('User Email: ' . $this->orderDetails['user_email'])
+            ->line('Total Amount: ₹' . $this->orderDetails['total_amount'])
+            ->line('Payment ID: ' . $this->orderDetails['payment_id'])
+            ->line('Order Date: ' . $this->orderDetails['order_date'])
+            ->line('Shipping Address: ' . $this->orderDetails['shipping_address'])
+            ->line('Order Items:')
+            ->with(collect($this->orderDetails['order_items'])->map(function ($item) {
+                return '- ' . $item['item_name'] . ' (Qty: ' . $item['quantity'] . ')';
+            })->implode("\n"))
+            ->line('Please process the order as soon as possible.')
+            ->action('View Orders', url('/admin/orders'))
+            ->line('Thank you for your attention!');
+    }
+}

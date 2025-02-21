@@ -207,6 +207,14 @@
                             </div>
                         </li>
 
+                        <li class="nav-item">
+                            <a href="{{route('admin.razorpay_transactions')}}">
+                                <i class="fas fa-coins"></i>
+                                <p>Transactions</p>
+                            </a>
+
+                        </li>
+
 
 
 
@@ -248,7 +256,7 @@
                                 <p>Settings</p>
                             </a>
                         </li>
-                        
+
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#ticket"
                                 aria-expanded="{{ request()->is('admin/tickets') || request()->is('admin/tickets/*') || request()->is('admin/tickets-categories/*') ? 'true' : 'false' }}"
@@ -338,6 +346,145 @@
                                     </form>
                                 </ul>
                             </li>
+                            <li class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                                    aria-expanded="false" aria-haspopup="true">
+                                    <i class="fa fa-search"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-search animated fadeIn">
+                                    <form class="navbar-left navbar-form nav-search">
+                                        <div class="input-group">
+                                            <input type="text" placeholder="Search ..." class="form-control" />
+                                        </div>
+                                    </form>
+                                </ul>
+                            </li>
+                            <li class="nav-item topbar-icon dropdown hidden-caret">
+                                <a class="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-envelope"></i>
+                                </a>
+                                <ul class="dropdown-menu messages-notif-box animated fadeIn"
+                                    aria-labelledby="messageDropdown">
+                                    <li>
+                                        <div class="dropdown-title d-flex justify-content-between align-items-center">
+                                            Messages
+                                            <a href="#" class="small">Mark all as read</a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="message-notif-scroll scrollbar-outer">
+                                            <div class="notif-center">
+                                                <a href="#">
+                                                    <div class="notif-img">
+                                                        <img src="{{asset('images/jm_denis.jpg')}}" alt="Img Profile" />
+                                                    </div>
+                                                    <div class="notif-content">
+                                                        <span class="subject">Jimmy Denis</span>
+                                                        <span class="block"> How are you ? </span>
+                                                        <span class="time">5 minutes ago</span>
+                                                    </div>
+                                                </a>
+                                                <a href="#">
+                                                    <div class="notif-img">
+                                                        <img src="{{asset('images/chadengle.jpg')}}"
+                                                            alt="Img Profile" />
+                                                    </div>
+                                                    <div class="notif-content">
+                                                        <span class="subject">Chad</span>
+                                                        <span class="block"> Ok, Thanks ! </span>
+                                                        <span class="time">12 minutes ago</span>
+                                                    </div>
+                                                </a>
+                                                <a href="#">
+                                                    <div class="notif-img">
+                                                        <img src="{{asset('images/mlane.jpg')}}" alt="Img Profile" />
+                                                    </div>
+                                                    <div class="notif-content">
+                                                        <span class="subject">Jhon Doe</span>
+                                                        <span class="block">
+                                                            Ready for the meeting today...
+                                                        </span>
+                                                        <span class="time">12 minutes ago</span>
+                                                    </div>
+                                                </a>
+                                                <a href="#">
+                                                    <div class="notif-img">
+                                                        <img src="{{asset('images/talha.jpg')}}" alt="Img Profile" />
+                                                    </div>
+                                                    <div class="notif-content">
+                                                        <span class="subject">Talha</span>
+                                                        <span class="block"> Hi, Apa Kabar ? </span>
+                                                        <span class="time">17 minutes ago</span>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="see-all" href="javascript:void(0);">See all messages<i
+                                                class="fa fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <!-- notification li tag -->
+                            <li class="nav-item topbar-icon dropdown hidden-caret">
+                                <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-bell"></i>
+                                    <span class="notification" id="notificationCount">{{ $unreadCount ?? 0 }}</span>
+                                </a>
+                                <ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
+                                    <li>
+                                        <div class="dropdown-title">
+                                            You have <span id="unreadCount">{{ $unreadCount ?? 0 }}</span> new
+                                            notifications
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="notif-scroll scrollbar-outer">
+                                            <div class="notif-center">
+                                                @if ($latestNotificationCount->isNotEmpty())
+                                                    @foreach ($latestNotificationCount as $notification)
+                                                        <a href="#">
+                                                            <div class="notif-icon notif-primary">
+                                                                <i class="fa fa-info-circle"></i>
+                                                            </div>
+                                                            <div class="notif-content">
+                                                                <span class="block">
+                                                                    {{ $notification->data['payment_method'] ?? 'Notification' }}
+                                                                    -
+                                                                    {{ $notification->data['status'] ?? '' }}
+                                                                </span>
+                                                                <span class="block">
+                                                                    Total:
+                                                                    ₹{{ number_format($notification->data['total_amount'] / 100, 2) }}
+                                                                </span>
+                                                                <span
+                                                                    class="time">{{ $notification->created_at->diffForHumans() }}</span>
+                                                            </div>
+                                                        </a>
+
+                                                    @endforeach
+                                                @else
+                                                    <p class="text-center">No new notifications</p>
+                                                @endif
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="see-all" href="{{ route('admin.notifications') }}">
+                                            See all notifications <i class="fa fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+
+                            <!-- //messages li tag -->
                             <li class="nav-item topbar-icon dropdown hidden-caret">
                                 <a class="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -411,7 +558,7 @@
 
 
 
-
+                            <!-- quick action li tag -->
                             <li class="nav-item topbar-icon dropdown hidden-caret">
                                 <a class="nav-link" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                                     <i class="fas fa-layer-group"></i>
@@ -478,6 +625,8 @@
                                 </div>
                             </li>
 
+
+
                             <li class="nav-item topbar-user dropdown hidden-caret">
                                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                                     aria-expanded="false">
@@ -534,6 +683,28 @@
 
 
     <!-- jQuery -->
+    <audio id="notificationSound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
+
+    <script>
+        let lastNotificationCount = parseInt(document.getElementById('notificationCount').innerText);
+
+        setInterval(function () {
+            fetch('{{ route("admin.notifications.count") }}')
+                .then(response => response.json())
+                .then(data => {
+                    const newNotificationCount = data.unreadCount;
+
+                    if (newNotificationCount > lastNotificationCount) {
+                        const audio = document.getElementById('notificationSound');
+                        audio.play().catch(error => console.error('Audio play error:', error));
+                        document.getElementById('notificationCount').innerText = newNotificationCount;
+                    }
+
+                    lastNotificationCount = newNotificationCount;
+                })
+                .catch(error => console.error('Error fetching notifications:', error));
+        }, 5000);
+    </script>
 
 
 

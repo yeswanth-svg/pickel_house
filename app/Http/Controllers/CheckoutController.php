@@ -262,6 +262,7 @@ class CheckoutController extends Controller
         $totalWeight = (float) $cartItems->sum(fn($item) => (float) $item->quantity->weight * $item->cart_quantity);
 
 
+
         // Fetch the best matching weight bracket
         $shippingZone = DB::table('shipping_zones')
             ->where('country', $country)
@@ -315,7 +316,7 @@ class CheckoutController extends Controller
 
             \Log::info("====================================================");
             \Log::info("FINAL SHIPPING COSTS");
-            \Log::info("Total Weight: " . number_format($totalWeight, 2));
+            \Log::info("Total Weight: " . $totalWeight, );
             \Log::info("Final Priority Rate: " . number_format($priorityShipping, 2));
             \Log::info("Final Standard Rate: " . number_format($standardShipping, 2));
             \Log::info("====================================================");

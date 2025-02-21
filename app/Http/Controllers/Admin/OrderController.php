@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Mail\OrderStatusUpdated;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -108,7 +110,9 @@ class OrderController extends Controller
 
     public function updateOrderStatus(Request $request, $id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::with(['user', 'dish'])->where('id', $id)->firstOrFail();
+
+
         $request->validate([
             'order_stage' => 'required|in:in_cart,confirmed,processing,packing,shipped,out_for_delivery,delivered,completed,cancelled,returned,removed_from_cart',
         ]);
@@ -116,7 +120,10 @@ class OrderController extends Controller
         $order->order_stage = $request->order_stage;
         $order->save();
 
-        return back()->with('success', 'Order status updated successfully.');
+        // Send email notification
+        Mail::to($order->user->email)->send(new OrderStatusUpdated($order));
+
+        return back()->with('success', 'Order status updated successfully, and email sent to the user.');
     }
 
     public function updatePaymentStatus(Request $request, $id)

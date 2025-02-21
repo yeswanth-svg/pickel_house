@@ -377,6 +377,7 @@
     <script src="{{asset('admin/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
 
 
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             let selectedCurrencyText = document.getElementById("selected-currency-text");

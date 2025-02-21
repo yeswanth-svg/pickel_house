@@ -136,14 +136,11 @@ class OrderController extends Controller
             // Multiply by cart quantity to get the total weight for this item
             $itemTotalWeight = $itemWeightInGrams * $item->cart_quantity;
 
-            // Debug: Output item weight and total weight for each cart item
-            \Log::info("Item weight: $itemWeightInGrams, Cart quantity: {$item->cart_quantity}, Total weight for this item: $itemTotalWeight");
 
             return $itemTotalWeight;
         });
 
-        // Debugging total weight calculation
-        \Log::info("Total weight: $totalWeight");
+
 
 
 
@@ -158,7 +155,7 @@ class OrderController extends Controller
             $minimumOrderWeight *= 1000;  // Convert kg to grams
         }
 
- 
+
 
         // Fetch the warning message from the settings table
         $warningMessageSetting = Setting::where('key', 'minimun_order_weight')->first();

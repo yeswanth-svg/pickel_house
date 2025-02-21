@@ -26,24 +26,24 @@
         </a>
         <a href="{{ route('order.history') }}"
             class="list-group-item list-group-item-action {{ request()->is('order*') ? 'active' : '' }}">
-            <i class="bi bi-box"></i> &nbsp; Orders History
+            <i class="fas fa-box"></i> &nbsp; Orders History
         </a>
 
         <a href="{{route('referrals')}}"
             class="nav-link list-group-item list-group-item-action {{ request()->is('referrals') ? 'active' : '' }}">
-            <i class="bi bi-share"></i>&nbsp; Referrals
+            <i class="fas fa-share"></i>&nbsp; Referrals
         </a>
 
         <a href="{{route('support-tickets.index')}}"
             class="nav-link list-group-item list-group-item-action {{ request()->is('support-tickets*') ? 'active' : '' }}">
-            <i class="bi bi-share"></i>&nbsp; Support Tickets
+            <i class="fas fa-ticket-alt"></i>&nbsp; Support Tickets
         </a>
         <a href="{{ route('profile.edit') }}"
             class="nav-link list-group-item list-group-item-action {{ request()->is('profile') ? 'active' : '' }}">
-            <i class="bi bi-person"></i>&nbsp;Edit Profile
+            <i class="fas fa-user"></i>&nbsp;Edit Profile
         </a>
         <a href="{{ route('logout') }}" class="nav-link list-group-item list-group-item-action text-danger">
-            <i class="bi bi-box-arrow-right"></i>&nbsp; Logout
+            <i class="fas fa-sign-out-alt"></i>&nbsp; Logout
         </a>
     </div>
 </div>

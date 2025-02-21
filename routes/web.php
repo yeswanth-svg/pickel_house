@@ -31,7 +31,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\SupportTicketController;
 
-
+use Illuminate\Support\Facades\Mail;
 
 
 
@@ -52,6 +52,15 @@ Route::post('/set-currency', function (Request $request) {
 
     return response()->json(['success' => true, 'stored_currency' => Session::get('selected_currency')]);
 })->name('set.currency');
+
+Route::get('/send-test-email', function () {
+    Mail::raw('This is a test email from Laravel using Gmail SMTP.', function ($message) {
+        $message->to('mallayeswanth23@gmail.com')
+            ->subject('Test Email from Laravel');
+    });
+
+    return 'Test email sent!';
+});
 
 
 
@@ -115,6 +124,8 @@ Route::middleware('auth')->group(function () {
         $count = \App\Models\WishlistItem::where('user_id', auth()->id())->count();
         return response()->json(['count' => $count]);
     });
+
+
     //wishlists routes 
 
 
@@ -189,6 +200,23 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('tickets', SupportTicketController::class);
     Route::put('/tickets/{id}/status-update', [SupportTicketController::class, 'change_status'])->name('tickets.change.status');
     Route::resource('tickets-categories', TicketCategoriesController::class);
+
+    Route::get('/transaction', [DashboardController::class, 'razorpay_transactions'])->name('razorpay_transactions');
+
+    Route::get('/all-notifications', [DashboardController::class, 'showNotifications'])->name('notifications'); // For the "See All Notifications" link
+
+    Route::get('/notifications/count', function () {
+        $user = Auth::user();
+
+        // Ensure only admin users can access this
+        if (!$user || $user->role !== 'admin') {
+            return response()->json(['error' => 'Unauthorized access.'], 403);
+        }
+
+        $unreadCount = $user->unreadNotifications->count();
+
+        return response()->json(['unreadCount' => $unreadCount]);
+    })->name('notifications.count');
 
 
 });

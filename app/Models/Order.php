@@ -16,6 +16,7 @@ class Order extends Model
         'quantity_id',
         'spice_level',
         'order_stage',
+        'payment_state',
         'original_price',
         'discount_price',
         'total_amount',
