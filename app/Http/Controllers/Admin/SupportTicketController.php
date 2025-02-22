@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
+use App\Notifications\TicketMessageNotification;
 use Illuminate\Http\Request;
 
 class SupportTicketController extends Controller
@@ -42,6 +43,10 @@ class SupportTicketController extends Controller
         //
 
         $ticket = Ticket::findorfail($id);
+        // Mark all unread messages as read
+        auth()->user()->unreadNotifications()
+            ->where('type', TicketMessageNotification::class)
+            ->update(['read_at' => now()]);
         return view('admin.support.tickets.show', compact('ticket'));
 
     }

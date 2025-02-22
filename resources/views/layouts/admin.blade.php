@@ -36,9 +36,6 @@
     <link rel="stylesheet" href="{{asset('admin/css/demo.css')}}" />
 
 
-
-    <!-- 
-
     <style>
         .notification {
             animation: pulse 1s infinite;
@@ -57,7 +54,41 @@
                 transform: scale(1);
             }
         }
-    </style> -->
+
+        .notification-2 {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .navbar .navbar-nav .notification-2 {
+            position: absolute;
+            background-color: #f25961;
+            text-align: center;
+            border-radius: 10px;
+            min-width: 17px;
+            height: 17px;
+            font-size: 10px;
+            color: #ffffff;
+            font-weight: 300;
+            line-height: 17px;
+            top: 3px;
+            right: 3px;
+            letter-spacing: -1px;
+        }
+    </style>
 </head>
 
 <body>
@@ -395,24 +426,35 @@
                                                                 <i class="fa fa-info-circle"></i>
                                                             </div>
                                                             <div class="notif-content">
-                                                                <span class="block">
-                                                                    {{ $notification->data['payment_method'] ?? 'Notification' }}
-                                                                    -
-                                                                    {{ $notification->data['status'] ?? '' }}
-                                                                </span>
-                                                                <span class="block">
-                                                                    Total:
-                                                                    ₹{{ number_format($notification->data['total_amount'] / 100, 2) }}
-                                                                </span>
+                                                                @if (isset($notification->data['total_amount']))
+                                                                    <!-- This is an Order Notification -->
+                                                                    <span class="block">
+                                                                        {{ $notification->data['payment_method'] ?? 'Notification' }}
+                                                                        -
+                                                                        {{ $notification->data['status'] ?? '' }}
+                                                                    </span>
+                                                                    <span class="block">
+                                                                        Total:
+                                                                        ₹{{ number_format($notification->data['total_amount'] / 100, 2) }}
+                                                                    </span>
+                                                                @elseif (isset($notification->data['message']))
+                                                                    <!-- This is a Message Notification -->
+                                                                    <span class="block">
+                                                                        <strong>{{ $notification->data['username'] ?? 'User' }}</strong>:
+                                                                        {{ $notification->data['message'] }}
+                                                                    </span>
+                                                                @else
+                                                                    <span class="block">Unknown Notification</span>
+                                                                @endif
                                                                 <span
                                                                     class="time">{{ $notification->created_at->diffForHumans() }}</span>
                                                             </div>
                                                         </a>
-
                                                     @endforeach
                                                 @else
                                                     <p class="text-center">No new notifications</p>
                                                 @endif
+
 
                                             </div>
                                         </div>
@@ -431,72 +473,30 @@
                                 <a class="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-envelope"></i>
+                                    <span class="notification-2 badge-danger" id="messageCount">0</span>
                                 </a>
                                 <ul class="dropdown-menu messages-notif-box animated fadeIn"
                                     aria-labelledby="messageDropdown">
                                     <li>
                                         <div class="dropdown-title d-flex justify-content-between align-items-center">
                                             Messages
-                                            <a href="#" class="small">Mark all as read</a>
+                                            <a href="#" id="markAllRead" class="small">Mark all as read</a>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="message-notif-scroll scrollbar-outer">
-                                            <div class="notif-center">
-                                                <a href="#">
-                                                    <div class="notif-img">
-                                                        <img src="{{asset('admin/img/jm_denis.jpg')}}"
-                                                            alt="Img Profile" />
-                                                    </div>
-                                                    <div class="notif-content">
-                                                        <span class="subject">Jimmy Denis</span>
-                                                        <span class="block"> How are you ? </span>
-                                                        <span class="time">5 minutes ago</span>
-                                                    </div>
-                                                </a>
-                                                <a href="#">
-                                                    <div class="notif-img">
-                                                        <img src="{{asset('admin/img/chadengle.jpg')}}"
-                                                            alt="Img Profile" />
-                                                    </div>
-                                                    <div class="notif-content">
-                                                        <span class="subject">Chad</span>
-                                                        <span class="block"> Ok, Thanks ! </span>
-                                                        <span class="time">12 minutes ago</span>
-                                                    </div>
-                                                </a>
-                                                <a href="#">
-                                                    <div class="notif-img">
-                                                        <img src="{{asset('admin/img/mlane.jpg')}}" alt="Img Profile" />
-                                                    </div>
-                                                    <div class="notif-content">
-                                                        <span class="subject">Jhon Doe</span>
-                                                        <span class="block">
-                                                            Ready for the meeting today...
-                                                        </span>
-                                                        <span class="time">12 minutes ago</span>
-                                                    </div>
-                                                </a>
-                                                <a href="#">
-                                                    <div class="notif-img">
-                                                        <img src="{{asset('admin/img/talha.jpg')}}" alt="Img Profile" />
-                                                    </div>
-                                                    <div class="notif-content">
-                                                        <span class="subject">Talha</span>
-                                                        <span class="block"> Hi, Apa Kabar ? </span>
-                                                        <span class="time">17 minutes ago</span>
-                                                    </div>
-                                                </a>
+                                            <div class="notif-center" id="messageList">
+                                                <!-- Dynamic messages will be loaded here -->
                                             </div>
                                         </div>
                                     </li>
                                     <li>
-                                        <a class="see-all" href="javascript:void(0);">See all messages<i
-                                                class="fa fa-angle-right"></i>
-                                        </a>
+                                        <a class="see-all" href="{{route('admin.messages') }}">See all messages<i
+                                                class="fa fa-angle-right"></i></a>
                                     </li>
                                 </ul>
                             </li>
+
 
 
 
@@ -764,6 +764,78 @@
             fillColor: "rgba(255, 165, 52, .14)",
         });
     </script>
+
+    <script>
+        function fetchAdminMessages() {
+            fetch("{{ route('notifications.messages') }}")
+                .then(response => response.json())
+                .then(data => {
+                    let messageList = document.getElementById('messageList');
+                    let messageCount = document.getElementById('messageCount');
+
+                    messageList.innerHTML = "";
+                    let unreadCount = 0;
+
+                    data.forEach(notification => {
+                        if (!notification.read_at) { // Only count unread messages
+                            unreadCount++;
+                        }
+
+                        messageList.innerHTML += `
+                        <a href="{{ url('admin/tickets') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
+                            <div class="notif-img">
+                                <img src="{{ asset('admin/img/mlane.jpg') }}" alt="Profile" />
+                            </div>
+                            <div class="notif-content">
+                                <span class="subject">${notification.data.username}</span>
+                                <span class="block">${notification.data.message}</span>
+                                <span class="time">${new Date(notification.created_at).toLocaleTimeString()}</span>
+                            </div>
+                        </a>
+                    `;
+                    });
+
+                    // Update the counter correctly
+                    messageCount.textContent = unreadCount > 0 ? unreadCount : 0;
+
+                    // If all messages are read, reset the count
+                    if (unreadCount === 0) {
+                        messageCount.textContent = 0;
+                    }
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchAdminMessages();
+            setInterval(fetchAdminMessages, 5000); // Refresh every 5 seconds
+        });
+
+        // Mark all messages as read when "Mark All as Read" is clicked
+        document.getElementById('markAllMessagesRead').addEventListener('click', function () {
+            fetch("{{ route('notifications.markAllRead') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Content-Type": "application/json"
+                }
+            }).then(() => {
+                fetchAdminMessages(); // Refresh after marking as read
+            });
+        });
+
+        document.getElementById('markAllMessagesReadMobile').addEventListener('click', function () {
+            fetch("{{ route('notifications.markAllRead') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Content-Type": "application/json"
+                }
+            }).then(() => {
+                fetchAdminMessages();
+            });
+        });
+    </script>
+
 </body>
 
 </html>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\TicketMessageNotification;
 use Illuminate\Http\Request;
 use Razorpay\Api\Api;
 
@@ -69,5 +70,17 @@ class DashboardController extends Controller
 
         return view('admin.notifications', compact('notifications'));
     }
+
+    public function getMessageNotifications()
+    {
+        $notifications = auth()->user()->notifications()
+            ->where('type', TicketMessageNotification::class)
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return response()->json($notifications);
+    }
+
 
 }

@@ -6,6 +6,8 @@ use App\Models\Ticket;
 use App\Models\TicketAttachment;
 use App\Models\TicketCategory;
 use App\Models\TicketMessage;
+use App\Models\User;
+use App\Notifications\TicketMessageNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -28,7 +30,7 @@ class UserSupportTicketsController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $request->validate([
             'subject' => 'required|string|max:255',
             'category_id' => 'required|exists:ticket_categories,id',
@@ -77,6 +79,10 @@ class UserSupportTicketsController extends Controller
     public function show($id)
     {
         $ticket = Ticket::findorfail($id);
+        // Mark all unread messages as read
+        auth()->user()->unreadNotifications()
+            ->where('type', TicketMessageNotification::class)
+            ->update(['read_at' => now()]);
         return view('user.support-tickets.show', compact('ticket'));
     }
 
@@ -155,8 +161,10 @@ class UserSupportTicketsController extends Controller
             'message' => 'required',
         ]);
 
+        $user = auth()->user();
+
         // Ensure user is the owner of the ticket or an admin
-        if (auth()->user()->id !== $ticket->user_id && auth()->user()->role !== 'admin') {
+        if ($user->id !== $ticket->user_id && $user->role !== 'admin') {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -165,12 +173,23 @@ class UserSupportTicketsController extends Controller
         // Save message
         $message = TicketMessage::create([
             'ticket_id' => $ticket->id,
-            'sender_id' => auth()->id(),
+            'sender_id' => $user->id,
             'message' => $request->message,
         ]);
 
-        return redirect()->back()->with('success', 'Message sent successfully!');
+        // Determine recipient
+        $recipient = $user->role === 'admin' ? $ticket->user : User::where('role', 'admin')->first();
 
+        if ($recipient) {
+            $recipient->notify(new TicketMessageNotification([
+                'sender_id' => $user->id,
+                'sender_name' => $user->name,
+                'message' => $request->message,
+                'ticket_id' => $ticket->id,
+            ]));
+        }
+
+        return redirect()->back()->with('success', 'Message sent successfully!');
     }
 
 

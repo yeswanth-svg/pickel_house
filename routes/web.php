@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ShippingZonesController;
 use App\Http\Controllers\Admin\TicketCategoriesController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\OrderController as UserOrderController;
 use App\Http\Controllers\RazorpayController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\UserSupportTicketsController;
 use App\Http\Controllers\WishlistController;
 use App\Models\UserAddress;
+use App\Notifications\TicketMessageNotification;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -64,6 +66,7 @@ Route::post('/set-currency', function (Request $request) {
 
 
 
+
 Route::get('/dashboard', [HomeController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -94,7 +97,17 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/newsletter/unsubscribe/{token}', [UserDashboardController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
+    Route::post('/notifications/messages/read', function () {
+        auth()->user()->unreadNotifications()
+            ->where('type', TicketMessageNotification::class)
+            ->update(['read_at' => now()]);
 
+        return response()->json(['success' => true]);
+    })->name('notifications.markAllRead');
+
+    Route::get('/notifications/messages', [NotificationController::class, 'getMessageNotifications'])
+        ->name('notifications.messages');
+    Route::get('/messages', [NotificationController::class, 'getMessages'])->name('user.messages');
 
 
 
@@ -220,6 +233,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
 
     Route::resource('newsletter', NewsLetterController::class);
     Route::post('/newsletter/send', [NewsletterController::class, 'sendNewsletter'])->name('sendNewsLetter');
+
+    Route::get('/messages', [NotificationController::class, 'getAdminMessages'])->name('messages');
+
 
 
 });

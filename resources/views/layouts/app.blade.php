@@ -58,6 +58,20 @@
             position: relative;
             display: inline-block;
         }
+
+        /* Hide Bootstrap dropdown arrow */
+        #messageDropdown::after {
+            display: none !important;
+        }
+
+        /* Ensure message dropdown is hidden by default */
+        .messages-notif-box {
+            display: none;
+        }
+
+        .messages-notif-box.show {
+            display: block;
+        }
     </style>
 
 
@@ -85,13 +99,41 @@
 
                 <!-- CART ICON (Mobile View) -->
                 @auth
-                    <div class="cart-container d-lg-none" style="position: absolute; right: 73px; top: 62px;">
+                    <div class="cart-container d-lg-none" style="position: absolute; right: 92px; top: 62px;">
                         <a href="{{route('user.cart')}}">
                             <i class="fas fa-shopping-cart cart-icon" style="font-size: 1.7rem;"></i>
                             <span class="uk-badge cart-badge">
                                 {{ auth()->check() ? \App\Models\Order::where(['user_id' => auth()->id(), 'order_stage' => 'in_cart'])->count() : 0 }}
                             </span>
                         </a>
+                    </div>
+                @endauth
+                <!-- Messages Icon (Mobile View) -->
+                @auth
+                    <div class="d-lg-none" style="position: absolute; right: 69px; top: 62px;">
+                        <a href="#" id="mobileMessageToggle">
+                            <i class="fas fa-envelope text-primary" style="font-size: 1.7rem;"></i>
+                            <span class="uk-badge cart-badge" id="messageCountMobile">0</span>
+                        </a>
+                        <ul class="dropdown-menu messages-notif-box animated fadeIn shadow-sm p-3"
+                            id="mobileMessageDropdown" style="width: 250px; border-radius: 10px; display: none;">
+                            <li class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                                <span class="fw-bold text-dark">Messages</span>
+                                <a href="#" id="markAllMessagesReadMobile" class="small text-primary">Mark all as read</a>
+                            </li>
+                            <li>
+                                <div class="message-notif-scroll scrollbar-outer"
+                                    style="max-height: 250px; overflow-y: auto;">
+                                    <div class="notif-center" id="messageListMobile">
+                                        <!-- Dynamic messages will be loaded here -->
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="text-center border-top pt-2">
+                                <a class="text-primary fw-bold" href="{{ route('user.messages') }}">See all messages <i
+                                        class="fa fa-angle-right"></i></a>
+                            </li>
+                        </ul>
                     </div>
                 @endauth
 
@@ -155,6 +197,40 @@
                             </a>
                         </div>
                     @endauth
+
+
+                    <!-- Messages Dropdown (Desktop View) -->
+                    @auth
+                        <div class="cart-container d-none d-lg-inline-block" style="position: relative;">
+                            <li class="nav-item topbar-icon dropdown hidden-caret d-none d-lg-inline-block">
+                                <a class="nav-link dropdown-toggle position-relative" href="#" id="messageDropdown"
+                                    role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-envelope text-primary fs-4"></i>
+                                    <span class="uk-badge cart-badge-2" id="messageCount">0</span>
+                                </a>
+                                <ul class="dropdown-menu messages-notif-box animated fadeIn shadow-sm p-3"
+                                    aria-labelledby="messageDropdown" style="width: 300px; border-radius: 10px;">
+                                    <li class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                                        <span class="fw-bold text-dark">Messages</span>
+                                        <a href="#" id="markAllMessagesRead" class="small text-primary">Mark all as read</a>
+                                    </li>
+                                    <li>
+                                        <div class="message-notif-scroll scrollbar-outer"
+                                            style="max-height: 250px; overflow-y: auto;">
+                                            <div class="notif-center" id="messageList">
+                                                <!-- Dynamic messages will be loaded here -->
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="text-center border-top pt-2">
+                                        <a class="text-primary fw-bold" href="{{ route('user.messages') }}">See all messages
+                                            <i class="fa fa-angle-right"></i></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </div>
+                    @endauth
+
                     <!-- Currency Selection Dropdown -->
                     <div class="dropdown me-4">
                         <button class="btn btn-light dropdown-toggle" type="button" id="currencyDropdown"
@@ -702,6 +778,19 @@
                     }
                 });
 
+                document.addEventListener('DOMContentLoaded', function () {
+                    const cartBadges = document.querySelectorAll('.cart-badge-2'); // Select all instances
+
+                    if (cartBadges.length > 0) {
+                        setInterval(() => {
+                            cartBadges.forEach((badge) => {
+                                badge.classList.add('bounce-once');
+                                setTimeout(() => badge.classList.remove('bounce-once'), 500);
+                            });
+                        }, 5000);
+                    }
+                });
+
 
                 document.addEventListener('DOMContentLoaded', function () {
                     const cartBadge = document.querySelector('.wishlist-badge');
@@ -713,6 +802,98 @@
                     }, 5000);
                 });
             </script>
+            <audio id="notificationSound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
+
+
+            <script>
+                let lastUnreadCount = 0; // Store the last unread count
+
+                function fetchMessages() {
+                    fetch("{{ route('notifications.messages') }}")
+                        .then(response => response.json())
+                        .then(data => {
+                            let messageList = document.getElementById('messageList');
+                            let messageListMobile = document.getElementById('messageListMobile');
+                            let messageCount = document.getElementById('messageCount');
+                            let messageCountMobile = document.getElementById('messageCountMobile');
+
+                            messageList.innerHTML = "";
+                            messageListMobile.innerHTML = "";
+                            let unreadCount = 0;
+
+                            data.forEach(notification => {
+                                if (!notification.read_at) { // Only count unread messages
+                                    unreadCount++;
+                                }
+
+                                let messageItem = `
+                        <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
+                            <div class="notif-content">
+                                <span class="fw-bold">${notification.data.username}</span>
+                                <span class="d-block small text-muted">${notification.data.message}</span>
+                                <span class="small text-muted">${new Date(notification.created_at).toLocaleTimeString()}</span>
+                            </div>
+                        </a>
+                    `;
+
+                                messageList.innerHTML += messageItem;
+                                messageListMobile.innerHTML += messageItem;
+                            });
+
+                            // Update the count based on unread messages
+                            if (messageCount) messageCount.textContent = unreadCount > 0 ? unreadCount : 0;
+                            if (messageCountMobile) messageCountMobile.textContent = unreadCount > 0 ? unreadCount : 0;
+
+                            // If there are new messages, play the notification sound
+                            if (unreadCount > lastUnreadCount) {
+                                playNotificationSound();
+                            }
+
+                            lastUnreadCount = unreadCount;
+                        })
+                        .catch(error => console.error("Error fetching messages:", error));
+                }
+
+                function playNotificationSound() {
+                    let audio = document.getElementById("notificationSound");
+                    if (audio) {
+                        audio.play().catch(error => console.error("Audio play error:", error));
+                    }
+                }
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    fetchMessages();
+                    setInterval(fetchMessages, 5000); // Auto-refresh every 5 seconds
+                });
+
+                // Mark all messages as read when the user clicks "See All Messages"
+                document.getElementById('markAllMessagesRead').addEventListener('click', function () {
+                    fetch("{{ route('notifications.markAllRead') }}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            "Content-Type": "application/json"
+                        }
+                    }).then(() => {
+                        fetchMessages(); // Refresh after marking as read
+                    });
+                });
+
+                document.getElementById('markAllMessagesReadMobile').addEventListener('click', function () {
+                    fetch("{{ route('notifications.markAllRead') }}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            "Content-Type": "application/json"
+                        }
+                    }).then(() => {
+                        fetchMessages();
+                    });
+                });
+            </script>
+
+
+
 
 
 </body>

@@ -480,6 +480,18 @@ h6,
     animation: shake 0.1s ease-in-out;
 }
 
+.cart-badge-2 {
+    position: absolute;
+    top: -12px;
+    right: -2px;
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    padding: 3px 6px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    animation: shake 0.1s ease-in-out;
+}
 /* Bounce animation for the badge */
 @keyframes shake {
     0%,

@@ -54,7 +54,7 @@
                                         </p>
                                         <p class="mb-1">
                                             <span class="text-primary">Total Amount:</span>
-                                            ₹{{ number_format($notification->data['total_amount'], 2) }}
+                                            ₹{{ number_format($notification->data['total_amount'], 2) ?? 'N/A' }}
                                         </p>
                                         <p>
                                             <span class="text-primary">Address:</span>
