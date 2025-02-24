@@ -24,15 +24,14 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        // Authenticate the user
-        $request->authenticate();
+        session()->forget('url.intended'); // Clears the previous URL
 
-        // Regenerate the session
+        $request->authenticate();
         $request->session()->regenerate();
 
-        // Default redirection for other roles or unauthenticated users
-        return redirect()->intended(route('home', absolute: false));
+        return redirect()->intended(route('dashboard'));
     }
+
 
 
     /**

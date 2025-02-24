@@ -58,15 +58,6 @@ Route::post('/set-currency', function (Request $request) {
 })->name('set.currency');
 
 
-
-
-
-
-
-
-
-
-
 Route::get('/dashboard', [HomeController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -105,13 +96,13 @@ Route::middleware('auth')->group(function () {
         return response()->json(['success' => true]);
     })->name('notifications.markAllRead');
 
+
+
+
+
     Route::get('/notifications/messages', [NotificationController::class, 'getMessageNotifications'])
         ->name('notifications.messages');
     Route::get('/messages', [NotificationController::class, 'getMessages'])->name('user.messages');
-
-
-
-
 
 
     //cart routes
