@@ -435,7 +435,7 @@
                                                                     </span>
                                                                     <span class="block">
                                                                         Total:
-                                                                        ₹{{ number_format($notification->data['total_amount'] / 100, 2) }}
+                                                                        ₹{{ number_format($notification->data['total_amount'], 2) }}
                                                                     </span>
                                                                 @elseif (isset($notification->data['message']))
                                                                     <!-- This is a Message Notification -->

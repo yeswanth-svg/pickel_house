@@ -79,6 +79,7 @@
                                         <th>No.of.Items</th>
                                         <th>Status</th>
                                         <th>Payment Status</th>
+                                        <th>Reward</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -151,7 +152,7 @@
                                         </td>
 
 
-
+                                        <td>{{ $order->reward_message ?: 'N/A' }}</td>
                                         <td>
                                             <div class="form-button-action">
 

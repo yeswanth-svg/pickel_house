@@ -258,10 +258,20 @@ class CheckoutController extends Controller
         $userAddress = UserAddress::where('user_id', $user->id)->first();
         $country = $userAddress ? $userAddress->country : null;
 
-        // Determine Shipping Zone
-        $totalWeight = (float) $cartItems->sum(fn($item) => (float) $item->quantity->weight * $item->cart_quantity);
+        // Determine Total Weight
+        $totalWeight = $cartItems->sum(function ($item) {
+            $weight = strtolower(trim($item->quantity->weight));
 
+            if (str_ends_with($weight, 'kg')) {
+                $weight = (float) str_replace('kg', '', $weight); // Convert kg to float
+            } elseif (str_ends_with($weight, 'g')) {
+                $weight = (float) str_replace('g', '', $weight) / 1000; // Convert g to kg
+            } else {
+                $weight = (float) $weight; // Fallback if already numeric
+            }
 
+            return $weight * $item->cart_quantity;
+        });
 
         // Fetch the best matching weight bracket
         $shippingZone = DB::table('shipping_zones')
@@ -274,58 +284,42 @@ class CheckoutController extends Controller
             \Log::info("Shipping Zone Found: Min Weight = {$shippingZone->min_weight}, Max Weight = " . ($shippingZone->max_weight ?? 'NULL'));
             \Log::info("Base Priority Rate: {$shippingZone->priority_rate}, Base Standard Rate: {$shippingZone->standard_rate}");
 
+            // Base rate for the bracket
             $priorityShipping = (float) $shippingZone->priority_rate;
             $standardShipping = (float) $shippingZone->standard_rate;
 
-            // Fetch the rate for exactly 1 kg
-            $oneKgRate = DB::table('shipping_zones')
-                ->where('country', $country)
-                ->where('min_weight', 1) // Get the 1kg price
-                ->first();
+            // Define weight boundaries
+            $baseWeight = $shippingZone->min_weight;
+            $maxWeight = $shippingZone->max_weight ?? $totalWeight; // If max_weight is NULL, assume no limit
 
-            if ($oneKgRate) {
-                $perKgChargePriority = (float) $oneKgRate->priority_rate;
-                $perKgChargeStandard = (float) $oneKgRate->standard_rate;
-                \Log::info("Using 1kg Rate: Priority = {$perKgChargePriority}, Standard = {$perKgChargeStandard}");
+            // Calculate extra weight within the same bracket
+            $extraWeight = max(0, $totalWeight - $baseWeight);
+            \Log::info("Excess Weight = {$extraWeight} KG");
+
+            // Correct per kg charge for gradual pricing
+            if ($maxWeight > $baseWeight) {
+                $perKgChargePriority = ($shippingZone->priority_rate / ($maxWeight - $baseWeight));
+                $perKgChargeStandard = ($shippingZone->standard_rate / ($maxWeight - $baseWeight));
             } else {
-                // Fallback: Use the per kg price from the current shipping zone
-                if ($shippingZone->max_weight && $shippingZone->max_weight > $shippingZone->min_weight) {
-                    $perKgChargePriority = $shippingZone->priority_rate / ($shippingZone->max_weight - $shippingZone->min_weight);
-                    $perKgChargeStandard = $shippingZone->standard_rate / ($shippingZone->max_weight - $shippingZone->min_weight);
-                    \Log::info("Calculated Per KG Rate from Bracket: Priority = {$perKgChargePriority}, Standard = {$perKgChargeStandard}");
-                } else {
-                    // If there's no max weight, assume a fixed rate per kg
-                    $perKgChargePriority = $shippingZone->priority_rate;
-                    $perKgChargeStandard = $shippingZone->standard_rate;
-                    \Log::info("No Max Weight Defined, Using Flat Rate Per KG: Priority = {$perKgChargePriority}, Standard = {$perKgChargeStandard}");
-                }
+                // If no max weight is defined, use flat per kg rate
+                $perKgChargePriority = $shippingZone->priority_rate / $baseWeight;
+                $perKgChargeStandard = $shippingZone->standard_rate / $baseWeight;
             }
 
-            // Handle excess weight
-            $excessWeight = $totalWeight - $shippingZone->min_weight;
-            \Log::info("Excess Weight = {$excessWeight} KG");
+            // Apply proportional pricing inside the bracket
+            $priorityShipping += ($extraWeight * $perKgChargePriority);
+            $standardShipping += ($extraWeight * $perKgChargeStandard);
 
-            if ($excessWeight > 0) {
-                \Log::info("Before Excess Charge - Priority: {$priorityShipping}, Standard: {$standardShipping}");
-
-                $priorityShipping += $excessWeight * $perKgChargePriority;
-                $standardShipping += $excessWeight * $perKgChargeStandard;
-
-                \Log::info("After Excess Charge - Priority: {$priorityShipping}, Standard: {$standardShipping}");
-            }
+            \Log::info("Final Priority Rate: " . number_format($priorityShipping, 2));
+            \Log::info("Final Standard Rate: " . number_format($standardShipping, 2));
 
             \Log::info("====================================================");
             \Log::info("FINAL SHIPPING COSTS");
-            \Log::info("Total Weight: " . $totalWeight, );
+            \Log::info("Total Weight: " . $totalWeight);
             \Log::info("Final Priority Rate: " . number_format($priorityShipping, 2));
             \Log::info("Final Standard Rate: " . number_format($standardShipping, 2));
             \Log::info("====================================================");
         }
-
-
-
-
-
 
         // Determine selected shipping method (default to priority shipping)
         $selectedShipping = $cartItems->first()->type_of_shipping ?? 'priority_shipping';
@@ -343,7 +337,6 @@ class CheckoutController extends Controller
             }
         }
 
-
         return view('user.shipping', compact(
             'cartItems',
             'subtotal',
@@ -356,6 +349,8 @@ class CheckoutController extends Controller
             'discountAmount'
         ));
     }
+
+
 
 
 

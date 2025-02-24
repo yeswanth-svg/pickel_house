@@ -79,6 +79,7 @@
                                         <th>No.of.Items</th>
                                         <th>Status</th>
                                         <th>Payment Status</th>
+                                        <th>Reward</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -149,7 +150,7 @@
                                                 {{ ucfirst(str_replace('_', ' ', $order->payment_state)) }}
                                             </span>
                                         </td>
-
+                                        <td>{{ $order->reward_message ?: 'N/A' }}</td>
 
 
                                         <td>

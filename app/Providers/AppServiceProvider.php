@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Process;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -37,6 +38,10 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             }
         });
+
+        if (app()->runningInConsole() === false) {
+            Process::run('php artisan queue:work --tries=3 --timeout=90 > /dev/null 2>&1 &');
+        }
     }
 
 }

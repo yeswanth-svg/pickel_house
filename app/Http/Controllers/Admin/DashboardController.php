@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\OrderPlacedNotification;
 use App\Notifications\TicketMessageNotification;
 use Illuminate\Http\Request;
 use Razorpay\Api\Api;
@@ -57,7 +58,7 @@ class DashboardController extends Controller
     {
         $admin = auth()->user();
 
-        // Check if the logged-in user is an admin
+        // Ensure only admins can access
         if ($admin->role !== 'admin') {
             abort(403, 'Unauthorized access.');
         }
@@ -65,11 +66,19 @@ class DashboardController extends Controller
         // Mark all unread notifications as read
         $admin->unreadNotifications->markAsRead();
 
-        // Fetch all notifications
-        $notifications = $admin->notifications;
+        // Query database directly for only OrderPlacedNotification
+        $notifications = $admin->notifications()
+            ->where('type', 'LIKE', '%OrderPlacedNotification%')
+            ->get();
+
+
+        // dd($notifications->count());
+
 
         return view('admin.notifications', compact('notifications'));
     }
+
+
 
     public function getMessageNotifications()
     {
