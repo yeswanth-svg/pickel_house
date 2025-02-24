@@ -106,7 +106,7 @@ class DishController extends Controller
             'image' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Image is nullable
             'spice_level' => ['required', 'string'],
             'availability_status' => ['required', 'string'],
-            'dish_tag' => ['required', 'string'],
+            'dish_tags' => ['required', 'string'],
             'rating' => ['nullable', 'numeric', 'between:0,5'],
         ]);
 
@@ -124,13 +124,16 @@ class DishController extends Controller
             $dish->image = $imageName; // Assign new image
         }
 
+        $dishtags = json_encode(explode(',', $request->dish_tags)); // Convert comma-separated values into an array and encode
+
+
         // 🔹 Explicitly Assign Fields
         $dish->name = $request->name;
         $dish->description = $request->description;
         $dish->category_id = $request->category_id;
         $dish->spice_level = $request->spice_level;
         $dish->availability_status = $request->availability_status;
-        $dish->dish_tag = $request->dish_tag;
+        $dish->dish_tags = $dishtags;
         $dish->rating = $request->rating;
 
         $dish->save(); // Save the model

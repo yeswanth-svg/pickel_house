@@ -290,26 +290,7 @@
 
     @yield('content')
 
-    @auth
-        <!-- Floating Wishlist Icon -->
-        <div class="custom-template">
-            <div class="title">My Wishlist</div>
-            <div class="custom-content">
-                <div class="wishlist-items-container">
-                    <!-- Wishlist items will be dynamically loaded here -->
-                </div>
-            </div>
-            <div class="custom-toggle">
-                <i class="fas fa-shopping-basket"></i>
-                <span class="uk-badge wishlist-badge">
-                    {{ auth()->check() ? \App\Models\WishlistItem::where([
-            'user_id' => auth()->id(),
-        ])->count() : 0 }}
-                </span>
-            </div>
-        </div>
-
-    @endauth
+ 
 
 
     <!-- Footer Start -->
@@ -561,28 +542,43 @@
 
 
             <script>
+
                 $(document).ready(function () {
-                    var toggle_customSidebar = false,
-                        custom_open = 0;
+                    $(document).ready(function () {
+                        var toggle_customSidebar = false,
+                            custom_open = 0;
 
-                    if (!toggle_customSidebar) {
-                        var toggle = $('.custom-template .custom-toggle');
+                        if (!toggle_customSidebar) {
+                            var toggle = $('.custom-template .custom-toggle');
+                            var customTemplate = $('.custom-template');
 
-                        toggle.on('click', function () {
-                            if (custom_open === 1) {
-                                $('.custom-template').removeClass('open');
-                                toggle.removeClass('toggled');
-                                custom_open = 0;
-                            } else {
-                                $('.custom-template').addClass('open');
-                                toggle.addClass('toggled');
-                                custom_open = 1;
-                                fetchWishlistItems(); // ✅ Fetch items when opening the panel
-                            }
-                        });
+                            toggle.on('click', function (event) {
+                                event.stopPropagation(); // Prevent click event from bubbling up
+                                if (custom_open === 1) {
+                                    customTemplate.removeClass('open');
+                                    toggle.removeClass('toggled');
+                                    custom_open = 0;
+                                } else {
+                                    customTemplate.addClass('open');
+                                    toggle.addClass('toggled');
+                                    custom_open = 1;
+                                    fetchWishlistItems();
+                                }
+                            });
 
-                        toggle_customSidebar = true;
-                    }
+                            // Click outside to close
+                            $(document).on("click", function (event) {
+                                if (custom_open === 1 && !$(event.target).closest('.custom-template').length) {
+                                    customTemplate.removeClass('open');
+                                    toggle.removeClass('toggled');
+                                    custom_open = 0;
+                                }
+                            });
+
+                            toggle_customSidebar = true;
+                        }
+                    });
+
 
                     // Event delegation for quantity buttons
                     $(document).on("click", ".decrease-qty", function () {

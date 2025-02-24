@@ -431,7 +431,17 @@
                                                             style="font-size: 1.3rem !important;">
                                                             {{ convertPrice($dish->quantities->first()->original_price) }}
                                                         </p>
+
                                                     </div>
+                                                    <!-- Display Tags Below Prices -->
+                                                    @if(!empty(json_decode($dish->dish_tags, true)))
+                                                        <div class="mt-2 tags">
+                                                            @foreach(json_decode($dish->dish_tags, true) as $tag)
+                                                                <span
+                                                                    class="border border-warning text-dark px-3 py-1 m-1 fw-bold rounded">{{ $tag }}</span>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
