@@ -70,10 +70,9 @@
     </style>
 
     <!-- Hero Section -->
-    <div class="container-fluid py-6 my-6 mt-0"
-        style="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    background: url({{  asset('img/bg-cover.jpg')}}) no-repeat center center/cover;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    color: white;height: 379px;">
+    <div class="container-fluid py-6 my-6 mt-0" style="
+    background: url({{  asset('img/bg-cover.jpg')}});
+    color: white;height: 379px;">
         <div class="container text-center animated bounceInDown">
             <h1 class="display-1 mb-4" style="color: white">Order History</h1>
             <ol class="breadcrumb justify-content-center mb-0 animated bounceInDown">
@@ -104,9 +103,9 @@
                             @foreach($messages as $message)
                                 <div class="d-flex align-items-start mb-3 border-bottom pb-2">
                                     <!-- <div class="notif-img me-3">
-                                                                            <img src="{{ asset('admin/img/default-profile.png') }}" alt="Profile" class="rounded-circle"
-                                                                                width="40">
-                                                                        </div> -->
+                                                                                        <img src="{{ asset('admin/img/default-profile.png') }}" alt="Profile" class="rounded-circle"
+                                                                                            width="40">
+                                                                                    </div> -->
                                     <div>
                                         <strong>{{ $message->data['username'] }}</strong>
                                         <p class="mb-1">{{ $message->data['message'] }}</p>

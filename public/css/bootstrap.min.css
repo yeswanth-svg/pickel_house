@@ -2616,7 +2616,6 @@ fieldset:disabled .btn {
     color: #000;
     background-color: #1572e8 !important;
     border-color: #1572e8 !important;
-
 }
 .btn-check:checked + .btn-primary,
 .btn-check:active + .btn-primary,
@@ -2659,7 +2658,6 @@ fieldset:disabled .btn {
 .btn-secondary.disabled {
     color: #000;
     background-color: #9a9a9a;
-
 }
 .btn-success {
     color: #fff;
@@ -3662,7 +3660,7 @@ fieldset:disabled .btn {
 }
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
-    color: #fff;
+    color: #000000;
     background-color: #d4a762;
 }
 .nav-fill > .nav-link,

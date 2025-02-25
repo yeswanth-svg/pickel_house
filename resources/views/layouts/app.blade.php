@@ -290,8 +290,27 @@
 
     @yield('content')
 
- 
 
+    @auth
+        <!-- Floating Wishlist Icon -->
+        <div class="custom-template">
+            <div class="title">My Wishlist</div>
+            <div class="custom-content">
+                <div class="wishlist-items-container">
+                    <!-- Wishlist items will be dynamically loaded here -->
+                </div>
+            </div>
+            <div class="custom-toggle">
+                <i class="fas fa-shopping-basket"></i>
+                <span class="uk-badge wishlist-badge">
+                    {{ auth()->check() ? \App\Models\WishlistItem::where([
+            'user_id' => auth()->id(),
+        ])->count() : 0 }}
+                </span>
+            </div>
+        </div>
+
+    @endauth
 
     <!-- Footer Start -->
     <div class="container-fluid footer py-6 my-6 mb-0 bg-light wow bounceInUp" data-wow-delay="0.1s">

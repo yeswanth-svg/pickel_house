@@ -2,7 +2,7 @@
 @section('title', 'Menu')
 @section('content')
 
-    <style>
+  <style>
     /* Menu Item */
 
     .menu-container {
@@ -180,8 +180,7 @@
   </style>
 
   <!-- Hero Start -->
-  <div class="container-fluid py-6 my-6 mt-0"
-    style="background: url('img/bg-cover.jpg') no-repeat center center/cover; color: white; height: 379px;">
+  <div class="container-fluid py-6 my-6 mt-0" style="background: url('img/bg-cover.jpg'); color: white; height: 379px;">
     <div class="container text-center animated bounceInDown">
     <h1 class="display-1 mb-4" style="color: white">Menu</h1>
     <ol class="breadcrumb justify-content-center mb-0 animated bounceInDown">
@@ -221,10 +220,10 @@
     <div class="menu-items-panel">
       <div class="tab-content">
       @foreach($categories as $key => $category)
-          <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
+      <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
       <div class="row g-4">
       @foreach($category->dishes as $dish)
-        <div class="col-lg-6">
+      <div class="col-lg-6">
       <div class="menu-item d-flex align-items-center position-relative">
       <div class="ratio ratio-1x1" style="width: 150px; object-fit: cover; position: relative;">
       <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
@@ -255,7 +254,7 @@
       {{ $q->weight }}
       </option>
     @endforeach
-        </select>
+      </select>
 
       <select class="form-select form-select-sm select-tag2" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
       <option value="">Spice Level</option>
@@ -333,10 +332,10 @@
       </div>
     @endforeach
 
-          </div>
+      </div>
       </div>
     @endforeach
-          </div>
+      </div>
     </div>
     </div>
   </div>

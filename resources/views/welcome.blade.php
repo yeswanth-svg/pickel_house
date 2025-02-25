@@ -17,11 +17,10 @@
         }
 
         /* Image Styling (Fixed Size) */
-        .menu-item img {
-
+        .menu-item .img-responsive {
             width: 150px;
             object-fit: cover;
-            flex-shrink: 0;
+            position: relative;
             /* Prevents image shrinking */
         }
 
@@ -78,8 +77,43 @@
             width: 120px;
         }
 
+        .menu-item .tags {
+            font-size: 14px;
+            position: relative;
+            left: -5px;
+            bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
         /* Responsive Adjustments */
+
+
         @media (max-width: 768px) {
+
+            /* Make categories appear in 2 columns */
+            .nav.nav-pills {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 5px;
+                justify-content: center;
+                padding: 0;
+                margin: 0 auto;
+                max-width: 100%;
+            }
+
+            .nav-item {
+                width: 100%;
+                text-align: center;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            .nav-item a {
+                display: block;
+                width: 100%;
+            }
+
             .menu-item {
                 flex-direction: row;
                 align-items: center;
@@ -89,17 +123,12 @@
 
             .menu-item img {
                 width: 120px;
-                /* Render as 100x100 on mobile */
                 height: 120px;
                 max-width: 150px;
-                /* Ensure it never exceeds original size */
                 object-fit: cover;
-                bottom: 93px;
+                top: -4pc;
             }
 
-            .menu-item .w-100 {
-                width: 100%;
-            }
 
             .menu-item .price-section {
                 text-align: left;
@@ -147,15 +176,17 @@
             }
 
             .menu-item .select-tag2 {
-                width: 90px;
+                width: 102px;
             }
 
-            .tags {
+            .menu-item .tags {
                 font-size: 10px !important;
                 position: absolute !important;
-                bottom: 35px !important;
-                left: 145px !important;
+                left: 8pc;
+                margin-bottom: 17px;
+                justify-content: space-evenly;
             }
+        }
     </style>
 
 
@@ -304,179 +335,166 @@
 
     <!-- Menu Start -->
     <div class="container-fluid menu py-6" id="welcome_menu">
-        <div class="container">
-            <div class="text-center">
-                <small
-                    class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">
-                    Our Menu
-                </small>
-                <h1 class="display-5 mb-5">Most Loved Pickles & Traditional Sweets Around the World</h1>
-            </div>
-            <div class="tab-class text-center">
 
-                <ul class="nav nav-pills d-inline-flex justify-content-center mb-5">
-                    @foreach($categories as $key => $category)
-                        <li class="nav-item p-2">
-                            <a class="d-flex py-2 mx-2 border border-primary bg-white rounded-pill category-tab {{ $key === 0 ? 'active' : '' }}"
-                                data-bs-toggle="pill" href="#tab-{{ $category->id }}" data-category-id="{{ $category->id }}">
-                                <span class="text-dark" style="width: 150px">{{ $category->category_name }}</span>
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
+        <div class="text-center">
+            <small
+                class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">
+                Our Menu
+            </small>
+            <h1 class="display-5 mb-5">Most Loved Pickles & Traditional Sweets Around the World</h1>
+        </div>
+        <div class="tab-class text-center">
 
-                <div class="tab-content">
-                    @foreach($categories as $key => $category)
-                        <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
-                            <div class="row g-4">
-                                @foreach($category->dishes as $dish)
-                                    <div class="col-lg-6">
-                                        <div class="menu-item d-flex align-items-center position-relative">
-                                            <div class="ratio ratio-1x1"
-                                                style="width: 150px; object-fit: cover; position: relative;">
-                                                <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
-                                                    class="img-fluid rounded {{ $dish->availability_status === 'out_of_stock' ? 'opacity-50' : '' }}" />
-                                                @if($dish->availability_status === 'out_of_stock')
-                                                    <div
-                                                        class="position-absolute top-50 start-50 translate-middle bg-danger text-white p-2 rounded">
-                                                        Out of Stock
+            <ul class="nav nav-pills d-inline-flex justify-content-center mb-5">
+                @foreach($categories as $key => $category)
+                    <li class="nav-item p-2">
+                        <a class="d-flex py-2 mx-2 border border-primary bg-white rounded-pill category-tab {{ $key === 0 ? 'active' : '' }}"
+                            data-bs-toggle="pill" href="#tab-{{ $category->id }}" data-category-id="{{ $category->id }}">
+                            <span class="text-dark" style="width: 150px">{{ $category->category_name }}</span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+
+            <div class="tab-content">
+                @foreach($categories as $key => $category)
+                    <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
+                        <div class="row g-4">
+                            @foreach($category->dishes as $dish)
+                                <div class="col-lg-6">
+                                    <div class="menu-item d-flex align-items-center position-relative">
+                                        <div class="ratio ratio-1x1 img-responsive">
+                                            <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
+                                                class="img-fluid rounded {{ $dish->availability_status === 'out_of_stock' ? 'opacity-50' : '' }}" />
+                                            @if($dish->availability_status === 'out_of_stock')
+                                                <div
+                                                    class="position-absolute top-50 start-50 translate-middle bg-danger text-white p-2 rounded">
+                                                    Out of Stock
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="w-100 d-flex flex-column text-start ps-4">
+                                            <h4 class="d-flex align-items-center">
+                                                {{ $dish->name }}
+                                            </h4>
+
+                                            <!-- Rating and Review Section -->
+                                            <div class="d-flex align-items-center gap-2 mt-1" style="position: static;">
+                                                <span class="badge bg-success text-white px-2 py-1">
+                                                    ⭐ {{ number_format($dish->rating, 1) }}
+                                                </span>
+                                            </div>
+
+                                            <div
+                                                class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2 mt-2">
+                                                @if($dish->quantities->isNotEmpty())
+                                                    <div class="d-flex align-items-center gap-2 select-tags">
+                                                        <select class="quantity-selector form-select form-select-sm select-tag1"
+                                                            data-dish-id="{{ $dish->id }}" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
+                                                            @foreach($dish->quantities as $q)
+                                                                <option value="{{ $q->id }}"
+                                                                    data-discount-price="{{ convertPrice($q->discount_price) }}"
+                                                                    data-original-price="{{ convertPrice($q->original_price) }}"
+                                                                    data-normal-price="{{ $q->discount_price }}">
+                                                                    {{ $q->weight }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+
+                                                        <select class="form-select form-select-sm select-tag2" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
+                                                            <option value="">Spice Level</option>
+                                                            <option value="mild">Mild 🌶️</option>
+                                                            <option value="medium">Medium 🌶️🌶️</option>
+                                                            <option value="spicy">Spicy 🌶️🌶️🌶️</option>
+                                                            <option value="extra_spicy">Extra Spicy 🔥</option>
+                                                        </select>
+
+
+
+                                                    </div>
+                                                @endif
+
+                                                @auth
+
+                                                    @if($dish->quantities->isNotEmpty() && $dish->availability_status !== 'out_of_stock')
+                                                        <div class="d-flex align-items-center gap-2" id="cart-process">
+                                                            <form id="add-to-wishlist-form-{{ $dish->id }}" class="add-to-wishlist-form">
+                                                                @csrf
+                                                                <input type="hidden" name="dish_id" value="{{ $dish->id }}">
+                                                                <input type="hidden" name="quantity_id" class="quantity-input1"
+                                                                    value="{{ $dish->quantities->first()->id }}">
+                                                                <input type="hidden" name="total_amount" class="price-input1"
+                                                                    value="{{ $dish->quantities->first()->original_price }}">
+                                                                <input type="hidden" name="spice_level" class="spice_level1">
+                                                                <button type="button" class="btn btn-outline-warning btn-sm add-to-wishlist"
+                                                                    data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top" title="Add to Wishlist">
+                                                                    <i class="fas fa-heart"></i>
+                                                                </button>
+                                                            </form>
+                                                            <form id="add-to-cart-form-{{$dish->id}}"
+                                                                class="add-to-cart-form d-flex align-items-center">
+                                                                @csrf
+                                                                <input type="hidden" name="dish_id" value="{{ $dish->id }}">
+                                                                <input type="hidden" name="quantity_id" class="quantity-input2"
+                                                                    value="{{ $dish->quantities->first()->id }}">
+                                                                <input type="hidden" name="spice_level" class="spice_level2">
+                                                                <div class="input-group input-group-sm" style="width: 100px;">
+                                                                    <button type="button"
+                                                                        class="btn btn-outline-secondary btn-sm decrease-qty">−</button>
+                                                                    <input type="number" name="cart_quantity"
+                                                                        class="form-control text-center cart-quantity" min="1" value="1"
+                                                                        style="width: 29px; font-size: 14px;">
+                                                                    <button type="button"
+                                                                        class="btn btn-outline-secondary btn-sm increase-qty">+</button>
+                                                                </div>
+                                                                <button type="button" class="btn btn-primary btn-sm add-to-cart m-2"
+                                                                    data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip"
+                                                                    data-bs-placement="top" title="Add to Cart">
+                                                                    <i class="fas fa-shopping-cart"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    @else
+                                                        <p class="text-danger">No available quantities</p>
+                                                    @endif
+                                                @endauth
+
+                                                <div class="text-start prices">
+                                                    <span class="fs-6 fw-bold text-success discount-price-display"
+                                                        style="font-size: 1.4rem !important;">
+                                                        {{ convertPrice($dish->quantities->first()->discount_price ?? 0) }}
+                                                    </span>
+                                                    <p class="text-primary text-decoration-line-through original-price-display mb-0"
+                                                        style="font-size: 1.3rem !important;">
+                                                        {{ convertPrice($dish->quantities->first()->original_price) }}
+                                                    </p>
+                                                </div>
+                                                @if(!empty(json_decode($dish->dish_tags, true)))
+                                                    <div class="mt-2 tags">
+                                                        @foreach(json_decode($dish->dish_tags, true) as $tag)
+                                                            <span
+                                                                class="border border-warning text-dark px-3 py-1 m-1 fw-bold rounded">{{ $tag }}</span>
+                                                        @endforeach
                                                     </div>
                                                 @endif
 
 
 
-                                            </div>
-                                            <div class="w-100 d-flex flex-column text-start ps-4">
-                                                <h4 class="d-flex align-items-center">
-                                                    {{ $dish->name }}
-                                                </h4>
-
-                                                <!-- Rating and Review Section -->
-                                                <div class="d-flex align-items-center gap-2 mt-1" style="position: static;">
-                                                    <span class="badge bg-success text-white px-2 py-1">
-                                                        ⭐ {{ number_format($dish->average_rating, 1) }}
-                                                    </span>
-                                                </div>
-
-                                                <div
-                                                    class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2 mt-2">
-                                                    @if($dish->quantities->isNotEmpty())
-                                                        <div class="d-flex align-items-center gap-2 select-tags">
-                                                            <select class="quantity-selector form-select form-select-sm select-tag1"
-                                                                data-dish-id="{{ $dish->id }}" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
-                                                                @foreach($dish->quantities as $q)
-                                                                    <option value="{{ $q->id }}"
-                                                                        data-discount-price="{{ convertPrice($q->discount_price) }}"
-                                                                        data-original-price="{{ convertPrice($q->original_price) }}"
-                                                                        data-normal-price="{{ $q->discount_price }}">
-                                                                        {{ $q->weight }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-
-                                                            <select class="form-select form-select-sm select-tag2" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
-                                                                <option value="">Spice Level</option>
-                                                                <option value="mild">Mild 🌶️</option>
-                                                                <option value="medium">Medium 🌶️🌶️</option>
-                                                                <option value="spicy">Spicy 🌶️🌶️🌶️</option>
-                                                                <option value="extra_spicy">Extra Spicy 🔥</option>
-                                                            </select>
-                                                        </div>
-                                                    @endif
 
 
-
-
-                                                    @auth
-
-
-
-                                                        @if($dish->quantities->isNotEmpty() && $dish->availability_status !== 'out_of_stock')
-                                                            <div class="d-flex align-items-center gap-2" id="cart-process">
-                                                                <form id="add-to-wishlist-form-{{ $dish->id }}"
-                                                                    class="add-to-wishlist-form">
-                                                                    @csrf
-                                                                    <input type="hidden" name="dish_id" value="{{ $dish->id }}">
-                                                                    <input type="hidden" name="quantity_id" class="quantity-input1"
-                                                                        value="{{ $dish->quantities->first()->id }}">
-                                                                    <input type="hidden" name="total_amount" class="price-input1"
-                                                                        value="{{ $dish->quantities->first()->original_price }}">
-                                                                    <input type="hidden" name="spice_level" class="spice_level1">
-                                                                    <button type="button"
-                                                                        class="btn btn-outline-warning btn-sm add-to-wishlist"
-                                                                        data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip"
-                                                                        data-bs-placement="top" title="Add to Wishlist">
-                                                                        <i class="fas fa-heart"></i>
-                                                                    </button>
-                                                                </form>
-                                                                <form id="add-to-cart-form-{{$dish->id}}"
-                                                                    class="add-to-cart-form d-flex align-items-center">
-                                                                    @csrf
-                                                                    <input type="hidden" name="dish_id" value="{{ $dish->id }}">
-                                                                    <input type="hidden" name="quantity_id" class="quantity-input2"
-                                                                        value="{{ $dish->quantities->first()->id }}">
-                                                                    <input type="hidden" name="spice_level" class="spice_level2">
-                                                                    <div class="input-group input-group-sm" style="width: 100px;">
-                                                                        <button type="button"
-                                                                            class="btn btn-outline-secondary btn-sm decrease-qty">−</button>
-                                                                        <input type="number" name="cart_quantity"
-                                                                            class="form-control text-center cart-quantity" min="1" value="1"
-                                                                            style="width: 29px; font-size: 14px;">
-                                                                        <button type="button"
-                                                                            class="btn btn-outline-secondary btn-sm increase-qty">+</button>
-                                                                    </div>
-                                                                    <button type="button" class="btn btn-primary btn-sm add-to-cart m-2"
-                                                                        data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip"
-                                                                        data-bs-placement="top" title="Add to Cart">
-                                                                        <i class="fas fa-shopping-cart"></i>
-                                                                    </button>
-                                                                </form>
-                                                            </div>
-                                                        @else
-
-
-
-                                                            <p class="text-danger">No available quantities</p>
-                                                        @endif
-
-
-
-                                                    @endauth
-
-                                                    <div class="text-start prices">
-                                                        <span class="fs-6 fw-bold text-success discount-price-display"
-                                                            style="font-size: 1.4rem !important;">
-                                                            {{ convertPrice($dish->quantities->first()->discount_price ?? 0) }}
-                                                        </span>
-                                                        <p class="text-primary text-decoration-line-through original-price-display mb-0"
-                                                            style="font-size: 1.3rem !important;">
-                                                            {{ convertPrice($dish->quantities->first()->original_price) }}
-                                                        </p>
-                                                    </div>
-                                                    @if(!empty(json_decode($dish->dish_tags, true)))
-                                                        <div class="mt-2 tags"
-                                                            style="font-size: 12px; position :relative; left: -5px; bottom:10px; display:flex;flex-wrap :wrap;">
-                                                            @foreach(json_decode($dish->dish_tags, true) as $tag)
-                                                                <span
-                                                                    class="border border-warning text-dark px-3 py-1 m-1 fw-bold rounded">{{ $tag }}</span>
-                                                            @endforeach
-                                                        </div>
-                                                    @endif
-
-
-
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
-                            </div>
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
-                </div>
-
+                    </div>
+                @endforeach
             </div>
+
         </div>
+
     </div>
     <!-- Menu End -->
 

@@ -5,10 +5,9 @@
 
 
     <!-- Hero Section -->
-    <div class="container-fluid py-6 my-6 mt-0"
-        style="
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                background: url({{  asset('img/bg-cover.jpg')}}) no-repeat center center/cover;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                color: white;height: 379px;">
+    <div class="container-fluid py-6 my-6 mt-0" style="
+    background: url({{  asset('img/bg-cover.jpg')}});
+    color: white;height: 379px;">
         <div class="container text-center animated bounceInDown">
             <h1 class="display-1 mb-4" style="color: white">Add Ticket</h1>
             <ol class="breadcrumb justify-content-center mb-0 animated bounceInDown">
@@ -43,10 +42,10 @@
                                             <div class="d-flex mb-3 {{ $isAdmin ? 'justify-content-start' : 'justify-content-end' }}">
                                                 <div class="p-2 rounded shadow-sm"
                                                     style="max-width: 75%;
-                                                                                                                                                                                background: {{ $isAdmin ? '#e9ecef' : '#35bf54' }};
-                                                                                                                                                                                color: {{ $isAdmin ? '#000' : '#fff' }};
-                                                                                                                                                                                border-radius: 20px;
-                                                                                                                                                                                padding: 10px 15px;">
+                                                                                                                                                                                                        background: {{ $isAdmin ? '#e9ecef' : '#35bf54' }};
+                                                                                                                                                                                                        color: {{ $isAdmin ? '#000' : '#fff' }};
+                                                                                                                                                                                                        border-radius: 20px;
+                                                                                                                                                                                                        padding: 10px 15px;">
                                                     @if($isAdmin)
                                                         <strong>{{ $message->sender->name }}</strong>
                                                     @endif

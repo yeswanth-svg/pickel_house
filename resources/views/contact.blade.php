@@ -5,7 +5,7 @@
 
 <!-- Hero Start -->
 <div class="container-fluid bg-light py-6 my-6 mt-0" style="
-    background: url('img/bg-cover.jpg') no-repeat center center/cover;
+    background: url('img/bg-cover.jpg');
     color: white;height: 379px;">
   <div class="container text-center animated bounceInDown">
     <h1 class="display-1 mb-4" style="color: white">Contact</h1>

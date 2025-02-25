@@ -120,9 +120,9 @@
                                         <label for="dish_tag" class="form-label text-success fw-bold fs-4">Tag</label>
                                         <input type="text" class="form-control" id="dish_tag" name="dish_tags"
                                             placeholder="Eg: No Oil, No Preservatives (comma-separated)"
-                                            value="{{ implode(', ', json_decode($dish->dish_tags, true)) }}">
-
+                                            value="{{ !empty($dish->dish_tags) ? implode(', ', json_decode($dish->dish_tags, true)) : '' }}">
                                     </div>
+
 
 
                                     <div class="col-md-6 mb-3">

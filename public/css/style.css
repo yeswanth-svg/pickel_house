@@ -726,63 +726,7 @@ h6,
     background: #13896e;
 }
 
-/* === Responsive Fix for Menu Items === */
-@media (max-width: 768px) {
-    .menu-item {
-        flex-direction: row-reverse;
-        align-items: flex-start;
-        text-align: left;
-    }
 
-    .menu-item img {
-        width: 80px;
-        height: 80px;
-        margin-bottom: auto !important;
-        margin-top: auto;
-    }
-
-    .w-100 {
-        width: 100% !important;
-    }
-
-    /* Stack elements below the dish name */
-    .menu-item .d-flex.align-items-center {
-        flex-wrap: wrap;
-        justify-content: start;
-        gap: 8px;
-        margin-top: 8px;
-    }
-
-    /* Adjust wishlist, counter, and cart */
-    .add-to-cart-form,
-    .add-to-cart-form .input-group {
-        justify-content: flex-start !important;
-        margin: 0 !important;
-    }
-
-    /* Make categories appear in 2 columns */
-    .nav.nav-pills {
-        display: grid !important;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 5px;
-        justify-content: center;
-        padding: 0;
-        margin: 0 auto;
-        max-width: 100%;
-    }
-
-    .nav-item {
-        width: 100%;
-        text-align: center;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    .nav-item a {
-        display: block;
-        width: 100%;
-    }
-}
 
 /* Hide number input arrows in Chrome, Safari, Edge, and Opera */
 input[type="number"]::-webkit-inner-spin-button,
