@@ -56,7 +56,7 @@
 
         /* Discounted Price */
         .discount-price-display {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: bold;
             color: green;
         }
@@ -94,6 +94,7 @@
                 max-width: 150px;
                 /* Ensure it never exceeds original size */
                 object-fit: cover;
+                bottom: 93px;
             }
 
             .menu-item .w-100 {
@@ -119,9 +120,9 @@
             }
 
             .menu-item .prices {
-                position: static;
-                margin-top: 5px;
-                margin-left: 1pc;
+                position: relative;
+                bottom: 20px;
+                left: -130px;
             }
 
             .menu-item #cart-process {
@@ -148,7 +149,13 @@
             .menu-item .select-tag2 {
                 width: 90px;
             }
-        }
+
+            .tags {
+                font-size: 10px !important;
+                position: absolute !important;
+                bottom: 35px !important;
+                left: 145px !important;
+            }
     </style>
 
 
@@ -306,6 +313,7 @@
                 <h1 class="display-5 mb-5">Most Loved Pickles & Traditional Sweets Around the World</h1>
             </div>
             <div class="tab-class text-center">
+
                 <ul class="nav nav-pills d-inline-flex justify-content-center mb-5">
                     @foreach($categories as $key => $category)
                         <li class="nav-item p-2">
@@ -328,7 +336,6 @@
                                                 style="width: 150px; object-fit: cover; position: relative;">
                                                 <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
                                                     class="img-fluid rounded {{ $dish->availability_status === 'out_of_stock' ? 'opacity-50' : '' }}" />
-
                                                 @if($dish->availability_status === 'out_of_stock')
                                                     <div
                                                         class="position-absolute top-50 start-50 translate-middle bg-danger text-white p-2 rounded">
@@ -336,11 +343,20 @@
                                                     </div>
                                                 @endif
 
+
+
                                             </div>
                                             <div class="w-100 d-flex flex-column text-start ps-4">
                                                 <h4 class="d-flex align-items-center">
                                                     {{ $dish->name }}
                                                 </h4>
+
+                                                <!-- Rating and Review Section -->
+                                                <div class="d-flex align-items-center gap-2 mt-1" style="position: static;">
+                                                    <span class="badge bg-success text-white px-2 py-1">
+                                                        ⭐ {{ number_format($dish->average_rating, 1) }}
+                                                    </span>
+                                                </div>
 
                                                 <div
                                                     class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2 mt-2">
@@ -369,7 +385,11 @@
                                                     @endif
 
 
+
+
                                                     @auth
+
+
 
                                                         @if($dish->quantities->isNotEmpty() && $dish->availability_status !== 'out_of_stock')
                                                             <div class="d-flex align-items-center gap-2" id="cart-process">
@@ -389,7 +409,6 @@
                                                                         <i class="fas fa-heart"></i>
                                                                     </button>
                                                                 </form>
-
                                                                 <form id="add-to-cart-form-{{$dish->id}}"
                                                                     class="add-to-cart-form d-flex align-items-center">
                                                                     @csrf
@@ -397,7 +416,6 @@
                                                                     <input type="hidden" name="quantity_id" class="quantity-input2"
                                                                         value="{{ $dish->quantities->first()->id }}">
                                                                     <input type="hidden" name="spice_level" class="spice_level2">
-
                                                                     <div class="input-group input-group-sm" style="width: 100px;">
                                                                         <button type="button"
                                                                             class="btn btn-outline-secondary btn-sm decrease-qty">−</button>
@@ -407,7 +425,6 @@
                                                                         <button type="button"
                                                                             class="btn btn-outline-secondary btn-sm increase-qty">+</button>
                                                                     </div>
-
                                                                     <button type="button" class="btn btn-primary btn-sm add-to-cart m-2"
                                                                         data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip"
                                                                         data-bs-placement="top" title="Add to Cart">
@@ -417,8 +434,12 @@
                                                             </div>
                                                         @else
 
+
+
                                                             <p class="text-danger">No available quantities</p>
                                                         @endif
+
+
 
                                                     @endauth
 
@@ -431,27 +452,29 @@
                                                             style="font-size: 1.3rem !important;">
                                                             {{ convertPrice($dish->quantities->first()->original_price) }}
                                                         </p>
-
                                                     </div>
-                                                    <!-- Display Tags Below Prices -->
                                                     @if(!empty(json_decode($dish->dish_tags, true)))
-                                                        <div class="mt-2 tags">
+                                                        <div class="mt-2 tags"
+                                                            style="font-size: 12px; position :relative; left: -5px; bottom:10px; display:flex;flex-wrap :wrap;">
                                                             @foreach(json_decode($dish->dish_tags, true) as $tag)
                                                                 <span
                                                                     class="border border-warning text-dark px-3 py-1 m-1 fw-bold rounded">{{ $tag }}</span>
                                                             @endforeach
                                                         </div>
                                                     @endif
+
+
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
-
                             </div>
                         </div>
                     @endforeach
                 </div>
+
             </div>
         </div>
     </div>
