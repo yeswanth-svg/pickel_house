@@ -87,33 +87,70 @@
         }
 
         /* Responsive Adjustments */
+        /* Desktop View - Categories Side by Side */
+        .category-tabs {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            white-space: nowrap;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 10px;
+            justify-content: center;
+        }
+
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-item {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            margin-right: 10px;
+        }
 
 
+        /* Mobile View - Side Scroll */
         @media (max-width: 768px) {
-
-            /* Make categories appear in 2 columns */
-            .nav.nav-pills {
-                display: grid !important;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 5px;
-                justify-content: center;
-                padding: 0;
-                margin: 0 auto;
-                max-width: 100%;
+            .category-tabs {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 10px;
+                scroll-padding-left: 15px;
+                /* Ensures first category is visible */
+                padding-left: 15px;
+                justify-content: normal;
+                /* Prevents cutoff */
             }
 
             .nav-item {
-                width: 100%;
-                text-align: center;
-                padding: 0 !important;
-                margin: 0 !important;
+                flex: 0 0 auto;
+                /* Prevent items from shrinking */
+                scroll-snap-align: start;
             }
 
-            .nav-item a {
-                display: block;
-                width: 100%;
+            .nav-item:first-child {
+                margin-left: 5px;
+                /* Ensures the first item is visible */
             }
 
+            /* Hide scrollbar but allow smooth scrolling */
+            .category-tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .category-tabs {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        }
+
+
+
+        @media (max-width: 768px) {
             .menu-item {
                 flex-direction: row;
                 align-items: center;
@@ -345,16 +382,19 @@
         </div>
         <div class="tab-class text-center">
 
-            <ul class="nav nav-pills d-inline-flex justify-content-center mb-5">
+            <ul class="nav nav-pills d-flex category-tabs">
                 @foreach($categories as $key => $category)
-                    <li class="nav-item p-2">
-                        <a class="d-flex py-2 mx-2 border border-primary bg-white rounded-pill category-tab {{ $key === 0 ? 'active' : '' }}"
+                    <li class="nav-item">
+                        <a class="nav-link px-3 py-2 border border-primary bg-white rounded-pill category-tab {{ $key === 0 ? 'active' : '' }}"
                             data-bs-toggle="pill" href="#tab-{{ $category->id }}" data-category-id="{{ $category->id }}">
-                            <span class="text-dark" style="width: 150px">{{ $category->category_name }}</span>
+                            {{ $category->category_name }}
                         </a>
                     </li>
                 @endforeach
             </ul>
+
+
+
 
             <div class="tab-content">
                 @foreach($categories as $key => $category)
@@ -372,6 +412,8 @@
                                                     Out of Stock
                                                 </div>
                                             @endif
+
+
                                         </div>
                                         <div class="w-100 d-flex flex-column text-start ps-4">
                                             <h4 class="d-flex align-items-center">
@@ -414,7 +456,11 @@
                                                     </div>
                                                 @endif
 
+
+
                                                 @auth
+
+
 
                                                     @if($dish->quantities->isNotEmpty() && $dish->availability_status !== 'out_of_stock')
                                                         <div class="d-flex align-items-center gap-2" id="cart-process">
@@ -456,8 +502,12 @@
                                                             </form>
                                                         </div>
                                                     @else
+
+
                                                         <p class="text-danger">No available quantities</p>
                                                     @endif
+
+
                                                 @endauth
 
                                                 <div class="text-start prices">
@@ -478,6 +528,8 @@
                                                         @endforeach
                                                     </div>
                                                 @endif
+
+
 
 
 
@@ -807,6 +859,42 @@
     <!-- Testimonial End -->
 
     <script src="{{asset('admin/js/core/jquery-3.7.1.min.js')}}"></script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const categoryTabs = document.querySelectorAll(".category-tab");
+            const spiceSelects = document.querySelectorAll(".select-tag2");
+
+            function checkCategoryVisibility() {
+                let activeCategory = document.querySelector(".category-tab.active");
+
+                if (activeCategory && activeCategory.textContent.trim().toLowerCase() === "sweets") {
+                    // Hide all spice-level select elements
+                    spiceSelects.forEach(select => {
+                        select.style.display = "none";
+                    });
+                } else {
+                    // Show all spice-level select elements
+                    spiceSelects.forEach(select => {
+                        select.style.display = "block";
+                    });
+                }
+            }
+
+            // Run on page load (for default active category)
+            checkCategoryVisibility();
+
+            // Add event listeners to update when a category is clicked
+            categoryTabs.forEach(tab => {
+                tab.addEventListener("click", function () {
+                    // Delay to allow Bootstrap tab change
+                    setTimeout(checkCategoryVisibility, 100);
+                });
+            });
+        });
+
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

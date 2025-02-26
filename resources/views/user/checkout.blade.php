@@ -214,7 +214,7 @@
                                     <h6 class="mt-3">Available Coupons:</h6>
                                     @foreach ($availableCoupons as $coupon)
                                         <div class="coupon-item p-3 border rounded d-flex justify-content-between align-items-center 
-                                                                                                                {{ $bestCoupon && $bestCoupon->id != $coupon->id ? 'disabled-coupon' : '' }}"
+                                                                                                                        {{ $bestCoupon && $bestCoupon->id != $coupon->id ? 'disabled-coupon' : '' }}"
                                             oncontextmenu="return false;"> <!-- Prevent Right-Click -->
 
                                             <div class="no-select"> <!-- Prevent Text Selection -->
@@ -337,36 +337,65 @@
             let newAddressForm = document.getElementById("newAddressForm");
             let selectedAddressInput = document.getElementById("selectedAddressInput");
 
+            // Function to fill the address form
+            function fillAddressForm(data) {
+                document.querySelector('[name="country"]').value = data.country;
+                document.querySelector('[name="first_name"]').value = data.first_name;
+                document.querySelector('[name="last_name"]').value = data.last_name;
+                document.querySelector('[name="company"]').value = data.company || '';
+                document.querySelector('[name="address"]').value = data.address;
+                document.querySelector('[name="apartment"]').value = data.apartment || '';
+                document.querySelector('[name="city"]').value = data.city;
+                document.querySelector('[name="state"]').value = data.state;
+                document.querySelector('[name="zip_code"]').value = data.zip_code;
+                document.querySelector('[name="phone"]').value = data.phone;
+
+                selectedAddressInput.value = data.id;
+                newAddressForm.style.display = 'block';
+            }
+
+            // Function to clear the address form
+            function clearAddressForm() {
+                document.querySelector('[name="country"]').value = "";
+                document.querySelector('[name="first_name"]').value = "";
+                document.querySelector('[name="last_name"]').value = "";
+                document.querySelector('[name="company"]').value = "";
+                document.querySelector('[name="address"]').value = "";
+                document.querySelector('[name="apartment"]').value = "";
+                document.querySelector('[name="city"]').value = "";
+                document.querySelector('[name="state"]').value = "";
+                document.querySelector('[name="zip_code"]').value = "";
+                document.querySelector('[name="phone"]').value = "";
+
+                selectedAddressInput.value = "";
+            }
+
+            // Auto-fill the form with the first saved address if available
+            let firstAddressId = savedAddressSelect.options[1]?.value; // First saved address (if exists)
+            if (firstAddressId) {
+                fetch(`/get-address/${firstAddressId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        fillAddressForm(data);
+                        savedAddressSelect.value = firstAddressId;
+                    });
+            }
+
             // Handle address selection
             savedAddressSelect.addEventListener("change", function () {
                 let addressId = this.value;
 
                 if (addressId === "new") {
-                    newAddressForm.style.display = 'block';
-                    selectedAddressInput.value = "";
+                    clearAddressForm();
                 } else {
                     fetch(`/get-address/${addressId}`)
                         .then(response => response.json())
-                        .then(data => {
-                            document.querySelector('[name="country"]').value = data.country;
-                            document.querySelector('[name="first_name"]').value = data.first_name;
-                            document.querySelector('[name="last_name"]').value = data.last_name;
-                            document.querySelector('[name="company"]').value = data.company || '';
-                            document.querySelector('[name="address"]').value = data.address;
-                            document.querySelector('[name="apartment"]').value = data.apartment || '';
-                            document.querySelector('[name="city"]').value = data.city;
-                            document.querySelector('[name="state"]').value = data.state;
-                            document.querySelector('[name="zip_code"]').value = data.zip_code;
-                            document.querySelector('[name="phone"]').value = data.phone;
-
-                            selectedAddressInput.value = addressId;
-                            newAddressForm.style.display = 'block';
-                        });
+                        .then(fillAddressForm);
                 }
             });
         });
-
     </script>
+
 
     <script>
         function copyCoupon(code) {

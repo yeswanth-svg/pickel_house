@@ -96,14 +96,14 @@ class RazorpayController extends Controller
                 $adminOrderDetails = $orderDetails;
                 $adminOrderDetails['user_name'] = "admin"; // Change only user_name
 
-                Mail::to($admin->email)->queue(new OrderSuccessMail($adminOrderDetails));
+                Mail::to($admin->email)->send(new OrderSuccessMail($adminOrderDetails));
                 // Notify admin
                 $admin->notify(new OrderPlacedNotification($adminOrderDetails));
 
             }
 
             // Notify user with the original order details (user_name remains unchanged)
-            Mail::to($user->email)->queue(new OrderSuccessMail($orderDetails));
+            Mail::to($user->email)->send(new OrderSuccessMail($orderDetails));
 
             return redirect()->route('order.confirmation')->with('success', 'Payment Successful! Your order is confirmed.');
         } catch (\Exception $e) {

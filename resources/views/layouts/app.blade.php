@@ -15,27 +15,27 @@
         rel="stylesheet" />
 
     <!-- Icon Font Stylesheet -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <link preload rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link preload href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
 
     <!-- Libraries Stylesheet -->
-    <link href="{{asset('lib/animate/animate.min.css')}}" rel="stylesheet" />
-    <link href="{{asset('lib/lightbox/css/lightbox.min.css')}}" rel="stylesheet" />
-    <link href="{{asset("lib/owlcarousel/owl.carousel.min.css")}}" rel="stylesheet" />
+    <link preload href="{{asset('lib/animate/animate.min.css')}}" rel="stylesheet" />
+    <link preload href="{{asset('lib/lightbox/css/lightbox.min.css')}}" rel="stylesheet" />
+    <link preload href="{{asset("lib/owlcarousel/owl.carousel.min.css")}}" rel="stylesheet" />
 
 
     <!-- <link rel="stylesheet" href="{{asset('admin/css/plugins.min.css')}}" />
     <link rel="stylesheet" href="{{asset('admin/css/kaiadmin.min.css')}}" /> -->
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" />
+    <link preload href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" />
 
     <!-- Template Stylesheet -->
     <link href="{{asset("css/style.css")}}" rel="stylesheet" />
     <!-- Slick CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css" />
-    <link rel="stylesheet" href="{{asset('admin/css/demo.css')}}" />
+    <link preload rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css" />
+    <link preload rel="stylesheet" href="{{asset('admin/css/demo.css')}}" />
 
-    <script src="{{asset('admin/js/plugin/webfont/webfont.min.js')}}"></script>
+    <script preload src="{{asset('admin/js/plugin/webfont/webfont.min.js')}}"></script>
     <script>
         WebFont.load({
             google: { families: ["Public Sans:300,400,500,600,700"] },
@@ -342,13 +342,18 @@
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-item">
                         <h4 class="mb-4">We Provide</h4>
-                        <ul class="list-unstyled">
-                            <li><i class="fas fa-check-circle text-primary me-2"></i> Non-Veg Pickles</li>
-                            <li><i class="fas fa-check-circle text-primary me-2"></i> Veg Pickles</li>
-                            <li><i class="fas fa-check-circle text-primary me-2"></i> Homemade Sweets</li>
-                            <li><i class="fas fa-check-circle text-primary me-2"></i> Special Sweets</li>
-                        </ul>
+                        <div class="d-flex flex-column align-items-start">
+                            <a class="text-body mb-3" href="#"><i class="fa fa-check text-primary me-2"></i>Non-veg
+                                Pickles</a>
+                            <a class="text-body mb-3" href="#"><i class="fa fa-check text-primary me-2"></i>Veg
+                                Pickles</a>
+                            <a class="text-body mb-3" href="#"><i class="fa fa-check text-primary me-2"></i>Homemade
+                                Sweets</a>
+                            <a class="text-body mb-3" href="#"><i class="fa fa-check text-primary me-2"></i>Special
+                                Sweets</a>
+                        </div>
                     </div>
+                              
                 </div>
 
                 <!-- Contact -->
@@ -365,34 +370,45 @@
                 <!-- Newsletter -->
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-item">
-                        <h4 class="mb-4">Subscribe to Newsletter</h4>
-                        <p>Stay updated with our latest offers and products.</p>
-                        <form action="{{ route('newsletter.subscribe') }}" method="POST">
-                            @csrf
-                            <div class="input-group">
-                                <input type="email" class="form-control border-primary rounded-start" name="email"
-                                    placeholder="Enter your email" required>
-                                <button class="btn btn-primary rounded-end" type="submit">
-                                    <i class="fas fa-paper-plane"></i>
-                                </button>
-                            </div>
-                        </form>
+                        <h4 class="mb-4">Social Gallery</h4>
+                        <div class="row g-2">
+                            <div class="col-4"><img src="{{ asset('img/menu-01.jpg') }}"
+                                    class="img-fluid rounded-circle border border-primary p-2"></div>
+                            <div class="col-4"><img src="{{ asset('img/menu-02.jpg') }}"
+                                    class="img-fluid rounded-circle border border-primary p-2"></div>
+                            <div class="col-4"><img src="{{ asset('img/menu-03.jpg') }}"
+                                    class="img-fluid rounded-circle border border-primary p-2"></div>
+                            <div class="col-4"><img src="{{ asset('img/menu-04.jpg') }}"
+                                    class="img-fluid rounded-circle border border-primary p-2"></div>
+                            <div class="col-4"><img src="{{ asset('img/menu-05.jpg') }}"
+                                    class="img-fluid rounded-circle border border-primary p-2"></div>
+                            <div class="col-4"><img src="{{ asset('img/menu-06.jpg') }}"
+                                    class="img-fluid rounded-circle border border-primary p-2"></div>
+                        </div>
                     </div>
+                              
                 </div>
             </div>
 
             <!-- Social Gallery -->
             <div class="row mt-5 mb-3">
                 <div class="col-12 text-center">
-                    <h4 class="mb-4">Social Gallery</h4>
+                    <h4 class="mb-4">Subscribe to Newsletter</h4>
+                    <p>Stay updated with our latest offers and products.</p>
                 </div>
                 <div class="d-flex justify-content-center">
-                    @foreach (['menu-01.jpg', 'menu-02.jpg', 'menu-03.jpg', 'menu-04.jpg', 'menu-05.jpg', 'menu-06.jpg'] as $img)
-                        <div class="mx-2">
-                            <img src="{{ asset("img/$img") }}" class="img-fluid rounded-circle border border-primary p-2"
-                                alt="Gallery Image" width="80">
+
+                    <form action="{{ route('newsletter.subscribe') }}" method="POST">
+                        @csrf
+                        <div class="input-group">
+                            <input type="email" class="form-control border-primary rounded-start" name="email"
+                                placeholder="Enter your email" required>
+                            <button class="btn btn-primary rounded-end" type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
                         </div>
-                    @endforeach
+                    </form>
+
                 </div>
             </div>
 
