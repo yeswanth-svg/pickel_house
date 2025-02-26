@@ -22,10 +22,10 @@
   <div class="container-fluid py-6">
     <div class="container">
     <div class="row g-5 align-items-center">
-      <div class="col-lg-5 wow bounceInUp" data-wow-delay="0.1s">
+      <div class="col-lg-5">
       <img src="img/about1.png" class="img-fluid rounded" alt="Traditional Pickles" />
       </div>
-      <div class="col-lg-7 wow bounceInUp" data-wow-delay="0.3s">
+      <div class="col-lg-7">
       <small
         class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">About
         Us</small>
@@ -67,14 +67,14 @@
   <!-- Team Start -->
   <div class="container-fluid team py-6">
     <div class="container">
-    <div class="text-center wow bounceInUp" data-wow-delay="0.1s">
+    <div class="text-center">
       <small
       class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">Our
       Team</small>
       <h1 class="display-5 mb-5">We have experienced chef Team</h1>
     </div>
     <div class="row g-4">
-      <div class="col-lg-3 col-md-6 wow bounceInUp" data-wow-delay="0.1s">
+      <div class="col-lg-3 col-md-6">
       <div class="team-item rounded">
         <img class="img-fluid rounded-top" src="img/chef1.jpg" alt="" />
         <div class="team-content text-center py-3 bg-dark rounded-bottom">
@@ -93,7 +93,7 @@
         </div>
       </div>
       </div>
-      <div class="col-lg-3 col-md-6 wow bounceInUp" data-wow-delay="0.3s">
+      <div class="col-lg-3 col-md-6">
       <div class="team-item rounded">
         <img class="img-fluid rounded-top" src="img/chef2.jpg" alt="" />
         <div class="team-content text-center py-3 bg-dark rounded-bottom">
@@ -112,7 +112,7 @@
         </div>
       </div>
       </div>
-      <div class="col-lg-3 col-md-6 wow bounceInUp" data-wow-delay="0.5s">
+      <div class="col-lg-3 col-md-6">
       <div class="team-item rounded">
         <img class="img-fluid rounded-top" src="img/chef3.jpg" alt="" />
         <div class="team-content text-center py-3 bg-dark rounded-bottom">
@@ -131,7 +131,7 @@
         </div>
       </div>
       </div>
-      <div class="col-lg-3 col-md-6 wow bounceInUp" data-wow-delay="0.7s">
+      <div class="col-lg-3 col-md-6">
       <div class="team-item rounded">
         <img class="img-fluid rounded-top" src="img/chef4.jpg" alt="" />
         <div class="team-content text-center py-3 bg-dark rounded-bottom">

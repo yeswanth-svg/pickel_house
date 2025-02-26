@@ -20,14 +20,13 @@
   <!-- Testimonial Start -->
   <div class="container-fluid py-6">
     <div class="container">
-    <div class="text-center wow bounceInUp" data-wow-delay="0.1s">
+    <div class="text-center">
       <small
       class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">Customer
       Reviews</small>
       <h1 class="display-5 mb-5">What Our Customers says!</h1>
     </div>
-    <div class="owl-carousel owl-theme testimonial-carousel testimonial-carousel-1 mb-4 wow bounceInUp"
-      data-wow-delay="0.1s">
+    <div class="owl-carousel owl-theme testimonial-carousel testimonial-carousel-1 mb-4">
       <div class="testimonial-item rounded bg-light">
       <div class="d-flex mb-3">
         <img src="img/testimonial-1.jpg" class="img-fluid rounded-circle flex-shrink-0" alt="" />
@@ -129,7 +128,7 @@
       </div>
       </div>
     </div>
-    <div class="owl-carousel testimonial-carousel testimonial-carousel-2 wow bounceInUp" data-wow-delay="0.3s">
+    <div class="owl-carousel testimonial-carousel testimonial-carousel-2">
       <div class="testimonial-item rounded bg-light">
       <div class="d-flex mb-3">
         <img src="img/testimonial-1.jpg" class="img-fluid rounded-circle flex-shrink-0" alt="" />

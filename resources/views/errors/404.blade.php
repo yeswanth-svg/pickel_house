@@ -19,7 +19,7 @@
 
 
   <!-- 404 Start -->
-  <div class="container-fluid py-6 wow fadeInUp" data-wow-delay="0.1s">
+  <div class="container-fluid py-6">
     <div class="container text-center">
     <div class="row justify-content-center">
       <div class="col-lg-6">

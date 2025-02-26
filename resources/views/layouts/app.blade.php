@@ -313,361 +313,359 @@
     @endauth
 
     <!-- Footer Start -->
-    <div class="container-fluid footer py-6 my-6 mb-0 bg-light wow bounceInUp" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="row">
-                <!-- Brand Info -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-item">
-                        <h1 class="text-primary">
-                            Pickle<span class="text-dark">House</span>
-                        </h1>
-                        <p class="lh-lg mb-4">
-                            Experience the Rich & Authentic Flavors of Pickles.
-                        </p>
-                        <div class="footer-icon d-flex">
-                            <a class="btn btn-outline-primary btn-sm-square me-2 rounded-circle" href="#"><i
-                                    class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-outline-primary btn-sm-square me-2 rounded-circle" href="#"><i
-                                    class="fab fa-twitter"></i></a>
-                            <a class="btn btn-outline-primary btn-sm-square me-2 rounded-circle" href="#"><i
-                                    class="fab fa-instagram"></i></a>
-                            <a class="btn btn-outline-primary btn-sm-square rounded-circle" href="#"><i
-                                    class="fab fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                </div>
+    <div class="container-fluid footer py-6 my-6 mb-0 bg-light">
 
-                <!-- Services -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-item">
-                        <h4 class="mb-4">We Provide</h4>
-                        <div class="d-flex flex-column align-items-start">
-                            <a class="text-body mb-3" href="#"><i class="fa fa-check text-primary me-2"></i>Non-veg
-                                Pickles</a>
-                            <a class="text-body mb-3" href="#"><i class="fa fa-check text-primary me-2"></i>Veg
-                                Pickles</a>
-                            <a class="text-body mb-3" href="#"><i class="fa fa-check text-primary me-2"></i>Homemade
-                                Sweets</a>
-                            <a class="text-body mb-3" href="#"><i class="fa fa-check text-primary me-2"></i>Special
-                                Sweets</a>
-                        </div>
+        <div class=" row">
+            <!-- Brand Info -->
+            <div class="col-lg-3 col-md-6">
+                <div class="footer-item">
+                    <h1 class="text-primary">
+                        Pickle<span class="text-dark">House</span>
+                    </h1>
+                    <p class="lh-lg mb-4">
+                        Experience the Rich & Authentic Flavors of Pickles.
+                    </p>
+                    <div class="footer-icon d-flex">
+                        <a class="btn btn-outline-primary btn-sm-square me-2 rounded-circle" href="#"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-primary btn-sm-square me-2 rounded-circle" href="#"><i
+                                class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-primary btn-sm-square me-2 rounded-circle" href="#"><i
+                                class="fab fa-instagram"></i></a>
+                        <a class="btn btn-outline-primary btn-sm-square rounded-circle" href="#"><i
+                                class="fab fa-linkedin-in"></i></a>
                     </div>
-                              
-                </div>
-
-                <!-- Contact -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-item">
-                        <h4 class="mb-4">Contact Us</h4>
-                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i> 123 Street, Visakhapatnam, AP</p>
-                        <p><i class="fa fa-phone-alt text-primary me-2"></i> (+091) 885544 3322</p>
-                        <p><i class="fas fa-envelope text-primary me-2"></i> info@example.com</p>
-                        <p><i class="fa fa-clock text-primary me-2"></i> 24/7 Hours Service</p>
-                    </div>
-                </div>
-
-                <!-- Newsletter -->
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-item">
-                        <h4 class="mb-4">Social Gallery</h4>
-                        <div class="row g-2">
-                            <div class="col-4"><img src="{{ asset('img/menu-01.jpg') }}"
-                                    class="img-fluid rounded-circle border border-primary p-2"></div>
-                            <div class="col-4"><img src="{{ asset('img/menu-02.jpg') }}"
-                                    class="img-fluid rounded-circle border border-primary p-2"></div>
-                            <div class="col-4"><img src="{{ asset('img/menu-03.jpg') }}"
-                                    class="img-fluid rounded-circle border border-primary p-2"></div>
-                            <div class="col-4"><img src="{{ asset('img/menu-04.jpg') }}"
-                                    class="img-fluid rounded-circle border border-primary p-2"></div>
-                            <div class="col-4"><img src="{{ asset('img/menu-05.jpg') }}"
-                                    class="img-fluid rounded-circle border border-primary p-2"></div>
-                            <div class="col-4"><img src="{{ asset('img/menu-06.jpg') }}"
-                                    class="img-fluid rounded-circle border border-primary p-2"></div>
-                        </div>
-                    </div>
-                              
                 </div>
             </div>
 
-            <!-- Social Gallery -->
-            <div class="row mt-5 mb-3">
-                <div class="col-12 text-center">
+            <!-- Services -->
+            <div class="col-lg-2 col-md-6">
+                <div class="footer-item">
+                    <h4 class="mb-4">We Provide</h4>
+                    <div class="d-flex flex-column align-items-start">
+                        <a class="text-body mb-3" href="#"><i class="fa fa-check text-primary me-2"></i>Non-veg
+                            Pickles</a>
+                        <a class="text-body mb-3" href="#"><i class="fa fa-check text-primary me-2"></i>Veg
+                            Pickles</a>
+                        <a class="text-body mb-3" href="#"><i class="fa fa-check text-primary me-2"></i>Homemade
+                            Sweets</a>
+                        <a class="text-body mb-3" href="#"><i class="fa fa-check text-primary me-2"></i>Special
+                            Sweets</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact -->
+            <div class="col-lg-2 col-md-6">
+                <div class="footer-item">
+                    <h4 class="mb-4">Contact Us</h4>
+                    <p><i class="fa fa-map-marker-alt text-primary me-2"></i> 123 Street, Visakhapatnam, AP</p>
+                    <p><i class="fa fa-phone-alt text-primary me-2"></i> (+091) 885544 3322</p>
+                    <p><i class="fas fa-envelope text-primary me-2"></i> info@example.com</p>
+                    <p><i class="fa fa-clock text-primary me-2"></i> 24/7 Hours Service</p>
+                </div>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="col-lg-2 col-md-6">
+                <div class="footer-item">
+                    <h4 class="mb-4">Social Gallery</h4>
+                    <div class="row g-2">
+                        <div class="col-4"><img src="{{ asset('img/menu-01.jpg') }}"
+                                class="img-fluid rounded-circle border border-primary p-2"></div>
+                        <div class="col-4"><img src="{{ asset('img/menu-02.jpg') }}"
+                                class="img-fluid rounded-circle border border-primary p-2"></div>
+                        <div class="col-4"><img src="{{ asset('img/menu-03.jpg') }}"
+                                class="img-fluid rounded-circle border border-primary p-2"></div>
+                        <div class="col-4"><img src="{{ asset('img/menu-04.jpg') }}"
+                                class="img-fluid rounded-circle border border-primary p-2"></div>
+                        <div class="col-4"><img src="{{ asset('img/menu-05.jpg') }}"
+                                class="img-fluid rounded-circle border border-primary p-2"></div>
+                        <div class="col-4"><img src="{{ asset('img/menu-06.jpg') }}"
+                                class="img-fluid rounded-circle border border-primary p-2"></div>
+                    </div>
+                </div>
+                          
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="footer-item">
                     <h4 class="mb-4">Subscribe to Newsletter</h4>
                     <p>Stay updated with our latest offers and products.</p>
-                </div>
-                <div class="d-flex justify-content-center">
-
-                    <form action="{{ route('newsletter.subscribe') }}" method="POST">
-                        @csrf
-                        <div class="input-group">
-                            <input type="email" class="form-control border-primary rounded-start" name="email"
-                                placeholder="Enter your email" required>
-                            <button class="btn btn-primary rounded-end" type="submit">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-
-            <!-- Footer Bottom -->
-
-            <!-- Footer End -->
-
-
-            <!-- Copyright Start -->
-            <div class="container-fluid copyright bg-dark py-4">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                            <span class="text-light"><a href="#"><i
-                                        class="fas fa-copyright text-light me-2"></i>PickleHouse</a>, All right
-                                reserved.</span>
-                        </div>
-                        <div class="col-md-6 my-auto text-center text-md-end text-white">
-                            Designed By
-                            <a class="border-bottom" href="#">Rajesh</a>
-                        </div>
+                    <div class="row g-2">
+                        <form action="{{ route('newsletter.subscribe') }}" method="POST">
+                            @csrf
+                            <div class="input-group">
+                                <input type="email" class="form-control border-primary rounded-start" name="email"
+                                    placeholder="Enter your email" required>
+                                <button class="btn btn-primary rounded-end" type="submit">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <!-- Copyright End -->
+                      
+        </div>
+    </div>
 
-            <!-- Back to Top -->
+    <!-- Social Gallery -->
 
-            <a href="#" class="btn btn-md-square btn-primary rounded-circle back-to-top"><i
-                    class="fa fa-arrow-up"></i></a>
+    <!-- Footer Bottom -->
 
-            <!-- JavaScript Libraries -->
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="{{asset("lib/wow/wow.min.js")}}"></script>
-            <script src="{{asset("lib/easing/easing.min.js")}}"></script>
-            <script src="{{asset("lib/waypoints/waypoints.min.js")}}"></script>
-            <script src="{{asset("lib/counterup/counterup.min.js")}}"></script>
-            <script src="{{asset("lib/lightbox/js/lightbox.min.js")}}"></script>
-            <script src="{{asset("lib/owlcarousel/owl.carousel.min.js")}}"></script>
+    <!-- Footer End -->
 
 
-            <!-- Template Javascript -->
-            <script src="{{asset("js/main.js")}}"></script>
+    <!-- Copyright Start -->
+    <div class="container-fluid copyright bg-dark py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <span class="text-light"><a href="#"><i
+                                class="fas fa-copyright text-light me-2"></i>PickleHouse</a>, All right
+                        reserved.</span>
+                </div>
+                <div class="col-md-6 my-auto text-center text-md-end text-white">
+                    Designed By
+                    <a class="border-bottom" href="#">Rajesh</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Copyright End -->
 
-            <script src="{{asset('admin/js/core/jquery-3.7.1.min.js')}}"></script>
-            <!-- Slick JS -->
-            <script type="text/javascript"
-                src="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.min.js"></script>
+    <!-- Back to Top -->
 
-            <!-- Bootstrap Notify -->
-            <script src="{{asset('admin/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
+    <a href="#" class="btn btn-md-square btn-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{asset("lib/wow/wow.min.js")}}"></script>
+    <script src="{{asset("lib/easing/easing.min.js")}}"></script>
+    <script src="{{asset("lib/waypoints/waypoints.min.js")}}"></script>
+    <script src="{{asset("lib/counterup/counterup.min.js")}}"></script>
+    <script src="{{asset("lib/lightbox/js/lightbox.min.js")}}"></script>
+    <script src="{{asset("lib/owlcarousel/owl.carousel.min.js")}}"></script>
+
+
+    <!-- Template Javascript -->
+    <script src="{{asset("js/main.js")}}"></script>
+
+    <script src="{{asset('admin/js/core/jquery-3.7.1.min.js')}}"></script>
+    <!-- Slick JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.min.js"></script>
+
+    <!-- Bootstrap Notify -->
+    <script src="{{asset('admin/js/plugin/bootstrap-notify/bootstrap-notify.min.js')}}"></script>
 
 
 
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    let selectedCurrencyText = document.getElementById("selected-currency-text");
-                    let selectedFlag = document.getElementById("selected-flag");
-                    let currencyOptions = document.querySelectorAll(".currency-option");
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let selectedCurrencyText = document.getElementById("selected-currency-text");
+            let selectedFlag = document.getElementById("selected-flag");
+            let currencyOptions = document.querySelectorAll(".currency-option");
 
-                    if (!selectedCurrencyText || !selectedFlag || currencyOptions.length === 0) {
-                        console.error("Dropdown elements not found. Ensure your dropdown exists in the HTML.");
+            if (!selectedCurrencyText || !selectedFlag || currencyOptions.length === 0) {
+                console.error("Dropdown elements not found. Ensure your dropdown exists in the HTML.");
+                return;
+            }
+
+            // Get stored values (default to INR)
+            let storedCurrency = localStorage.getItem("selectedCurrency") || "INR";
+            let storedFlag = localStorage.getItem("selectedFlag") || "{{ asset('img/flags/inr.png') }}";
+
+            // Update UI
+            selectedCurrencyText.textContent = storedCurrency;
+            selectedFlag.src = storedFlag;
+
+            currencyOptions.forEach(option => {
+                option.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    let selectedCurrency = this.getAttribute("data-country");
+                    let selectedFlagUrl = this.getAttribute("data-flag");
+
+                    if (!selectedCurrency || !selectedFlagUrl) {
+                        console.error("Missing currency or flag attributes.");
                         return;
                     }
 
-                    // Get stored values (default to INR)
-                    let storedCurrency = localStorage.getItem("selectedCurrency") || "INR";
-                    let storedFlag = localStorage.getItem("selectedFlag") || "{{ asset('img/flags/inr.png') }}";
+                    // Update UI immediately
+                    selectedCurrencyText.textContent = selectedCurrency;
+                    selectedFlag.src = selectedFlagUrl;
 
-                    // Update UI
-                    selectedCurrencyText.textContent = storedCurrency;
-                    selectedFlag.src = storedFlag;
+                    // Save in localStorage
+                    localStorage.setItem("selectedCurrency", selectedCurrency);
+                    localStorage.setItem("selectedFlag", selectedFlagUrl);
 
-                    currencyOptions.forEach(option => {
-                        option.addEventListener("click", function (e) {
-                            e.preventDefault();
-
-                            let selectedCurrency = this.getAttribute("data-country");
-                            let selectedFlagUrl = this.getAttribute("data-flag");
-
-                            if (!selectedCurrency || !selectedFlagUrl) {
-                                console.error("Missing currency or flag attributes.");
-                                return;
+                    // Make AJAX request to update session only (DO NOT update user country)
+                    fetch("{{ route('set.currency') }}", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ currency: selectedCurrency })
+                    }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log("Currency updated in session:", selectedCurrency);
+                                location.reload(); // Refresh to apply conversion
                             }
-
-                            // Update UI immediately
-                            selectedCurrencyText.textContent = selectedCurrency;
-                            selectedFlag.src = selectedFlagUrl;
-
-                            // Save in localStorage
-                            localStorage.setItem("selectedCurrency", selectedCurrency);
-                            localStorage.setItem("selectedFlag", selectedFlagUrl);
-
-                            // Make AJAX request to update session only (DO NOT update user country)
-                            fetch("{{ route('set.currency') }}", {
-                                method: "POST",
-                                headers: {
-                                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                                    "Content-Type": "application/json"
-                                },
-                                body: JSON.stringify({ currency: selectedCurrency })
-                            }).then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        console.log("Currency updated in session:", selectedCurrency);
-                                        location.reload(); // Refresh to apply conversion
-                                    }
-                                })
-                                .catch(error => console.error("Error updating session:", error));
-                        });
-                    });
+                        })
+                        .catch(error => console.error("Error updating session:", error));
                 });
+            });
+        });
 
-            </script>
-
-
-            <script>
-                $(document).ready(function () {
-                    // Success notification
-                    @if(session('success'))
-                        var content = {
-                            message: "{{ session('success') }}",
-                            title: "Success",
-                            icon: "fa fa-bell"
-                        };
-
-                        $.notify(content, {
-                            type: 'success', // You can change this to match your notification type
-                            placement: {
-                                from: 'top', // Correct capitalization
-                                align: 'right' // Correct capitalization
-                            },
-                            time: 1000,
-                            delay: 5000, // Adjust delay if needed
-                        });
-                    @endif
+    </script>
 
 
-                    // Error notification
-                    @if($errors->any())
-                        var content = {
-                            message: "{{ $errors->first() }}",
-                            title: "Error",
-                            icon: "fa fa-exclamation-circle",
-                        };
+    <script>
+        $(document).ready(function () {
+            // Success notification
+            @if(session('success'))
+                var content = {
+                    message: "{{ session('success') }}",
+                    title: "Success",
+                    icon: "fa fa-bell"
+                };
 
-                        $.notify(content, {
-                            type: "danger", // Error style
-                            allow_dismiss: true,
-                            delay: 5000,
-                            placement: {
-                                from: "top",
-                                align: "right",
-                            },
-                            offset: { x: 20, y: 70 },
-                            animate: {
-                                enter: "animated fadeInDown",
-                                exit: "animated fadeOutUp",
-                            },
-                        });
-                    @endif
-
+                $.notify(content, {
+                    type: 'success', // You can change this to match your notification type
+                    placement: {
+                        from: 'top', // Correct capitalization
+                        align: 'right' // Correct capitalization
+                    },
+                    time: 1000,
+                    delay: 5000, // Adjust delay if needed
                 });
-            </script>
+            @endif
 
 
-            <script>
+            // Error notification
+            @if($errors->any())
+                var content = {
+                    message: "{{ $errors->first() }}",
+                    title: "Error",
+                    icon: "fa fa-exclamation-circle",
+                };
 
-                $(document).ready(function () {
-                    $(document).ready(function () {
-                        var toggle_customSidebar = false,
+                $.notify(content, {
+                    type: "danger", // Error style
+                    allow_dismiss: true,
+                    delay: 5000,
+                    placement: {
+                        from: "top",
+                        align: "right",
+                    },
+                    offset: { x: 20, y: 70 },
+                    animate: {
+                        enter: "animated fadeInDown",
+                        exit: "animated fadeOutUp",
+                    },
+                });
+            @endif
+
+        });
+    </script>
+
+
+    <script>
+
+        $(document).ready(function () {
+            $(document).ready(function () {
+                var toggle_customSidebar = false,
+                    custom_open = 0;
+
+                if (!toggle_customSidebar) {
+                    var toggle = $('.custom-template .custom-toggle');
+                    var customTemplate = $('.custom-template');
+
+                    toggle.on('click', function (event) {
+                        event.stopPropagation(); // Prevent click event from bubbling up
+                        if (custom_open === 1) {
+                            customTemplate.removeClass('open');
+                            toggle.removeClass('toggled');
                             custom_open = 0;
-
-                        if (!toggle_customSidebar) {
-                            var toggle = $('.custom-template .custom-toggle');
-                            var customTemplate = $('.custom-template');
-
-                            toggle.on('click', function (event) {
-                                event.stopPropagation(); // Prevent click event from bubbling up
-                                if (custom_open === 1) {
-                                    customTemplate.removeClass('open');
-                                    toggle.removeClass('toggled');
-                                    custom_open = 0;
-                                } else {
-                                    customTemplate.addClass('open');
-                                    toggle.addClass('toggled');
-                                    custom_open = 1;
-                                    fetchWishlistItems();
-                                }
-                            });
-
-                            // Click outside to close
-                            $(document).on("click", function (event) {
-                                if (custom_open === 1 && !$(event.target).closest('.custom-template').length) {
-                                    customTemplate.removeClass('open');
-                                    toggle.removeClass('toggled');
-                                    custom_open = 0;
-                                }
-                            });
-
-                            toggle_customSidebar = true;
+                        } else {
+                            customTemplate.addClass('open');
+                            toggle.addClass('toggled');
+                            custom_open = 1;
+                            fetchWishlistItems();
                         }
                     });
 
-
-                    // Event delegation for quantity buttons
-                    $(document).on("click", ".decrease-qty", function () {
-                        let input = $(this).next(".cart-quantity");
-                        let value = parseInt(input.val(), 10);
-                        if (value > 1) {
-                            input.val(value - 1);
+                    // Click outside to close
+                    $(document).on("click", function (event) {
+                        if (custom_open === 1 && !$(event.target).closest('.custom-template').length) {
+                            customTemplate.removeClass('open');
+                            toggle.removeClass('toggled');
+                            custom_open = 0;
                         }
                     });
 
-                    $(document).on("click", ".increase-qty", function () {
-                        let input = $(this).prev(".cart-quantity");
-                        let value = parseInt(input.val(), 10);
-                        input.val(value + 1);
-                    });
+                    toggle_customSidebar = true;
+                }
+            });
 
-                    function showNotification(type, title, message) {
-                        $.notify({
-                            icon: type === "success" ? "fa fa-bell" : "fa fa-exclamation-circle",
-                            title: title,
-                            message: message
-                        }, {
-                            type: type,
-                            allow_dismiss: true,
-                            delay: 4000,
-                            placement: {
-                                from: 'top',
-                                align: 'right'
-                            },
-                            offset: { x: 0, y: 60 },
-                            animate: {
-                                enter: 'animated fadeInDown',
-                                exit: 'animated fadeOutUp'
-                            }
-                        });
+
+            // Event delegation for quantity buttons
+            $(document).on("click", ".decrease-qty", function () {
+                let input = $(this).next(".cart-quantity");
+                let value = parseInt(input.val(), 10);
+                if (value > 1) {
+                    input.val(value - 1);
+                }
+            });
+
+            $(document).on("click", ".increase-qty", function () {
+                let input = $(this).prev(".cart-quantity");
+                let value = parseInt(input.val(), 10);
+                input.val(value + 1);
+            });
+
+            function showNotification(type, title, message) {
+                $.notify({
+                    icon: type === "success" ? "fa fa-bell" : "fa fa-exclamation-circle",
+                    title: title,
+                    message: message
+                }, {
+                    type: type,
+                    allow_dismiss: true,
+                    delay: 4000,
+                    placement: {
+                        from: 'top',
+                        align: 'right'
+                    },
+                    offset: { x: 0, y: 60 },
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
                     }
+                });
+            }
 
 
 
-                    // Function to Fetch Wishlist Items
-                    function fetchWishlistItems() {
-                        $.ajax({
-                            url: "/get-wishlist-items",
-                            method: "GET",
-                            success: function (response) {
-                                const wishlistContainer = $(".wishlist-items-container");
-                                const wishlistCount = $(".wishlist-count");
+            // Function to Fetch Wishlist Items
+            function fetchWishlistItems() {
+                $.ajax({
+                    url: "/get-wishlist-items",
+                    method: "GET",
+                    success: function (response) {
+                        const wishlistContainer = $(".wishlist-items-container");
+                        const wishlistCount = $(".wishlist-count");
 
-                                wishlistContainer.empty(); // Clear existing items
-                                wishlistCount.text(response.items.length); // Update count on the bag icon
+                        wishlistContainer.empty(); // Clear existing items
+                        wishlistCount.text(response.items.length); // Update count on the bag icon
 
-                                if (response.items.length > 0) {
-                                    response.items.forEach(item => {
-                                        wishlistContainer.append(`
+                        if (response.items.length > 0) {
+                            response.items.forEach(item => {
+                                wishlistContainer.append(`
                             <div class="wishlist-item" data-id="${item.id}">
                                 <div class="wishlist-card">
                                     <div class="wishlist-details">
@@ -718,146 +716,146 @@
                                 </div>
                             </div>
                         `);
-                                    });
+                            });
 
-                                    // Attach event listener for delete buttons (event delegation)
-                                    $(document).on("click", ".delete-wishlist-item", function () {
-                                        const itemId = $(this).data("id");
-                                        deleteWishlistItem(itemId);
-                                    });
-                                } else {
-                                    wishlistContainer.append("<p>Your wishlist is empty.</p>");
-                                }
-                            },
-                            error: function () {
-                                alert("Failed to load wishlist items. Please try again.");
-                            }
-                        });
+                            // Attach event listener for delete buttons (event delegation)
+                            $(document).on("click", ".delete-wishlist-item", function () {
+                                const itemId = $(this).data("id");
+                                deleteWishlistItem(itemId);
+                            });
+                        } else {
+                            wishlistContainer.append("<p>Your wishlist is empty.</p>");
+                        }
+                    },
+                    error: function () {
+                        alert("Failed to load wishlist items. Please try again.");
                     }
+                });
+            }
 
-                    // AJAX Submission for "Add to Cart"
-                    $(document).on("submit", ".add-to-cart-form", function (e) {
-                        e.preventDefault(); // Prevent default form submission
-                        var form = $(this);
-                        var formData = form.serialize();
-                        var wishlistItem = form.closest(".wishlist-item"); // Get the parent wishlist item
+            // AJAX Submission for "Add to Cart"
+            $(document).on("submit", ".add-to-cart-form", function (e) {
+                e.preventDefault(); // Prevent default form submission
+                var form = $(this);
+                var formData = form.serialize();
+                var wishlistItem = form.closest(".wishlist-item"); // Get the parent wishlist item
 
-                        $.ajax({
-                            url: "/add-to-cart", // Change this to your actual route
-                            method: "POST",
-                            data: formData,
-                            success: function (response) {
-                                if (response.success) {
-                                    showNotification("success", "Success", response.message);
-                                    updateWishlistCount();
-                                    updateCartCount();
-                                } else {
-                                    showNotification("danger", "Error", response.message);
-                                }
-                            },
-                            error: function (xhr) {
-                                let errorMessage = "Failed to add item to wishlist.";
-                                if (xhr.responseJSON && xhr.responseJSON.message) {
-                                    errorMessage = xhr.responseJSON.message;
-                                }
-                                showNotification("danger", "Error", errorMessage);
-                            }
-                        });
+                $.ajax({
+                    url: "/add-to-cart", // Change this to your actual route
+                    method: "POST",
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            showNotification("success", "Success", response.message);
+                            updateWishlistCount();
+                            updateCartCount();
+                        } else {
+                            showNotification("danger", "Error", response.message);
+                        }
+                    },
+                    error: function (xhr) {
+                        let errorMessage = "Failed to add item to wishlist.";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        showNotification("danger", "Error", errorMessage);
+                    }
+                });
+            });
+
+            function updateWishlistCount() {
+                $.ajax({
+                    url: "/wishlist-count",
+                    method: "GET",
+                    success: function (data) {
+                        $(".wishlist-badge").text(data.count);
+                    },
+                    error: function () {
+                        console.error("Failed to fetch updated wishlist count.");
+                    }
+                });
+            }
+
+            // Function to update cart count (Assuming cart count is displayed somewhere)
+            function updateCartCount() {
+                $.ajax({
+                    url: "/cart-count",
+                    method: "GET",
+                    success: function (data) {
+                        $(".cart-badge").text(data.count);
+                    },
+                    error: function () {
+                        console.error("Failed to fetch updated wishlist count.");
+                    }
+                });
+            }
+        });
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cartBadges = document.querySelectorAll('.cart-badge'); // Select all instances
+
+            if (cartBadges.length > 0) {
+                setInterval(() => {
+                    cartBadges.forEach((badge) => {
+                        badge.classList.add('bounce-once');
+                        setTimeout(() => badge.classList.remove('bounce-once'), 500);
                     });
+                }, 5000);
+            }
+        });
 
-                    function updateWishlistCount() {
-                        $.ajax({
-                            url: "/wishlist-count",
-                            method: "GET",
-                            success: function (data) {
-                                $(".wishlist-badge").text(data.count);
-                            },
-                            error: function () {
-                                console.error("Failed to fetch updated wishlist count.");
-                            }
-                        });
-                    }
+        document.addEventListener('DOMContentLoaded', function () {
+            const cartBadges = document.querySelectorAll('.cart-badge-2'); // Select all instances
 
-                    // Function to update cart count (Assuming cart count is displayed somewhere)
-                    function updateCartCount() {
-                        $.ajax({
-                            url: "/cart-count",
-                            method: "GET",
-                            success: function (data) {
-                                $(".cart-badge").text(data.count);
-                            },
-                            error: function () {
-                                console.error("Failed to fetch updated wishlist count.");
-                            }
-                        });
-                    }
-                });
-
-            </script>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const cartBadges = document.querySelectorAll('.cart-badge'); // Select all instances
-
-                    if (cartBadges.length > 0) {
-                        setInterval(() => {
-                            cartBadges.forEach((badge) => {
-                                badge.classList.add('bounce-once');
-                                setTimeout(() => badge.classList.remove('bounce-once'), 500);
-                            });
-                        }, 5000);
-                    }
-                });
-
-                document.addEventListener('DOMContentLoaded', function () {
-                    const cartBadges = document.querySelectorAll('.cart-badge-2'); // Select all instances
-
-                    if (cartBadges.length > 0) {
-                        setInterval(() => {
-                            cartBadges.forEach((badge) => {
-                                badge.classList.add('bounce-once');
-                                setTimeout(() => badge.classList.remove('bounce-once'), 500);
-                            });
-                        }, 5000);
-                    }
-                });
+            if (cartBadges.length > 0) {
+                setInterval(() => {
+                    cartBadges.forEach((badge) => {
+                        badge.classList.add('bounce-once');
+                        setTimeout(() => badge.classList.remove('bounce-once'), 500);
+                    });
+                }, 5000);
+            }
+        });
 
 
-                document.addEventListener('DOMContentLoaded', function () {
-                    const cartBadge = document.querySelector('.wishlist-badge');
+        document.addEventListener('DOMContentLoaded', function () {
+            const cartBadge = document.querySelector('.wishlist-badge');
 
-                    // Trigger the bounce animation every 5 seconds
-                    setInterval(() => {
-                        cartBadge.classList.add('bounce-once');
-                        setTimeout(() => cartBadge.classList.remove('bounce-once'), 500);
-                    }, 5000);
-                });
-            </script>
-            <audio id="notificationSound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
+            // Trigger the bounce animation every 5 seconds
+            setInterval(() => {
+                cartBadge.classList.add('bounce-once');
+                setTimeout(() => cartBadge.classList.remove('bounce-once'), 500);
+            }, 5000);
+        });
+    </script>
+    <audio id="notificationSound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
 
 
-            <script>
-                let lastUnreadCount = 0; // Store the last unread count
+    <script>
+        let lastUnreadCount = 0; // Store the last unread count
 
-                function fetchMessages() {
-                    fetch("{{ route('notifications.messages') }}")
-                        .then(response => response.json())
-                        .then(data => {
-                            let messageList = document.getElementById('messageList');
-                            let messageListMobile = document.getElementById('messageListMobile');
-                            let messageCount = document.getElementById('messageCount');
-                            let messageCountMobile = document.getElementById('messageCountMobile');
+        function fetchMessages() {
+            fetch("{{ route('notifications.messages') }}")
+                .then(response => response.json())
+                .then(data => {
+                    let messageList = document.getElementById('messageList');
+                    let messageListMobile = document.getElementById('messageListMobile');
+                    let messageCount = document.getElementById('messageCount');
+                    let messageCountMobile = document.getElementById('messageCountMobile');
 
-                            messageList.innerHTML = "";
-                            messageListMobile.innerHTML = "";
-                            let unreadCount = 0;
+                    messageList.innerHTML = "";
+                    messageListMobile.innerHTML = "";
+                    let unreadCount = 0;
 
-                            data.forEach(notification => {
-                                if (!notification.read_at) { // Only count unread messages
-                                    unreadCount++;
-                                }
+                    data.forEach(notification => {
+                        if (!notification.read_at) { // Only count unread messages
+                            unreadCount++;
+                        }
 
-                                let messageItem = `
+                        let messageItem = `
                         <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
                             <div class="notif-content">
                                 <span class="fw-bold">${notification.data.username}</span>
@@ -867,61 +865,61 @@
                         </a>
                     `;
 
-                                messageList.innerHTML += messageItem;
-                                messageListMobile.innerHTML += messageItem;
-                            });
+                        messageList.innerHTML += messageItem;
+                        messageListMobile.innerHTML += messageItem;
+                    });
 
-                            // Update the count based on unread messages
-                            if (messageCount) messageCount.textContent = unreadCount > 0 ? unreadCount : 0;
-                            if (messageCountMobile) messageCountMobile.textContent = unreadCount > 0 ? unreadCount : 0;
+                    // Update the count based on unread messages
+                    if (messageCount) messageCount.textContent = unreadCount > 0 ? unreadCount : 0;
+                    if (messageCountMobile) messageCountMobile.textContent = unreadCount > 0 ? unreadCount : 0;
 
-                            // If there are new messages, play the notification sound
-                            if (unreadCount > lastUnreadCount) {
-                                playNotificationSound();
-                            }
-
-                            lastUnreadCount = unreadCount;
-                        })
-                        .catch(error => console.error("Error fetching messages:", error));
-                }
-
-                function playNotificationSound() {
-                    let audio = document.getElementById("notificationSound");
-                    if (audio) {
-                        audio.play().catch(error => console.error("Audio play error:", error));
+                    // If there are new messages, play the notification sound
+                    if (unreadCount > lastUnreadCount) {
+                        playNotificationSound();
                     }
+
+                    lastUnreadCount = unreadCount;
+                })
+                .catch(error => console.error("Error fetching messages:", error));
+        }
+
+        function playNotificationSound() {
+            let audio = document.getElementById("notificationSound");
+            if (audio) {
+                audio.play().catch(error => console.error("Audio play error:", error));
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchMessages();
+            setInterval(fetchMessages, 5000); // Auto-refresh every 5 seconds
+        });
+
+        // Mark all messages as read when the user clicks "See All Messages"
+        document.getElementById('markAllMessagesRead').addEventListener('click', function () {
+            fetch("{{ route('notifications.markAllRead') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Content-Type": "application/json"
                 }
+            }).then(() => {
+                fetchMessages(); // Refresh after marking as read
+            });
+        });
 
-                document.addEventListener("DOMContentLoaded", function () {
-                    fetchMessages();
-                    setInterval(fetchMessages, 5000); // Auto-refresh every 5 seconds
-                });
-
-                // Mark all messages as read when the user clicks "See All Messages"
-                document.getElementById('markAllMessagesRead').addEventListener('click', function () {
-                    fetch("{{ route('notifications.markAllRead') }}", {
-                        method: "POST",
-                        headers: {
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                            "Content-Type": "application/json"
-                        }
-                    }).then(() => {
-                        fetchMessages(); // Refresh after marking as read
-                    });
-                });
-
-                document.getElementById('markAllMessagesReadMobile').addEventListener('click', function () {
-                    fetch("{{ route('notifications.markAllRead') }}", {
-                        method: "POST",
-                        headers: {
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                            "Content-Type": "application/json"
-                        }
-                    }).then(() => {
-                        fetchMessages();
-                    });
-                });
-            </script>
+        document.getElementById('markAllMessagesReadMobile').addEventListener('click', function () {
+            fetch("{{ route('notifications.markAllRead') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Content-Type": "application/json"
+                }
+            }).then(() => {
+                fetchMessages();
+            });
+        });
+    </script>
 
 
 
