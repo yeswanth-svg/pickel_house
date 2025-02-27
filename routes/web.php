@@ -47,15 +47,20 @@ Route::get('/about-us', [HomeController::class, 'about_us'])->name('about-us');
 Route::get('/menu', [HomeController::class, 'menu'])->name('menu');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
+
+
 Route::post('/set-currency', function (Request $request) {
     $currency = $request->currency;
-    // Set country in the session after login
-    session(['country' => auth()->user()->country]);
-    // Store the selected currency in the session only
+
+    // Store only the selected currency in the session
     Session::put('selected_currency', $currency);
 
-    return response()->json(['success' => true, 'stored_currency' => Session::get('selected_currency')]);
+    return response()->json([
+        'success' => true,
+        'stored_currency' => Session::get('selected_currency')
+    ]);
 })->name('set.currency');
+
 
 
 Route::get('/dashboard', [HomeController::class, 'dashboard'])
@@ -65,46 +70,20 @@ Route::get('/dashboard', [HomeController::class, 'dashboard'])
 // Show email verification notice
 Route::get('/email/verify', EmailVerificationPromptController::class)
     ->name('verification.notice');
-
-// Handle verification link
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect('/dashboard');
-})->middleware(['auth', 'signed'])->name('verification.verify');
-
 // Resend verification email
 Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
     ->middleware(['auth', 'throttle:6,1'])
     ->name('verification.send');
 
+// Handle verification link
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/dashboard');
+})->middleware(['auth'])->name('verification.verify');
 
-use App\Mail\OrderSuccessMail;
 
-Route::get('/test-email', function () {
-    $adminEmail = 'yeswanthmalla2000@gmail.com'; // Replace with your actual admin email
 
-    // Sample order details (similar to what you use in production)
-    $orderDetails = [
-        'order_ids' => [123, 124],
-        'user_id' => 1,
-        'user_name' => "admin", // Force it to "admin"
-        'total_amount' => 4400,
-        'payment_id' => "test_payment_12345",
-        'payment_method' => "Razorpay",
-        'status' => "Completed",
-        'shipping_address' => "Test Address, City, Country",
-        'order_date' => now()->toDateTimeString(),
-        'order_items' => [
-            ['item_name' => 'Chicken Pickle', 'quantity' => '3 kg'],
-            ['item_name' => 'Mango Pickle', 'quantity' => '500 g']
-        ],
-    ];
 
-    // Send test email
-    Mail::to($adminEmail)->send(new OrderSuccessMail($orderDetails));
-
-    return "Test email sent to $adminEmail";
-});
 
 
 Route::middleware('auth')->group(function () {

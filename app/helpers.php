@@ -32,14 +32,16 @@ function formatDate($date)
 if (!function_exists('convertPrice')) {
     function convertPrice($amount, $numericOnly = false)
     {
-        // Check if a currency is selected in the session (from the dropdown)
+        // Get selected currency from session
         $selectedCurrency = session('selected_currency');
 
-        // If no currency is selected in the session, use the logged-in user's country as fallback
-        if (!$selectedCurrency) {
-            $userCountry = auth()->user()->country ?? 'INR'; // Default to INR if no user country is found
-            $selectedCurrency = $userCountry;
+        // Use logged-in user's country as fallback only if user is authenticated
+        if (!$selectedCurrency && auth()->check()) {
+            $selectedCurrency = auth()->user()->country ?? 'INR'; // Default to INR
         }
+
+        // Default to INR if no currency is found
+        $toCurrency = $selectedCurrency ?? 'INR';
 
         // Define currency mapping
         $currencyMap = [
@@ -47,11 +49,11 @@ if (!function_exists('convertPrice')) {
             'USD' => 'USD',
             'CAD' => 'CAD',
             'AUD' => 'AUD',
-            'GBP' => 'GBP', // Add more if needed
+            'GBP' => 'GBP',
         ];
 
-        // Ensure selected currency is valid
-        $toCurrency = $currencyMap[$selectedCurrency] ?? 'INR'; // Default to INR if not found
+        // Validate selected currency
+        $toCurrency = $currencyMap[$toCurrency] ?? 'INR';
 
         // Fetch conversion rate with caching
         $conversionRate = getExchangeRate('INR', $toCurrency);
@@ -68,6 +70,7 @@ if (!function_exists('convertPrice')) {
         return getCurrencySymbol($toCurrency) . number_format($convertedAmount, 2);
     }
 }
+
 
 
 if (!function_exists('PaymentPrice')) {

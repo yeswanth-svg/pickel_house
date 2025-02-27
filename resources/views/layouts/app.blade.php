@@ -232,27 +232,44 @@
                     @endauth
 
                     <!-- Currency Selection Dropdown -->
+                    @php
+                        // Get the logged-in user's country (default to INR if not logged in)
+                        $userCountry = auth()->check() ? auth()->user()->country : 'INR';
+
+                        // Get the stored session currency (if the user changed it)
+                        $sessionCurrency = session('selected_currency', $userCountry);
+
+                        // Currency flag mapping
+                        $flags = [
+                            'INR' => asset('img/flags/inr.png'),
+                            'USD' => asset('img/flags/usd.png'),
+                            'AUD' => asset('img/flags/aud.png'),
+                            'CAD' => asset('img/flags/cad.png'),
+                        ];
+
+                        // Use the session currency flag (or default to user's country)
+                        $selectedFlag = $flags[$sessionCurrency] ?? asset('img/flags/inr.png');
+                    @endphp
+
+                    <!-- Currency Selection Dropdown -->
                     <div class="dropdown me-4">
                         <button class="btn btn-light dropdown-toggle" type="button" id="currencyDropdown"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <img id="selected-flag" src="{{ asset('img/flags/inr.png') }}" width="25" class="me-1">
-                            <span id="selected-currency-text"> INR</span>
+                            <img id="selected-flag" src="{{ $selectedFlag }}" width="25" class="me-1">
+                            <span id="selected-currency-text"> {{ $sessionCurrency }} </span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
                             <li><a class="dropdown-item currency-option" href="#" data-country="INR"
                                     data-flag="{{ asset('img/flags/inr.png') }}">🇮🇳 INR</a></li>
-
                             <li><a class="dropdown-item currency-option" href="#" data-country="USD"
                                     data-flag="{{ asset('img/flags/usd.png') }}">🇺🇸 USD</a></li>
-
-
                             <li><a class="dropdown-item currency-option" href="#" data-country="AUD"
                                     data-flag="{{ asset('img/flags/aud.png') }}">🇦🇺 AUD</a></li>
-
                             <li><a class="dropdown-item currency-option" href="#" data-country="CAD"
                                     data-flag="{{ asset('img/flags/cad.png') }}">🇨🇦 CAD</a></li>
                         </ul>
                     </div>
+
 
                     <button class="btn-search btn btn-primary btn-md-square me-4 rounded-circle d-none d-lg-inline-flex"
                         data-bs-toggle="modal" data-bs-target="#searchModal">
@@ -808,11 +825,11 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-            const cartBadges = document.querySelectorAll('.cart-badge-2'); // Select all instances
+            const cartBadges2 = document.querySelectorAll('.cart-badge-2'); // Select all instances
 
-            if (cartBadges.length > 0) {
+            if (cartBadges2.length > 0) {
                 setInterval(() => {
-                    cartBadges.forEach((badge) => {
+                    cartBadges2.forEach((badge) => {
                         badge.classList.add('bounce-once');
                         setTimeout(() => badge.classList.remove('bounce-once'), 500);
                     });
@@ -820,106 +837,109 @@
             }
         });
 
-
         document.addEventListener('DOMContentLoaded', function () {
             const cartBadge = document.querySelector('.wishlist-badge');
 
-            // Trigger the bounce animation every 5 seconds
-            setInterval(() => {
-                cartBadge.classList.add('bounce-once');
-                setTimeout(() => cartBadge.classList.remove('bounce-once'), 500);
-            }, 5000);
+            if (cartBadge) { // Check if element exists
+                setInterval(() => {
+                    cartBadge.classList.add('bounce-once');
+                    setTimeout(() => cartBadge.classList.remove('bounce-once'), 500);
+                }, 5000);
+            }
         });
     </script>
+
+
     <audio id="notificationSound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
 
+    @auth
+        <script>
+            let lastUnreadCount = 0; // Store the last unread count
 
-    <script>
-        let lastUnreadCount = 0; // Store the last unread count
+            function fetchMessages() {
+                fetch("{{ route('notifications.messages') }}")
+                    .then(response => response.json())
+                    .then(data => {
+                        let messageList = document.getElementById('messageList');
+                        let messageListMobile = document.getElementById('messageListMobile');
+                        let messageCount = document.getElementById('messageCount');
+                        let messageCountMobile = document.getElementById('messageCountMobile');
 
-        function fetchMessages() {
-            fetch("{{ route('notifications.messages') }}")
-                .then(response => response.json())
-                .then(data => {
-                    let messageList = document.getElementById('messageList');
-                    let messageListMobile = document.getElementById('messageListMobile');
-                    let messageCount = document.getElementById('messageCount');
-                    let messageCountMobile = document.getElementById('messageCountMobile');
+                        messageList.innerHTML = "";
+                        messageListMobile.innerHTML = "";
+                        let unreadCount = 0;
 
-                    messageList.innerHTML = "";
-                    messageListMobile.innerHTML = "";
-                    let unreadCount = 0;
+                        data.forEach(notification => {
+                            if (!notification.read_at) { // Only count unread messages
+                                unreadCount++;
+                            }
 
-                    data.forEach(notification => {
-                        if (!notification.read_at) { // Only count unread messages
-                            unreadCount++;
+                            let messageItem = `
+                                    <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
+                                        <div class="notif-content">
+                                            <span class="fw-bold">${notification.data.username}</span>
+                                            <span class="d-block small text-muted">${notification.data.message}</span>
+                                            <span class="small text-muted">${new Date(notification.created_at).toLocaleTimeString()}</span>
+                                        </div>
+                                    </a>
+                                `;
+
+                            messageList.innerHTML += messageItem;
+                            messageListMobile.innerHTML += messageItem;
+                        });
+
+                        // Update the count based on unread messages
+                        if (messageCount) messageCount.textContent = unreadCount > 0 ? unreadCount : 0;
+                        if (messageCountMobile) messageCountMobile.textContent = unreadCount > 0 ? unreadCount : 0;
+
+                        // If there are new messages, play the notification sound
+                        if (unreadCount > lastUnreadCount) {
+                            playNotificationSound();
                         }
 
-                        let messageItem = `
-                        <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
-                            <div class="notif-content">
-                                <span class="fw-bold">${notification.data.username}</span>
-                                <span class="d-block small text-muted">${notification.data.message}</span>
-                                <span class="small text-muted">${new Date(notification.created_at).toLocaleTimeString()}</span>
-                            </div>
-                        </a>
-                    `;
-
-                        messageList.innerHTML += messageItem;
-                        messageListMobile.innerHTML += messageItem;
-                    });
-
-                    // Update the count based on unread messages
-                    if (messageCount) messageCount.textContent = unreadCount > 0 ? unreadCount : 0;
-                    if (messageCountMobile) messageCountMobile.textContent = unreadCount > 0 ? unreadCount : 0;
-
-                    // If there are new messages, play the notification sound
-                    if (unreadCount > lastUnreadCount) {
-                        playNotificationSound();
-                    }
-
-                    lastUnreadCount = unreadCount;
-                })
-                .catch(error => console.error("Error fetching messages:", error));
-        }
-
-        function playNotificationSound() {
-            let audio = document.getElementById("notificationSound");
-            if (audio) {
-                audio.play().catch(error => console.error("Audio play error:", error));
+                        lastUnreadCount = unreadCount;
+                    })
+                    .catch(error => console.error("Error fetching messages:", error));
             }
-        }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            fetchMessages();
-            setInterval(fetchMessages, 5000); // Auto-refresh every 5 seconds
-        });
-
-        // Mark all messages as read when the user clicks "See All Messages"
-        document.getElementById('markAllMessagesRead').addEventListener('click', function () {
-            fetch("{{ route('notifications.markAllRead') }}", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                    "Content-Type": "application/json"
+            function playNotificationSound() {
+                let audio = document.getElementById("notificationSound");
+                if (audio) {
+                    audio.play().catch(error => console.error("Audio play error:", error));
                 }
-            }).then(() => {
-                fetchMessages(); // Refresh after marking as read
-            });
-        });
+            }
 
-        document.getElementById('markAllMessagesReadMobile').addEventListener('click', function () {
-            fetch("{{ route('notifications.markAllRead') }}", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                    "Content-Type": "application/json"
-                }
-            }).then(() => {
+            document.addEventListener("DOMContentLoaded", function () {
                 fetchMessages();
+                setInterval(fetchMessages, 5000); // Auto-refresh every 5 seconds
             });
-        });
-    </script>
+
+            // Mark all messages as read when the user clicks "See All Messages"
+            document.getElementById('markAllMessagesRead').addEventListener('click', function () {
+                fetch("{{ route('notifications.markAllRead') }}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                        "Content-Type": "application/json"
+                    }
+                }).then(() => {
+                    fetchMessages(); // Refresh after marking as read
+                });
+            });
+
+            document.getElementById('markAllMessagesReadMobile').addEventListener('click', function () {
+                fetch("{{ route('notifications.markAllRead') }}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                        "Content-Type": "application/json"
+                    }
+                }).then(() => {
+                    fetchMessages();
+                });
+            });
+        </script>
+    @endauth
 
 
 

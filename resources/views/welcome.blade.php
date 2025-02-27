@@ -2,7 +2,7 @@
 @section('title', 'Pickel House')
 @section('content')
 
-    <style>
+        <style>
         /* Menu Item */
         .menu-item {
             display: flex;
@@ -187,8 +187,8 @@
 
             .menu-item .prices {
                 position: relative;
-                bottom: 20px;
-                left: -130px;
+                /* bottom: 20px; */
+                left: -113px;
             }
 
             .menu-item #cart-process {
@@ -382,26 +382,26 @@
         </div>
         <div class="tab-class text-center">
 
-            <ul class="nav nav-pills d-flex category-tabs">
+            <ul class="nav nav-pills d-flex category-tabs mb-5">
                 @foreach($categories as $key => $category)
-                    <li class="nav-item">
+                            <li class="nav-item">
                         <a class="nav-link px-3 py-2 border border-primary bg-white rounded-pill category-tab {{ $key === 0 ? 'active' : '' }}"
                             data-bs-toggle="pill" href="#tab-{{ $category->id }}" data-category-id="{{ $category->id }}">
                             {{ $category->category_name }}
                         </a>
                     </li>
                 @endforeach
-            </ul>
+                </ul>
 
 
 
 
             <div class="tab-content">
                 @foreach($categories as $key => $category)
-                    <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
+                            <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
                         <div class="row g-4">
                             @foreach($category->dishes as $dish)
-                                <div class="col-lg-6">
+                                            <div class="col-lg-6">
                                     <div class="menu-item d-flex align-items-center position-relative">
                                         <div class="ratio ratio-1x1 img-responsive">
                                             <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
@@ -412,6 +412,7 @@
                                                     Out of Stock
                                                 </div>
                                             @endif
+
 
 
                                         </div>
@@ -434,14 +435,14 @@
                                                         <select class="quantity-selector form-select form-select-sm select-tag1"
                                                             data-dish-id="{{ $dish->id }}" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
                                                             @foreach($dish->quantities as $q)
-                                                                <option value="{{ $q->id }}"
+                                                                                    <option value="{{ $q->id }}"
                                                                     data-discount-price="{{ convertPrice($q->discount_price) }}"
                                                                     data-original-price="{{ convertPrice($q->original_price) }}"
                                                                     data-normal-price="{{ $q->discount_price }}">
                                                                     {{ $q->weight }}
                                                                 </option>
                                                             @endforeach
-                                                        </select>
+                                                                        </select>
 
                                                         <select class="form-select form-select-sm select-tag2" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
                                                             <option value="">Spice Level</option>
@@ -450,17 +451,13 @@
                                                             <option value="spicy">Spicy 🌶️🌶️🌶️</option>
                                                             <option value="extra_spicy">Extra Spicy 🔥</option>
                                                         </select>
-
-
-
                                                     </div>
                                                 @endif
 
 
 
+
                                                 @auth
-
-
 
                                                     @if($dish->quantities->isNotEmpty() && $dish->availability_status !== 'out_of_stock')
                                                         <div class="d-flex align-items-center gap-2" id="cart-process">
@@ -503,10 +500,8 @@
                                                         </div>
                                                     @else
 
-
                                                         <p class="text-danger">No available quantities</p>
                                                     @endif
-
 
                                                 @endauth
 
@@ -523,27 +518,21 @@
                                                 @if(!empty(json_decode($dish->dish_tags, true)))
                                                     <div class="mt-2 tags">
                                                         @foreach(json_decode($dish->dish_tags, true) as $tag)
-                                                            <span
-                                                                class="border border-warning text-dark px-3 py-1 m-1 fw-bold rounded">{{ $tag }}</span>
+                                                                            <span
+                                                            class="border border-warning text-dark px-3 py-1 m-1 fw-bold rounded">{{ $tag }}</span>
                                                         @endforeach
-                                                    </div>
+                                                                    </div>
                                                 @endif
-
-
-
-
-
-
 
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
-                        </div>
+                                </div>
                     </div>
                 @endforeach
-            </div>
+                </div>
 
         </div>
 
@@ -861,40 +850,40 @@
     <script src="{{asset('admin/js/core/jquery-3.7.1.min.js')}}"></script>
 
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const categoryTabs = document.querySelectorAll(".category-tab");
-            const spiceSelects = document.querySelectorAll(".select-tag2");
+    <!-- <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const categoryTabs = document.querySelectorAll(".category-tab");
+                    const spiceSelects = document.querySelectorAll(".select-tag2");
 
-            function checkCategoryVisibility() {
-                let activeCategory = document.querySelector(".category-tab.active");
+                    function checkCategoryVisibility() {
+                        let activeCategory = document.querySelector(".category-tab.active");
 
-                if (activeCategory && activeCategory.textContent.trim().toLowerCase() === "sweets") {
-                    // Hide all spice-level select elements
-                    spiceSelects.forEach(select => {
-                        select.style.display = "none";
+                        if (activeCategory && activeCategory.textContent.trim().toLowerCase() === "sweets") {
+                            // Hide all spice-level select elements
+                            spiceSelects.forEach(select => {
+                                select.style.display = "none";
+                            });
+                        } else {
+                            // Show all spice-level select elements
+                            spiceSelects.forEach(select => {
+                                select.style.display = "block";
+                            });
+                        }
+                    }
+
+                    // Run on page load (for default active category)
+                    checkCategoryVisibility();
+
+                    // Add event listeners to update when a category is clicked
+                    categoryTabs.forEach(tab => {
+                        tab.addEventListener("click", function () {
+                            // Delay to allow Bootstrap tab change
+                            setTimeout(checkCategoryVisibility, 100);
+                        });
                     });
-                } else {
-                    // Show all spice-level select elements
-                    spiceSelects.forEach(select => {
-                        select.style.display = "block";
-                    });
-                }
-            }
-
-            // Run on page load (for default active category)
-            checkCategoryVisibility();
-
-            // Add event listeners to update when a category is clicked
-            categoryTabs.forEach(tab => {
-                tab.addEventListener("click", function () {
-                    // Delay to allow Bootstrap tab change
-                    setTimeout(checkCategoryVisibility, 100);
                 });
-            });
-        });
 
-    </script>
+            </script> -->
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
