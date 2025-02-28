@@ -5,7 +5,7 @@
     <div class="container mt-5">
         <div class="row">
             <!-- Left side: Product images -->
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <div class=" product-gallery d-flex">
                     <!-- Thumbnail images -->
                     <div class="thumbnail-list d-flex flex-column me-3">
@@ -23,7 +23,7 @@
             </div>
 
             <!-- Right side: Product details -->
-            <div class="col-md-6" style="position: relative;left: 140px;">
+            <div class="col-md-6">
                 <h2>Bandar Laddu / Tokkudu Laddu</h2>
                 <p class="text-warning"><strong>⭐⭐⭐⭐⭐ 3 reviews</strong></p>
                 <h4>Rs. 160.00</h4>
