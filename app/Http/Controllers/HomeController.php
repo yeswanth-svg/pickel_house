@@ -35,4 +35,9 @@ class HomeController extends Controller
     {
         return view('user.dashboard');
     }
+
+    public function singleProduct()
+    {
+        return view('singlepageitem');
+    }
 }
