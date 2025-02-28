@@ -1042,8 +1042,17 @@ span {
 
 /* Show View Button */
 .view-button {
-    z-index: 2;
-    position: relative;
+    display: inline-block;
+    background: black;
+    color: white;
+    font-weight: bold;
+    padding: 12px 30px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background 0.3s ease-in-out;
+    text-align: center;
 }
 
 /* View Button should appear on hover (desktop) & touch (mobile) */
@@ -1051,106 +1060,10 @@ span {
     opacity: 1;
 }
 
-.dish-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-    transition: transform 0.3s ease-in-out;
-}
-
-.dish-card:hover {
-    transform: scale(1.02);
-}
-
 /* Overlay Effect (Hidden on Mobile) */
 .d-none.d-md-block {
     display: none !important;
     /* Hide overlay on mobile */
-}
-
-/* pagiantion style */
-.pagination-container {
-    margin-top: 20px;
-}
-
-/* Pagination Flexbox */
-.pagination {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    border-radius: 8px;
-    gap: 10px; /* 🔹 Adds spacing between elements */
-}
-
-/* Page Number Buttons */
-.page-item .page-link {
-    color: #333;
-    font-weight: 600;
-    padding: 10px 16px;
-    border: 2px solid transparent;
-    border-radius: 6px;
-    transition: all 0.3s ease-in-out;
-}
-
-/* Add spacing between page numbers */
-.page-item {
-    margin: 0 6px; /* 🔹 Space around each page number */
-}
-
-/* Hover Effect */
-.page-item .page-link:hover {
-    background: #ff5722;
-    color: #fff;
-    border-color: #ff5722;
-}
-
-/* Active Page (Current Page) */
-.page-item.active .page-link {
-    background: #ff5722;
-    color: #fff;
-    border-color: #ff5722;
-}
-
-/* Disabled Button (Previous & Next) */
-.page-item.disabled .page-link {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background: #f0f0f0;
-}
-
-/* Custom Prev & Next Arrows */
-.custom-prev,
-.custom-next {
-    font-size: 18px;
-    font-weight: bold;
-    padding: 10px 18px;
-    border-radius: 6px;
-}
-
-/* 🔹 Next Button Styling (Make it Stand Out) */
-.page-item .custom-next {
-    background: #ff5722;
-    color: #fff;
-    font-weight: bold;
-    border: 2px solid #ff5722;
-    margin-left: 10px; /* 🔹 Adds spacing between numbers and Next arrow */
-}
-
-.page-item .custom-next:hover {
-    background: #d84315;
-    border-color: #d84315;
-}
-
-/* 🔹 Prev Button Styling */
-.page-item .custom-prev {
-    margin-right: 10px; /* 🔹 Adds spacing between numbers and Prev arrow */
-}
-
-/* 🔹 Next Button Disabled */
-.page-item.disabled .custom-next {
-    background: #ccc;
-    border-color: #ccc;
-    color: #777;
 }
 
 @media (min-width: 768px) {
@@ -1239,4 +1152,89 @@ span {
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
+}
+
+/* pagiantion style */
+.pagination-container {
+    margin-top: 20px;
+}
+
+/* Pagination Flexbox */
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    border-radius: 8px;
+    gap: 10px; /* 🔹 Adds spacing between elements */
+}
+
+/* Page Number Buttons */
+.page-item .page-link {
+    color: #333;
+    font-weight: 600;
+    padding: 10px 16px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Add spacing between page numbers */
+.page-item {
+    margin: 0 6px; /* 🔹 Space around each page number */
+}
+
+/* Hover Effect */
+.page-item .page-link:hover {
+    background: #ff5722;
+    color: #fff;
+    border-color: #ff5722;
+}
+
+/* Active Page (Current Page) */
+.page-item.active .page-link {
+    background: #ff5722;
+    color: #fff;
+    border-color: #ff5722;
+}
+
+/* Disabled Button (Previous & Next) */
+.page-item.disabled .page-link {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f0f0f0;
+}
+
+/* Custom Prev & Next Arrows */
+.custom-prev,
+.custom-next {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 18px;
+    border-radius: 6px;
+}
+
+/* 🔹 Next Button Styling (Make it Stand Out) */
+.page-item .custom-next {
+    background: #ff5722;
+    color: #fff;
+    font-weight: bold;
+    border: 2px solid #ff5722;
+    margin-left: 10px; /* 🔹 Adds spacing between numbers and Next arrow */
+}
+
+.page-item .custom-next:hover {
+    background: #d84315;
+    border-color: #d84315;
+}
+
+/* 🔹 Prev Button Styling */
+.page-item .custom-prev {
+    margin-right: 10px; /* 🔹 Adds spacing between numbers and Prev arrow */
+}
+
+/* 🔹 Next Button Disabled */
+.page-item.disabled .custom-next {
+    background: #ccc;
+    border-color: #ccc;
+    color: #777;
 }

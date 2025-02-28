@@ -182,9 +182,9 @@
                             <div class="row g-4">
                                 @foreach($category->dishes as $dish)
                                     <div class="col-lg-6">
-                                        <div class="menu-item d-flex align-items-center position-relative dish-card">
+                                        <div class="menu-item d-flex align-items-center position-relative dish-card ">
                                             <a href="{{ route('dish.details', $dish->id) }}" class="dish-overlay">
-                                                <div class="overlay-effect d-none d-md-block"></div>
+                                                <div class="d-none d-md-block"></div>
                                                 <span class="view-button btn btn-primary btn-sm d-inline d-md-none">View</span>
                                             </a>
                                             <div class="ratio ratio-1x1 img-responsive">
