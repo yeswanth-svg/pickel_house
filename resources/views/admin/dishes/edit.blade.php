@@ -59,19 +59,44 @@
                                         <!-- Previous Image on Left -->
                                         <div class="col-md-6">
                                             <label for="" class="form-label text-success fw-bold fs-4">Previous
-                                                Image :</label>
+                                                Main Image :</label>
 
                                             <img src="{{ asset('dish_images/' . $dish->image) }}" alt="Dish Image"
-                                                class="img-thumbnail" width="200">
+                                                class="img-thumbnail" width="100">
                                         </div>
 
                                         <!-- New Image Upload on Right -->
                                         <div class="col-md-6">
                                             <label for="dishImage" class="form-label text-success fw-bold fs-4">Upload New
-                                                Image</label>
+                                                Main Image</label>
                                             <input type="file" name="image" id="dishImage" class="form-control"
-                                                accept=".png,.jpg,.gif,.webp,.jpeg">
-                                            <span class="text-danger">* You can only upload png, jpg, jpeg. Max 2MB</span>
+                                                accept=".webp">
+                                            <span class="text-danger">* You can only upload .webpof size 150 * 150.Max
+                                                2MB</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- Previous Image on Left -->
+                                        <div class="col-md-6">
+                                            <label for="" class="form-label text-success fw-bold fs-4">Previous
+                                                Extra Images :</label>
+
+                                            @foreach($dish->images as $i)
+                                                <img src="{{ asset('dish_images/' . $i->image_path) }}" alt="Dish Image"
+                                                    class="img-thumbnail" width="100">
+                                            @endforeach
+
+                                        </div>
+
+                                        <!-- New Image Upload on Right -->
+                                        <div class="col-md-6">
+                                            <label for="dishImage" class="form-label text-success fw-bold fs-4">Upload New
+                                                Extra Images</label>
+                                            <input type="file" name="extra_images[]" id="dishImage" class="form-control"
+                                                accept=".webp" multiple>
+                                            <span class="text-danger">* You can only upload .webpof size 150 * 150.Max
+                                                2MB</span>
                                         </div>
                                     </div>
 

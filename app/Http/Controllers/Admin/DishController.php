@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Dish;
+use App\Models\DishImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -16,7 +17,7 @@ class DishController extends Controller
     public function index()
     {
         //
-        $dishes = Dish::all();
+        $dishes = Dish::orderBy('category_id')->get();
         return view('admin.dishes.index', compact('dishes'));
     }
 
@@ -33,43 +34,58 @@ class DishController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+
     public function store(Request $request)
     {
-        //
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
-            'image' => ['required', 'mimes:jpg,jpeg,png'], // Corrected this line
+            'main_image' => ['required', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Main Image (Required)
+            'extra_images.*' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Multiple Images
             'spice_level' => ['required'],
         ]);
 
-
+        // 🔹 Create Dish
         $dish = new Dish();
         $dish->name = $request->name;
         $dish->description = $request->description;
         $dish->category_id = $request->category_id;
         $dish->spice_level = $request->spice_level;
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $name = time() . '.' . $image->getClientOriginalExtension();
+        // 🔹 Handle Main Image Upload
+        if ($request->hasFile('main_image')) {
+            $mainImage = $request->file('main_image');
+            $imageName = time() . '_main.' . $mainImage->getClientOriginalExtension();
 
             $directory = public_path('dish_images');
-
             if (!file_exists($directory)) {
                 mkdir($directory, 0777, true);
-
             }
-            $image->move($directory, $name);
 
-            $dish->image = $name;
+            $mainImage->move($directory, $imageName);
+            $dish->image = $imageName; // Save main image filename
         }
 
-        $dish->save();
+        $dish->save(); // Save dish before adding multiple images
+
+        // 🔹 Handle Multiple Extra Images Upload
+        if ($request->hasFile('extra_images')) {
+            foreach ($request->file('extra_images') as $image) {
+                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('dish_images'), $imageName);
+
+                DishImage::create([
+                    'dish_id' => $dish->id,
+                    'image_path' => $imageName
+                ]);
+            }
+        }
 
         return redirect()->route('admin.dishes.index')->with('success', 'Dish created successfully.');
     }
+
 
     /**
      * Display the specified resource.
@@ -96,6 +112,7 @@ class DishController extends Controller
      * Update the specified resource in storage.
      */
 
+
     public function update(Request $request, Dish $dish)
     {
         // Validate request
@@ -103,31 +120,57 @@ class DishController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
-            'image' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Image is nullable
+            'main_image' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Main image
+            'extra_images.*' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Multiple images
             'spice_level' => ['required', 'string'],
             'availability_status' => ['required', 'string'],
             'dish_tags' => ['required', 'string'],
             'rating' => ['nullable', 'numeric', 'between:0,5'],
         ]);
 
-        // Handle image upload if a new image is provided
-        if ($request->hasFile('image')) {
-            // Delete old image
+        // 🔹 Handle Main Image Upload
+        if ($request->hasFile('main_image')) {
+            // Delete old main image if it exists
             if ($dish->image && File::exists(public_path('dish_images/' . $dish->image))) {
                 File::delete(public_path('dish_images/' . $dish->image));
             }
 
-            // Upload new image
-            $newImage = $request->file('image');
-            $imageName = time() . '.' . $newImage->getClientOriginalExtension();
-            $newImage->move(public_path('dish_images'), $imageName);
+            // Upload new main image
+            $mainImage = $request->file('main_image');
+            $imageName = time() . '_main.' . $mainImage->getClientOriginalExtension();
+            $mainImage->move(public_path('dish_images'), $imageName);
             $dish->image = $imageName; // Assign new image
         }
 
-        $dishtags = json_encode(explode(',', $request->dish_tags)); // Convert comma-separated values into an array and encode
+        // 🔹 Handle Deletion of Old Extra Images Before Uploading New Ones
+        if ($request->hasFile('extra_images')) {
+            // Get all old images and delete from storage
+            $oldImages = DishImage::where('dish_id', $dish->id)->get();
+            foreach ($oldImages as $oldImage) {
+                if (File::exists(public_path('dish_images/' . $oldImage->image_path))) {
+                    File::delete(public_path('dish_images/' . $oldImage->image_path));
+                }
+            }
 
+            // Delete old images from the database
+            DishImage::where('dish_id', $dish->id)->delete();
 
-        // 🔹 Explicitly Assign Fields
+            // Upload and save new extra images
+            foreach ($request->file('extra_images') as $image) {
+                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('dish_images'), $imageName);
+
+                DishImage::create([
+                    'dish_id' => $dish->id,
+                    'image_path' => $imageName
+                ]);
+            }
+        }
+
+        // 🔹 Convert tags into JSON format
+        $dishtags = json_encode(explode(',', $request->dish_tags));
+
+        // 🔹 Update Dish Details
         $dish->name = $request->name;
         $dish->description = $request->description;
         $dish->category_id = $request->category_id;
@@ -135,8 +178,7 @@ class DishController extends Controller
         $dish->availability_status = $request->availability_status;
         $dish->dish_tags = $dishtags;
         $dish->rating = $request->rating;
-
-        $dish->save(); // Save the model
+        $dish->save();
 
         return redirect()->route('admin.dishes.index')->with('success', 'Dish updated successfully!');
     }
@@ -154,7 +196,13 @@ class DishController extends Controller
             File::delete(public_path('dish_images/' . $dish->image));
         }
 
+        $dish_images = DishImage::findOrFail($id);
+        if ($dish_images->image && File::exists(public_path('dish_images/' . $dish_images->image_path))) {
+            File::delete(public_path('dish_images/' . $dish_images->image_path));
+        }
+
         $dish->delete();
+        $dish_images->delete();
 
         return redirect()->route('admin.dishes.index')->with('success', 'Dish deleted successfully.');
     }

@@ -30,4 +30,9 @@ class Dish extends Model
     {
         return $this->hasMany(DishQuantity::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(DishImage::class);
+    }
 }

@@ -2,54 +2,95 @@
 @section('title', 'singlepage')
 @section('content')
 
+    <style>
+        .thumb-img {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .thumb-img:hover {
+            transform: scale(1.1);
+            /* Slightly enlarge the thumbnail */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            /* Add a shadow */
+            border: 2px solid #ff9800;
+            /* Highlight border color */
+            border-radius: 8px;
+        }
+
+        .selected-thumb {
+            border: 3px solid black !important;
+            border-radius: 8px;
+
+        }
+
+        @media only screen and (max-width: 749px) {
+            .small--text-center {
+                text-align: center !important;
+            }
+        }
+    </style>
     <div class="container mt-5">
         <div class="row">
             <!-- Left side: Product images -->
-            <div class="col-lg-6 col-md-6 col-sm">
-                <div class=" product-gallery d-flex">
-                    <!-- Thumbnail images -->
-                    <div class="thumbnail-list d-flex flex-column me-3">
-                        <img src="{{ asset('img/menu-01.jpg') }}" class="img-thumbnail thumb-img mb-2 active-thumb"
-                            width="80">
-                        <img src="{{ asset('img/hero1.png') }}" class="img-thumbnail thumb-img mb-2" width="80">
+
+            <div class="col-lg-7 col-md-6 col-sm-12">
+                <div class="product-gallery d-lg-flex flex-lg-row d-flex flex-column align-items-center">
+
+                    <!-- Main Image (Top in Mobile, Right in Web View) -->
+                    <div class="main-image text-center flex-grow-1 order-1 order-lg-2">
+                        <img id="mainProductImage"
+                            src="{{ asset('dish_images/' . $dish->images->first()->image_path ?? 'default.jpg') }}"
+                            alt="Product Image" class="img-fluid rounded shadow-lg" width="450"
+                            style="max-width: 100%; height: auto;">
                     </div>
 
-                    <!-- Main Image -->
-                    <div class="main-image text-center flex-grow-1">
-                        <img id="mainProductImage" src="{{ asset('img/menu-01.jpg') }}" alt="Product Image"
-                            class="img-fluid">
+                    <!-- Thumbnails (Below in Mobile, Left in Web View) -->
+                    <div
+                        class="thumbnail-list d-flex flex-lg-column flex-row justify-content-center gap-3 order-2 order-lg-1">
+                        @foreach($dish->images as $index => $image)
+                            <img src="{{ asset('dish_images/' . $image->image_path) }}"
+                                class="img-thumbnail thumb-img {{ $loop->first ? 'selected-thumb' : '' }}" width="100"
+                                style="cursor: pointer;">
+                        @endforeach
                     </div>
+
                 </div>
             </div>
 
+
+
+
+
+
+
+
             <!-- Right side: Product details -->
-            <div class="col-lg-6 col-md-6 col-sm">
-                <h1>{{ $dish->name }}</h1>
+            <div class="col-lg-5 col-md-6 col-sm">
+                <h1 class="small--text-center">{{ $dish->name }}</h1>
                 <div class="d-flex align-items-center">
-                    <p class="text-dark fw-bold  m-3">
+                    <p class="text-dark fw-bold">
                         @for ($i = 1; $i <= 5; $i++)
                             <i class="fas fa-star {{ $i <= $dish->rating ? 'text-warning' : 'text-secondary' }}"></i>
                         @endfor
                         <span class="ms-2">{{ number_format($dish->rating, 1) }}</span>
                     </p>
                     <br>
-                    <div class="text-start">
-                        <span class="fs-6 fw-bold text-success discount-price-display"
-                            style="font-size: 1.4rem !important;">
-                            {{ convertPrice($dish->quantities->first()->discount_price ?? 0) }}
-                        </span>
-                        <p class="text-primary text-decoration-line-through original-price-display mb-0"
-                            style="font-size: 1.3rem !important;">
-                            {{ convertPrice($dish->quantities->first()->original_price) }}
-                        </p>
-                    </div>
+
+                </div>
+                <div class="text-start prices">
+                    <span class="fs-6 fw-bold text-success discount-price-display" style="font-size: 1.6rem !important;">
+                        {{ convertPrice($dish->quantities->first()->discount_price ?? 0) }}
+                    </span>
+                    <p class="text-primary text-decoration-line-through original-price-display mb-0"
+                        style="font-size: 1.5rem !important;">
+                        {{ convertPrice($dish->quantities->first()->original_price) }}
+                    </p>
                 </div>
 
 
                 <div class="mb-3">
                     <div class="d-flex align-items-center gap-2 select-tags">
-                        <select class="quantity-selector form-select form-select-sm select-tag1"
-                            data-dish-id="{{ $dish->id }}" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
+                        <select class="quantity-selector form-select select-tag1" data-dish-id="{{ $dish->id }}" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
                             @foreach($dish->quantities as $q)
                                 <option value="{{ $q->id }}" data-discount-price="{{ convertPrice($q->discount_price) }}"
                                     data-original-price="{{ convertPrice($q->original_price) }}"
@@ -59,7 +100,7 @@
                             @endforeach
                         </select>
 
-                        <select class="form-select form-select-sm select-tag2" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
+                        <select class="form-select select-tag2" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
                             <option value="">Spice Level</option>
                             <option value="mild">Mild 🌶️</option>
                             <option value="medium">Medium 🌶️🌶️</option>
@@ -73,7 +114,7 @@
                     @auth
 
                         @if($dish->quantities->isNotEmpty() && $dish->availability_status !== 'out_of_stock')
-                            <div class="d-flex align-items-center gap-2" id="cart-process">
+                            <div class="d-flex align-items-center justify-content-center gap-2" id="cart-process">
                                 <form id="add-to-wishlist-form-{{ $dish->id }}" class="add-to-wishlist-form">
                                     @csrf
                                     <input type="hidden" name="dish_id" value="{{ $dish->id }}">
@@ -82,7 +123,7 @@
                                     <input type="hidden" name="total_amount" class="price-input1"
                                         value="{{ $dish->quantities->first()->original_price }}">
                                     <input type="hidden" name="spice_level" class="spice_level1">
-                                    <button type="button" class="btn btn-lg btn-outline-warning btn-sm add-to-wishlist"
+                                    <button type="button" class="btn btn-lg btn-outline-warning  add-to-wishlist"
                                         data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip" data-bs-placement="top"
                                         title="Add to Wishlist">
                                         <i class="fas fa-heart"></i>
@@ -100,7 +141,7 @@
                                             min="1" value="1" style="width: 50px; font-size: 20px;">
                                         <button type="button" class="btn btn-outline-secondary btn-sm increase-qty">+</button>
                                     </div>
-                                    <button type="button" class="btn btn-primary btn-sm add-to-cart m-2"
+                                    <button type="button" class="btn btn-primary btn-lg add-to-cart m-2"
                                         data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip" data-bs-placement="top"
                                         title="Add to Cart">
                                         <i class="fas fa-shopping-cart"></i>
@@ -136,11 +177,11 @@
             <h4>You may also like</h4>
             <div class="row">
                 <div class="col-md-3 text-center">
-                    <img src="{{ asset('images/related1.jpg') }}" class="img-fluid">
+                    <img src="" class="img-fluid">
                     <p>Boondi Laddu - Rs. 175</p>
                 </div>
                 <div class="col-md-3 text-center">
-                    <img src="{{ asset('images/related2.jpg') }}" class="img-fluid">
+                    <img src="" class="img-fluid">
                     <p>Malarapu Undalu - Rs. 180</p>
                 </div>
             </div>
@@ -170,48 +211,66 @@
             const mainImage = document.getElementById("mainProductImage");
             const thumbnails = document.querySelectorAll(".thumb-img");
 
+            if (thumbnails.length > 0) {
+                // Set the first thumbnail as selected when the page loads
+                thumbnails[0].classList.add("selected-thumb");
+
+                // Ensure the main image matches the first thumbnail
+                mainImage.src = thumbnails[0].src;
+            }
+
             thumbnails.forEach(thumbnail => {
                 thumbnail.addEventListener("click", function () {
+                    // Change main image
                     mainImage.src = this.src;
+
+                    // Remove active class from all thumbnails
+                    thumbnails.forEach(img => img.classList.remove("selected-thumb"));
+
+                    // Add active class to the clicked thumbnail
+                    this.classList.add("selected-thumb");
                 });
             });
         });
+
+
+
     </script>
 
     <!-- <script>
-                                        document.addEventListener("DOMContentLoaded", function () {
-                                            const categoryTabs = document.querySelectorAll(".category-tab");
-                                            const spiceSelects = document.querySelectorAll(".select-tag2");
+                                                                                                                                                        document.addEventListener("DOMContentLoaded", function () {
+                                                                                                                                                            const categoryTabs = document.querySelectorAll(".category-tab");
+                                                                                                                                                            const spiceSelects = document.querySelectorAll(".select-tag2");
 
-                                            function checkCategoryVisibility() {
-                                                let activeCategory = document.querySelector(".category-tab.active");
+                                                                                                                                                            function checkCategoryVisibility() {
+                                                                                                                                                                let activeCategory = document.querySelector(".category-tab.active");
 
-                                                if (activeCategory && activeCategory.textContent.trim().toLowerCase() === "sweets") {
-                                                    // Hide all spice-level select elements
-                                                    spiceSelects.forEach(select => {
-                                                        select.style.display = "none";
-                                                    });
-                                                } else {
-                                                    // Show all spice-level select elements
-                                                    spiceSelects.forEach(select => {
-                                                        select.style.display = "block";
-                                                    });
-                                                }
-                                            }
+                                                                                                                                                                if (activeCategory && activeCategory.textContent.trim().toLowerCase() === "sweets") {
+                                                                                                                                                                    // Hide all spice-level select elements
+                                                                                                                                                                    spiceSelects.forEach(select => {
+                                                                                                                                                                        select.style.display = "none";
+                                                                                                                                                                    });
+                                                                                                                                                                } else {
+                                                                                                                                                                    // Show all spice-level select elements
+                                                                                                                                                                    spiceSelects.forEach(select => {
+                                                                                                                                                                        select.style.display = "block";
+                                                                                                                                                                    });
+                                                                                                                                                                }
+                                                                                                                                                            }
 
-                                            // Run on page load (for default active category)
-                                            checkCategoryVisibility();
+                                                                                                                                                            // Run on page load (for default active category)
+                                                                                                                                                            checkCategoryVisibility();
 
-                                            // Add event listeners to update when a category is clicked
-                                            categoryTabs.forEach(tab => {
-                                                tab.addEventListener("click", function () {
-                                                    // Delay to allow Bootstrap tab change
-                                                    setTimeout(checkCategoryVisibility, 100);
-                                                });
-                                            });
-                                        });
+                                                                                                                                                            // Add event listeners to update when a category is clicked
+                                                                                                                                                            categoryTabs.forEach(tab => {
+                                                                                                                                                                tab.addEventListener("click", function () {
+                                                                                                                                                                    // Delay to allow Bootstrap tab change
+                                                                                                                                                                    setTimeout(checkCategoryVisibility, 100);
+                                                                                                                                                                });
+                                                                                                                                                            });
+                                                                                                                                                        });
 
-                                    </script> -->
+                                                                                                                                                    </script> -->
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -231,9 +290,12 @@
                     let original_price = selectedOption.getAttribute('data-original-price');
                     let discount_price = selectedOption.getAttribute('data-discount-price');
                     let normal_price = selectedOption.getAttribute('data-normal-price');
-                    let menuItem = this.closest('.menu-item');
+
+                    // Find the closest parent container
+                    let menuItem = this.closest('.row') || this.closest('.col-md-6'); // Adjust based on your structure
                     if (!menuItem) return;
 
+                    // Update price displays
                     let original_price_display = menuItem.querySelector('.original-price-display');
                     if (original_price_display) {
                         original_price_display.textContent = original_price;
@@ -244,6 +306,7 @@
                         discount_price_display.textContent = discount_price;
                     }
 
+                    // Update form values
                     let wishlistForm = menuItem.querySelector('.add-to-wishlist-form');
                     let cartForm = menuItem.querySelector('.add-to-cart-form');
 
@@ -266,7 +329,7 @@
             document.querySelectorAll('.select-tag2').forEach(spiceSelector => {
                 spiceSelector.addEventListener('change', function () {
                     let selectedSpiceLevel = this.value;
-                    let menuItem = this.closest('.menu-item');
+                    let menuItem = this.closest('.row') || this.closest('.col-md-6'); // Adjust based on your structure
                     if (!menuItem) return;
 
                     let wishlistForm = menuItem.querySelector('.add-to-wishlist-form');
@@ -284,6 +347,7 @@
                 });
             });
         });
+
     </script>
 
     <script>

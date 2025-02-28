@@ -15,7 +15,7 @@ class DishQuantities extends Controller
     public function index()
     {
         //
-        $quantites = DishQuantity::all();
+        $quantites = DishQuantity::orderBy('dish_id')->get();
         return view('admin.quantity.index', compact('quantites'));
     }
 
