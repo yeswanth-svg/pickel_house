@@ -23,6 +23,26 @@
 
         }
 
+        .badge {
+            font-size: 0.95rem;
+            /* Slightly larger text */
+            border-radius: 10px;
+        }
+
+        .list-group-horizontal-md {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 0;
+        }
+
+        .list-group-item {
+            font-size: 0.9rem;
+            border: 1px solid #ffc107;
+            display: inline-block;
+        }
+
+
         @media only screen and (max-width: 749px) {
             .small--text-center {
                 text-align: center !important;
@@ -33,7 +53,7 @@
         <div class="row">
             <!-- Left side: Product images -->
 
-            <div class="col-lg-7 col-md-6 col-sm-12">
+            <div class="col-lg-7 col-md-6 col-sm-12 mb-3">
                 <div class="product-gallery d-lg-flex flex-lg-row d-flex flex-column align-items-center">
 
                     <!-- Main Image (Top in Mobile, Right in Web View) -->
@@ -46,7 +66,7 @@
 
                     <!-- Thumbnails (Below in Mobile, Left in Web View) -->
                     <div
-                        class="thumbnail-list d-flex flex-lg-column flex-row justify-content-center gap-3 order-2 order-lg-1">
+                        class="thumbnail-list d-flex flex-lg-column flex-row justify-content-center gap-3 order-2 order-lg-1 mt-3">
                         @foreach($dish->images as $index => $image)
                             <img src="{{ asset('dish_images/' . $image->image_path) }}"
                                 class="img-thumbnail thumb-img {{ $loop->first ? 'selected-thumb' : '' }}" width="100"
@@ -59,15 +79,10 @@
 
 
 
-
-
-
-
-
             <!-- Right side: Product details -->
             <div class="col-lg-5 col-md-6 col-sm">
                 <h1 class="small--text-center">{{ $dish->name }}</h1>
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center rating justify-content-lg-start justify-content-center">
                     <p class="text-dark fw-bold">
                         @for ($i = 1; $i <= 5; $i++)
                             <i class="fas fa-star {{ $i <= $dish->rating ? 'text-warning' : 'text-secondary' }}"></i>
@@ -77,7 +92,7 @@
                     <br>
 
                 </div>
-                <div class="text-start prices">
+                <div class="text-start prices text-lg-start text-center">
                     <span class="fs-6 fw-bold text-success discount-price-display" style="font-size: 1.6rem !important;">
                         {{ convertPrice($dish->quantities->first()->discount_price ?? 0) }}
                     </span>
@@ -86,6 +101,17 @@
                         {{ convertPrice($dish->quantities->first()->original_price) }}
                     </p>
                 </div>
+
+                <div class="mb-3">
+                    @if(!empty(json_decode($dish->dish_tags, true)))
+                        <div class="mt-2 d-flex flex-wrap gap-2 justify-content-lg-start justify-content-center">
+                            @foreach(json_decode($dish->dish_tags, true) as $tag)
+                                <span class="badge bg-warning text-dark px-3 py-2 fw-bold">{{ $tag }}</span>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+
 
 
                 <div class="mb-3">
@@ -161,13 +187,16 @@
                 <h4>Product Information</h4>
                 <p>{{ $dish->description }}</p>
 
-                <h5>Ingredients</h5>
-                <ul>
-                    <li>Besan flour</li>
-                    <li>Sugar</li>
-                    <li>Ghee</li>
-                    <li>Cardamom powder</li>
-                </ul>
+                <h4 class="mt-3">Ingredients</h4>
+                @if(!empty(json_decode($dish->ingredients, true)))
+                    <ul class="list-group list-group-horizontal-md flex-wrap">
+                        @foreach(json_decode($dish->ingredients, true) as $ingredient)
+                            <li class="list-group-item bg-light text-dark border rounded-pill px-3 py-1 m-1 fw-bold">
+                                {{ $ingredient }}
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
             </div>
         </div>
 
@@ -238,39 +267,39 @@
     </script>
 
     <!-- <script>
-                                                                                                                                                        document.addEventListener("DOMContentLoaded", function () {
-                                                                                                                                                            const categoryTabs = document.querySelectorAll(".category-tab");
-                                                                                                                                                            const spiceSelects = document.querySelectorAll(".select-tag2");
+                                                                                                                                                                                                                            document.addEventListener("DOMContentLoaded", function () {
+                                                                                                                                                                                                                                const categoryTabs = document.querySelectorAll(".category-tab");
+                                                                                                                                                                                                                                const spiceSelects = document.querySelectorAll(".select-tag2");
 
-                                                                                                                                                            function checkCategoryVisibility() {
-                                                                                                                                                                let activeCategory = document.querySelector(".category-tab.active");
+                                                                                                                                                                                                                                function checkCategoryVisibility() {
+                                                                                                                                                                                                                                    let activeCategory = document.querySelector(".category-tab.active");
 
-                                                                                                                                                                if (activeCategory && activeCategory.textContent.trim().toLowerCase() === "sweets") {
-                                                                                                                                                                    // Hide all spice-level select elements
-                                                                                                                                                                    spiceSelects.forEach(select => {
-                                                                                                                                                                        select.style.display = "none";
-                                                                                                                                                                    });
-                                                                                                                                                                } else {
-                                                                                                                                                                    // Show all spice-level select elements
-                                                                                                                                                                    spiceSelects.forEach(select => {
-                                                                                                                                                                        select.style.display = "block";
-                                                                                                                                                                    });
-                                                                                                                                                                }
-                                                                                                                                                            }
+                                                                                                                                                                                                                                    if (activeCategory && activeCategory.textContent.trim().toLowerCase() === "sweets") {
+                                                                                                                                                                                                                                        // Hide all spice-level select elements
+                                                                                                                                                                                                                                        spiceSelects.forEach(select => {
+                                                                                                                                                                                                                                            select.style.display = "none";
+                                                                                                                                                                                                                                        });
+                                                                                                                                                                                                                                    } else {
+                                                                                                                                                                                                                                        // Show all spice-level select elements
+                                                                                                                                                                                                                                        spiceSelects.forEach(select => {
+                                                                                                                                                                                                                                            select.style.display = "block";
+                                                                                                                                                                                                                                        });
+                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                }
 
-                                                                                                                                                            // Run on page load (for default active category)
-                                                                                                                                                            checkCategoryVisibility();
+                                                                                                                                                                                                                                // Run on page load (for default active category)
+                                                                                                                                                                                                                                checkCategoryVisibility();
 
-                                                                                                                                                            // Add event listeners to update when a category is clicked
-                                                                                                                                                            categoryTabs.forEach(tab => {
-                                                                                                                                                                tab.addEventListener("click", function () {
-                                                                                                                                                                    // Delay to allow Bootstrap tab change
-                                                                                                                                                                    setTimeout(checkCategoryVisibility, 100);
-                                                                                                                                                                });
-                                                                                                                                                            });
-                                                                                                                                                        });
+                                                                                                                                                                                                                                // Add event listeners to update when a category is clicked
+                                                                                                                                                                                                                                categoryTabs.forEach(tab => {
+                                                                                                                                                                                                                                    tab.addEventListener("click", function () {
+                                                                                                                                                                                                                                        // Delay to allow Bootstrap tab change
+                                                                                                                                                                                                                                        setTimeout(checkCategoryVisibility, 100);
+                                                                                                                                                                                                                                    });
+                                                                                                                                                                                                                                });
+                                                                                                                                                                                                                            });
 
-                                                                                                                                                    </script> -->
+                                                                                                                                                                                                                        </script> -->
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

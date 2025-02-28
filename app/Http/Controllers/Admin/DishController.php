@@ -124,6 +124,7 @@ class DishController extends Controller
             'extra_images.*' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Multiple images
             'spice_level' => ['required', 'string'],
             'availability_status' => ['required', 'string'],
+            'ingredients' => ['required', 'string'],
             'dish_tags' => ['required', 'string'],
             'rating' => ['nullable', 'numeric', 'between:0,5'],
         ]);
@@ -170,6 +171,8 @@ class DishController extends Controller
         // 🔹 Convert tags into JSON format
         $dishtags = json_encode(explode(',', $request->dish_tags));
 
+        $ingredients = json_encode(explode(',', $request->ingredients));
+
         // 🔹 Update Dish Details
         $dish->name = $request->name;
         $dish->description = $request->description;
@@ -177,6 +180,7 @@ class DishController extends Controller
         $dish->spice_level = $request->spice_level;
         $dish->availability_status = $request->availability_status;
         $dish->dish_tags = $dishtags;
+        $dish->ingredients = $ingredients;
         $dish->rating = $request->rating;
         $dish->save();
 

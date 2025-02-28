@@ -148,6 +148,13 @@
                                             value="{{ !empty($dish->dish_tags) ? implode(', ', json_decode($dish->dish_tags, true)) : '' }}">
                                     </div>
 
+                                    <div class="col-md-6 mb-3">
+                                        <label for="ingredients"
+                                            class="form-label text-success fw-bold fs-4">Ingredients</label>
+                                        <input type="text" class="form-control" id="ingredients" name="ingredients"
+                                            placeholder="Eg:Oil, Chicken (comma-separated)"
+                                            value="{{ !empty($dish->ingredients) ? implode(', ', json_decode($dish->ingredients, true)) : '' }}">
+                                    </div>
 
 
                                     <div class="col-md-6 mb-3">
@@ -155,6 +162,7 @@
                                         <input type="number" name="rating" id="rating" class="form-control" placeholder=""
                                             value="{{$dish->rating}}" step="0.1">
                                     </div>
+
                                     <!-- Submit Button -->
                                     <div class="mt-4">
                                         <button type="submit" class="btn btn-primary">Update</button>
