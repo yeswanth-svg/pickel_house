@@ -46,7 +46,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-us', [HomeController::class, 'about_us'])->name('about-us');
 Route::get('/menu', [HomeController::class, 'menu'])->name('menu');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
-Route::get('/product', [HomeController::class, 'singleProduct'])->name('product.details');
+Route::get('/dish/{id}', [HomeController::class, 'singleDish'])->name('dish.details');
 
 
 

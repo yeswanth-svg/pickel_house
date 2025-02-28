@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Dish;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -36,8 +37,10 @@ class HomeController extends Controller
         return view('user.dashboard');
     }
 
-    public function singleProduct()
+    public function singleDish($id)
     {
-        return view('singlepageitem');
+
+        $dish = Dish::findOrFail($id);
+        return view('singlepageitem', compact('dish'));
     }
 }

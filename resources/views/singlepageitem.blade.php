@@ -5,7 +5,7 @@
     <div class="container mt-5">
         <div class="row">
             <!-- Left side: Product images -->
-            <div class="col-md-6">
+            <div class="col-lg-6 col-md-6 col-sm">
                 <div class=" product-gallery d-flex">
                     <!-- Thumbnail images -->
                     <div class="thumbnail-list d-flex flex-column me-3">
@@ -23,34 +23,102 @@
             </div>
 
             <!-- Right side: Product details -->
-            <div class="col-md-6">
-                <h2>Bandar Laddu / Tokkudu Laddu</h2>
-                <p class="text-warning"><strong>⭐⭐⭐⭐⭐ 3 reviews</strong></p>
-                <h4>Rs. 160.00</h4>
-                <p><small>Shipping calculated at checkout.</small></p>
+            <div class="col-lg-6 col-md-6 col-sm">
+                <h2>{{ $dish->name }}</h2>
+                <div class="d-flex align-items-center">
+                    <p class="text-dark fw-bold  m-3">
+                        @for ($i = 1; $i <= 5; $i++)
+                            <i class="fas fa-star {{ $i <= $dish->rating ? 'text-warning' : 'text-secondary' }}"></i>
+                        @endfor
+                        <span class="ms-2">{{ number_format($dish->rating, 1) }}</span>
+                    </p>
+                    <br>
+                    <div class="text-start">
+                        <span class="fs-6 fw-bold text-success discount-price-display"
+                            style="font-size: 1.4rem !important;">
+                            {{ convertPrice($dish->quantities->first()->discount_price ?? 0) }}
+                        </span>
+                        <p class="text-primary text-decoration-line-through original-price-display mb-0"
+                            style="font-size: 1.3rem !important;">
+                            {{ convertPrice($dish->quantities->first()->original_price) }}
+                        </p>
+                    </div>
+                </div>
+
 
                 <div class="mb-3">
-                    <label for="weight" class="form-label"><strong>Weight</strong></label>
-                    <select class="form-select" id="weight">
-                        <option>250 gms</option>
-                        <option>500 gms</option>
-                        <option>1 kg</option>
-                    </select>
+                    <div class="d-flex align-items-center gap-2 select-tags">
+                        <select class="quantity-selector form-select form-select-sm select-tag1"
+                            data-dish-id="{{ $dish->id }}" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
+                            @foreach($dish->quantities as $q)
+                                <option value="{{ $q->id }}" data-discount-price="{{ convertPrice($q->discount_price) }}"
+                                    data-original-price="{{ convertPrice($q->original_price) }}"
+                                    data-normal-price="{{ $q->discount_price }}">
+                                    {{ $q->weight }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <select class="form-select form-select-sm select-tag2" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
+                            <option value="">Spice Level</option>
+                            <option value="mild">Mild 🌶️</option>
+                            <option value="medium">Medium 🌶️🌶️</option>
+                            <option value="spicy">Spicy 🌶️🌶️🌶️</option>
+                            <option value="extra_spicy">Extra Spicy 🔥</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="mb-3">
-                    <label for="quantity" class="form-label"><strong>Quantity</strong></label>
-                    <input type="number" class="form-control" id="quantity" value="1" min="1">
-                </div>
+                    @auth
 
-                <button class="btn btn-dark btn-lg w-100 mb-2">Add to Cart</button>
-                <button class="btn btn-outline-dark btn-lg w-100">Buy Now</button>
+                        @if($dish->quantities->isNotEmpty() && $dish->availability_status !== 'out_of_stock')
+                            <div class="d-flex align-items-center gap-2" id="cart-process">
+                                <form id="add-to-wishlist-form-{{ $dish->id }}" class="add-to-wishlist-form">
+                                    @csrf
+                                    <input type="hidden" name="dish_id" value="{{ $dish->id }}">
+                                    <input type="hidden" name="quantity_id" class="quantity-input1"
+                                        value="{{ $dish->quantities->first()->id }}">
+                                    <input type="hidden" name="total_amount" class="price-input1"
+                                        value="{{ $dish->quantities->first()->original_price }}">
+                                    <input type="hidden" name="spice_level" class="spice_level1">
+                                    <button type="button" class="btn btn-outline-warning btn-sm add-to-wishlist"
+                                        data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Add to Wishlist">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                </form>
+                                <form id="add-to-cart-form-{{$dish->id}}" class="add-to-cart-form d-flex align-items-center">
+                                    @csrf
+                                    <input type="hidden" name="dish_id" value="{{ $dish->id }}">
+                                    <input type="hidden" name="quantity_id" class="quantity-input2"
+                                        value="{{ $dish->quantities->first()->id }}">
+                                    <input type="hidden" name="spice_level" class="spice_level2">
+                                    <div class="input-group input-group-sm" style="width: 100px;">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm decrease-qty">−</button>
+                                        <input type="number" name="cart_quantity" class="form-control text-center cart-quantity"
+                                            min="1" value="1" style="width: 29px; font-size: 14px;">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm increase-qty">+</button>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm add-to-cart m-2"
+                                        data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        title="Add to Cart">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        @else
+
+                            <p class="text-danger">No available quantities</p>
+                        @endif
+
+                    @endauth
+                </div>
 
                 <hr>
 
                 <h4>Product Information</h4>
-                <p>Bandar Laddu is the native and most popular sweet belonging to Machilipatnam town based in Andhra
-                    Pradesh. It is made of besan flour, jaggery or sugar, ghee, and cardamom powder.</p>
+                <p>{{ $dish->description }}</p>
 
                 <h5>Ingredients</h5>
                 <ul>
@@ -59,38 +127,6 @@
                     <li>Ghee</li>
                     <li>Cardamom powder</li>
                 </ul>
-
-                <h5>Nutritional Facts</h5>
-                <table class="table">
-                    <tr>
-                        <td>Carbohydrates</td>
-                        <td>22 g</td>
-                    </tr>
-                    <tr>
-                        <td>Protein</td>
-                        <td>3 g</td>
-                    </tr>
-                    <tr>
-                        <td>Fat</td>
-                        <td>8 mg</td>
-                    </tr>
-                    <tr>
-                        <td>Fiber</td>
-                        <td>1 mg</td>
-                    </tr>
-                    <tr>
-                        <td>Calcium</td>
-                        <td>10 mg</td>
-                    </tr>
-                    <tr>
-                        <td>Iron</td>
-                        <td>0.8 mg</td>
-                    </tr>
-                    <tr>
-                        <td>Potassium</td>
-                        <td>114 mg</td>
-                    </tr>
-                </table>
             </div>
         </div>
 

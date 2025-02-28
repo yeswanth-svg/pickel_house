@@ -404,8 +404,10 @@
                                 <div class="col-lg-6">
                                     <div class="menu-item d-flex align-items-center position-relative">
                                         <div class="ratio ratio-1x1 img-responsive">
-                                            <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
-                                                class="img-fluid rounded {{ $dish->availability_status === 'out_of_stock' ? 'opacity-50' : '' }}" />
+                                            <a href="{{ route('dish.details', $dish->id) }}">
+                                                <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
+                                                    class="img-fluid rounded {{ $dish->availability_status === 'out_of_stock' ? 'opacity-50' : '' }}" />
+                                            </a>
                                             @if($dish->availability_status === 'out_of_stock')
                                                 <div
                                                     class="position-absolute top-50 start-50 translate-middle bg-danger text-white p-2 rounded">
@@ -851,39 +853,39 @@
 
 
     <!-- <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        const categoryTabs = document.querySelectorAll(".category-tab");
-                        const spiceSelects = document.querySelectorAll(".select-tag2");
+                            document.addEventListener("DOMContentLoaded", function () {
+                                const categoryTabs = document.querySelectorAll(".category-tab");
+                                const spiceSelects = document.querySelectorAll(".select-tag2");
 
-                        function checkCategoryVisibility() {
-                            let activeCategory = document.querySelector(".category-tab.active");
+                                function checkCategoryVisibility() {
+                                    let activeCategory = document.querySelector(".category-tab.active");
 
-                            if (activeCategory && activeCategory.textContent.trim().toLowerCase() === "sweets") {
-                                // Hide all spice-level select elements
-                                spiceSelects.forEach(select => {
-                                    select.style.display = "none";
+                                    if (activeCategory && activeCategory.textContent.trim().toLowerCase() === "sweets") {
+                                        // Hide all spice-level select elements
+                                        spiceSelects.forEach(select => {
+                                            select.style.display = "none";
+                                        });
+                                    } else {
+                                        // Show all spice-level select elements
+                                        spiceSelects.forEach(select => {
+                                            select.style.display = "block";
+                                        });
+                                    }
+                                }
+
+                                // Run on page load (for default active category)
+                                checkCategoryVisibility();
+
+                                // Add event listeners to update when a category is clicked
+                                categoryTabs.forEach(tab => {
+                                    tab.addEventListener("click", function () {
+                                        // Delay to allow Bootstrap tab change
+                                        setTimeout(checkCategoryVisibility, 100);
+                                    });
                                 });
-                            } else {
-                                // Show all spice-level select elements
-                                spiceSelects.forEach(select => {
-                                    select.style.display = "block";
-                                });
-                            }
-                        }
-
-                        // Run on page load (for default active category)
-                        checkCategoryVisibility();
-
-                        // Add event listeners to update when a category is clicked
-                        categoryTabs.forEach(tab => {
-                            tab.addEventListener("click", function () {
-                                // Delay to allow Bootstrap tab change
-                                setTimeout(checkCategoryVisibility, 100);
                             });
-                        });
-                    });
 
-                </script> -->
+                        </script> -->
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
