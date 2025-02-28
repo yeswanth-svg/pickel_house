@@ -191,23 +191,37 @@ class DishController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
     public function destroy(string $id)
     {
-        //
+        // Find the Dish
         $dish = Dish::find($id);
 
+        if (!$dish) {
+            return redirect()->route('admin.dishes.index')->with('error', 'Dish not found.');
+        }
+
+        // Delete main dish image
         if ($dish->image && File::exists(public_path('dish_images/' . $dish->image))) {
             File::delete(public_path('dish_images/' . $dish->image));
         }
 
-        $dish_images = DishImage::findOrFail($id);
-        if ($dish_images->image && File::exists(public_path('dish_images/' . $dish_images->image_path))) {
-            File::delete(public_path('dish_images/' . $dish_images->image_path));
+        // Fetch all associated images and delete them
+        $dish_images = DishImage::where('dish_id', $id)->get();
+
+        foreach ($dish_images as $dish_image) {
+            if (File::exists(public_path('dish_images/' . $dish_image->image_path))) {
+                File::delete(public_path('dish_images/' . $dish_image->image_path));
+            }
         }
 
+        // Delete related images from database
+        DishImage::where('dish_id', $id)->delete();
+
+        // Delete the dish
         $dish->delete();
-        $dish_images->delete();
 
         return redirect()->route('admin.dishes.index')->with('success', 'Dish deleted successfully.');
     }
+
 }

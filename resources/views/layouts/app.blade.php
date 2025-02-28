@@ -53,26 +53,17 @@
             },
         });
     </script>
-    <style>
-        .cart-container {
-            position: relative;
-            display: inline-block;
-        }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll("img").forEach(img => {
+                if (!img.hasAttribute("loading")) {
+                    img.setAttribute("loading", "lazy");
+                }
+            });
+        });
+    </script>
 
-        /* Hide Bootstrap dropdown arrow */
-        #messageDropdown::after {
-            display: none !important;
-        }
-
-        /* Ensure message dropdown is hidden by default */
-        .messages-notif-box {
-            display: none;
-        }
-
-        .messages-notif-box.show {
-            display: block;
-        }
-    </style>
+    <link rel="preload" as="image" href="img/hero1.png" type="image/webp">
 
 
 
@@ -110,13 +101,13 @@
                 @endauth
                 <!-- Messages Icon (Mobile View) -->
                 @auth
-                    <div class="d-lg-none" style="position: absolute; right: 69px; top: 62px;">
+                    <div class="d-lg-none" style="position: absolute; right: 70px; top: 62px;">
                         <a href="#" id="mobileMessageToggle">
                             <i class="fas fa-envelope text-primary" style="font-size: 1.7rem;"></i>
                             <span class="uk-badge cart-badge" id="messageCountMobile">0</span>
                         </a>
                         <ul class="dropdown-menu messages-notif-box animated fadeIn shadow-sm p-3"
-                            id="mobileMessageDropdown" style="width: 250px; border-radius: 10px; display: none;">
+                            id="mobileMessageDropdown" style="border-radius: 10px; display: none;">
                             <li class="d-flex justify-content-between align-items-center border-bottom pb-2">
                                 <span class="fw-bold text-dark">Messages</span>
                                 <a href="#" id="markAllMessagesReadMobile" class="small text-primary">Mark all as read</a>
@@ -130,12 +121,15 @@
                                 </div>
                             </li>
                             <li class="text-center border-top pt-2">
-                                <a class="text-primary fw-bold" href="{{ route('user.messages') }}">See all messages <i
-                                        class="fa fa-angle-right"></i></a>
+                                <a class="text-primary fw-bold" href="{{ route('user.messages') }}">
+                                    See all messages <i class="fa fa-angle-right"></i>
+                                </a>
                             </li>
                         </ul>
                     </div>
                 @endauth
+
+
 
                 <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarCollapse">
@@ -251,11 +245,11 @@
                         $selectedFlag = $flags[$sessionCurrency] ?? asset('img/flags/inr.png');
                     @endphp
 
-                    <!-- Currency Selection Dropdown -->
+
                     <div class="dropdown me-4">
                         <button class="btn btn-light dropdown-toggle" type="button" id="currencyDropdown"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <img id="selected-flag" src="{{ $selectedFlag }}" width="25" class="me-1">
+                            <img id="selected-flag" src="{{ $selectedFlag }}" width="25" class="me-1" alt="flags">
                             <span id="selected-currency-text"> {{ $sessionCurrency }} </span>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="currencyDropdown">
@@ -269,10 +263,12 @@
                                     data-flag="{{ asset('img/flags/cad.png') }}">🇨🇦 CAD</a></li>
                         </ul>
                     </div>
+                    <!-- end Currency Selection Dropdown -->
 
 
                     <button class="btn-search btn btn-primary btn-md-square me-4 rounded-circle d-none d-lg-inline-flex"
-                        data-bs-toggle="modal" data-bs-target="#searchModal">
+                        data-bs-toggle="modal" data-bs-target="#searchModal" aria-label="Open Search">
+                        <span class="visually-hidden">Search</span>
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -415,7 +411,8 @@
                             <div class="input-group">
                                 <input type="email" class="form-control border-primary rounded-start" name="email"
                                     placeholder="Enter your email" required>
-                                <button class="btn btn-primary rounded-end" type="submit">
+                                <button class="btn btn-primary rounded-end" type="submit" aria-label="Send Newsletter">
+                                    <span class="visually-hidden">Send Newsletter</span>
                                     <i class="fas fa-paper-plane"></i>
                                 </button>
                             </div>
@@ -477,6 +474,36 @@
 
 
 
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let mobileMessageToggle = document.getElementById("mobileMessageToggle");
+            let mobileMessageDropdown = document.getElementById("mobileMessageDropdown");
+
+            if (mobileMessageToggle && mobileMessageDropdown) {
+                mobileMessageToggle.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    // Toggle the dropdown visibility
+                    if (mobileMessageDropdown.style.display === "none" || mobileMessageDropdown.style.display === "") {
+                        mobileMessageDropdown.style.display = "block";
+                    } else {
+                        mobileMessageDropdown.style.display = "none";
+                    }
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener("click", function (event) {
+                    if (!mobileMessageToggle.contains(event.target) && !mobileMessageDropdown.contains(event.target)) {
+                        mobileMessageDropdown.style.display = "none";
+                    }
+                });
+            }
+        });
+    </script>
+
+
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             let selectedCurrencyText = document.getElementById("selected-currency-text");
@@ -488,14 +515,15 @@
                 return;
             }
 
-            // Get stored values (default to INR)
-            let storedCurrency = localStorage.getItem("selectedCurrency") || "INR";
-            let storedFlag = localStorage.getItem("selectedFlag") || "{{ asset('img/flags/inr.png') }}";
+            // Get stored session currency (from backend-rendered HTML)
+            let storedCurrency = "{{ $sessionCurrency }}";
+            let storedFlag = "{{ $selectedFlag }}";
 
-            // Update UI
+            // Update UI with stored values
             selectedCurrencyText.textContent = storedCurrency;
             selectedFlag.src = storedFlag;
 
+            // Add event listeners for currency selection
             currencyOptions.forEach(option => {
                 option.addEventListener("click", function (e) {
                     e.preventDefault();
@@ -516,7 +544,7 @@
                     localStorage.setItem("selectedCurrency", selectedCurrency);
                     localStorage.setItem("selectedFlag", selectedFlagUrl);
 
-                    // Make AJAX request to update session only (DO NOT update user country)
+                    // Make AJAX request to update session
                     fetch("{{ route('set.currency') }}", {
                         method: "POST",
                         headers: {
@@ -524,7 +552,8 @@
                             "Content-Type": "application/json"
                         },
                         body: JSON.stringify({ currency: selectedCurrency })
-                    }).then(response => response.json())
+                    })
+                        .then(response => response.json())
                         .then(data => {
                             if (data.success) {
                                 console.log("Currency updated in session:", selectedCurrency);
@@ -873,14 +902,14 @@
                             }
 
                             let messageItem = `
-                                            <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
-                                                <div class="notif-content">
-                                                    <span class="fw-bold">${notification.data.username}</span>
-                                                    <span class="d-block small text-muted">${notification.data.message}</span>
-                                                    <span class="small text-muted">${new Date(notification.created_at).toLocaleTimeString()}</span>
-                                                </div>
-                                            </a>
-                                        `;
+                                                                                                        <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
+                                                                                                            <div class="notif-content">
+                                                                                                                <span class="fw-bold">${notification.data.username}</span>
+                                                                                                                <span class="d-block small text-muted">${notification.data.message}</span>
+                                                                                                                <span class="small text-muted">${new Date(notification.created_at).toLocaleTimeString()}</span>
+                                                                                                            </div>
+                                                                                                        </a>
+                                                                                                    `;
 
                             messageList.innerHTML += messageItem;
                             messageListMobile.innerHTML += messageItem;

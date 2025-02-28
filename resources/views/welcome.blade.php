@@ -3,208 +3,7 @@
 @section('content')
 
     <style>
-        /* Menu Item */
-        .menu-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            /* Spacing between image and content */
-            padding: 15px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
 
-        /* Image Styling (Fixed Size) */
-        .menu-item .img-responsive {
-            width: 150px;
-            object-fit: cover;
-            position: relative;
-            /* Prevents image shrinking */
-        }
-
-        /* Responsive Adjustments */
-        /* Desktop View - Categories Side by Side */
-        .category-tabs {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            white-space: nowrap;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            padding-bottom: 10px;
-            justify-content: center;
-        }
-
-        .category-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .nav-item {
-            flex: 0 0 auto;
-            scroll-snap-align: start;
-            margin-right: 10px;
-        }
-
-        .dish-card {
-            position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .dish-card:hover {
-            transform: scale(1.02);
-        }
-
-        /* Make sure the button appears properly */
-        .dish-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        /* Darken the background on hover */
-        /* Darken background on hover */
-        .overlay-effect {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            /* Dark overlay */
-            border-radius: 10px;
-        }
-
-        /* Show View Button */
-        .view-button {
-            z-index: 2;
-            position: relative;
-        }
-
-        /* View Button should appear on hover (desktop) & touch (mobile) */
-        .dish-card:hover .dish-overlay {
-            opacity: 1;
-        }
-
-        .dish-card {
-            position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .dish-card:hover {
-            transform: scale(1.02);
-        }
-
-        /* Overlay Effect (Hidden on Mobile) */
-        .d-none.d-md-block {
-            display: none !important;
-            /* Hide overlay on mobile */
-        }
-
-        @media (min-width: 768px) {
-
-            /* Desktop styles */
-            .d-none.d-md-block {
-                display: block !important;
-                /* Show overlay on desktop */
-            }
-
-            .dish-overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                text-decoration: none;
-                opacity: 0;
-                transition: opacity 0.3s ease-in-out;
-            }
-
-            .overlay-effect {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                /* Dark overlay */
-                border-radius: 10px;
-            }
-
-            .dish-card:hover .dish-overlay {
-                opacity: 1;
-            }
-        }
-
-        /* View Button (Always Visible on Mobile) */
-        .view-button {
-            z-index: 2;
-            position: relative;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        /* Ensure View Button is always visible on mobile */
-        .d-inline.d-md-none {
-            display: inline-block !important;
-        }
-
-
-
-
-        /* Mobile View - Side Scroll */
-        @media (max-width: 768px) {
-            .category-tabs {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                -webkit-overflow-scrolling: touch;
-                padding-bottom: 10px;
-                scroll-padding-left: 15px;
-                /* Ensures first category is visible */
-                padding-left: 15px;
-                justify-content: normal;
-                /* Prevents cutoff */
-            }
-
-            .nav-item {
-                flex: 0 0 auto;
-                /* Prevent items from shrinking */
-                scroll-snap-align: start;
-            }
-
-            .nav-item:first-child {
-                margin-left: 5px;
-                /* Ensures the first item is visible */
-            }
-
-            /* Hide scrollbar but allow smooth scrolling */
-            .category-tabs::-webkit-scrollbar {
-                display: none;
-            }
-
-            .category-tabs {
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-            }
-        }
     </style>
 
 
@@ -212,7 +11,7 @@
     <div class="container-fluid bg-light py-6 my-6 mt-0">
         <div class="container">
             <div class="row g-5 align-items-center">
-                <div class="col-lg-7 col-md-12">
+                <div class="col-lg-7 col-md-12 order-1">
                     <h1 class="display-2 mb-4">
                         <span style="color: black">Authentic</span>
                         <span class="text-primary">Experience the Rich & Authentic</span>
@@ -226,7 +25,7 @@
                     </div>
 
                 </div>
-                <div class="col-lg-5 col-md-12">
+                <div class="col-lg-5 col-md-12 order-lg-2">
                     <img src="img/hero1.png" class="img-fluid rounded " alt="Delicious Pickles" />
                 </div>
             </div>
@@ -322,8 +121,8 @@
                 <div class="col-lg-5">
                     <div class="video">
                         <button type="button" class="btn btn-play" data-bs-toggle="modal" data-src="img/hero12.mp4"
-                            data-bs-target="#videoModal">
-                            <span></span>
+                            data-bs-target="#videoModal" aria-label="Open Video Modal">
+                            <span class="visually-hidden">Open Video Modal</span>
                         </button>
                     </div>
                 </div>
@@ -353,68 +152,68 @@
 
     <!-- Menu Start -->
     <div class="container-fluid menu py-6" id="welcome_menu">
-        <div class="text-center">
-            <small
-                class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">
-                Our Menu
-            </small>
-            <h1 class="display-5 mb-5">Most Loved Pickles & Traditional Sweets Around the World</h1>
-        </div>
+        <div class="container">
+            <div class="text-center">
+                <small
+                    class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">
+                    Our Menu
+                </small>
+                <h1 class="display-5 mb-5">Most Loved Pickles & Traditional Sweets Around the World</h1>
+            </div>
 
-        <div class="tab-class text-center">
-            <!-- Category Tabs -->
-            <ul class="nav nav-pills d-flex category-tabs mb-5">
-                @foreach($categories as $key => $category)
-                    <li class="nav-item">
-                        <a class="nav-link px-3 py-2 border border-primary bg-white rounded-pill category-tab {{ $key === 0 ? 'active' : '' }}"
-                            data-bs-toggle="pill" href="#tab-{{ $category->id }}">
-                            {{ $category->category_name }}
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
+            <div class="tab-class text-center">
+                <!-- Category Tabs -->
+                <div class="category-tabs-wrapper">
+                    <ul class="nav nav-pills d-flex category-tabs mb-5">
+                        @foreach($categories as $key => $category)
+                            <li class="nav-item">
+                                <a class="nav-link px-3 py-2 border border-primary bg-white rounded-pill category-tab {{ $key === 0 ? 'active' : '' }}"
+                                    data-bs-toggle="pill" href="#tab-{{ $category->id }}">
+                                    {{ $category->category_name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
 
-            <div class="tab-content">
-                @foreach($categories as $key => $category)
-                    <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
-                        <div class="row g-4">
-                            @foreach($category->dishes as $dish)
-                                <div class="col-lg-6">
-                                    <!-- Dish Card with Hover Effect -->
-                                    <!-- Dish Card with Mobile-Friendly View Button -->
-                                    <div class="menu-item d-flex align-items-center position-relative dish-card">
-                                        <a href="{{ route('dish.details', $dish->id) }}" class="dish-overlay">
-                                            <div class="overlay-effect d-none d-md-block"></div> <!-- Only visible on desktop -->
-                                            <span class="view-button btn btn-primary btn-sm d-inline d-md-none">View</span>
-                                            <!-- Always visible on mobile -->
-                                        </a>
-
-                                        <!-- Dish Image -->
-                                        <div class="ratio ratio-1x1 img-responsive">
-                                            <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
-                                                class="img-fluid rounded dish-img" />
-                                        </div>
-
-                                        <!-- Dish Details -->
-                                        <div class="w-100 d-flex flex-column text-start ps-4">
-                                            <h4>{{ $dish->name }}</h4>
-                                            <!-- Rating -->
-                                            <div class="d-flex align-items-center gap-2 mt-1">
-                                                <span class="badge bg-success text-white px-2 py-1">
-                                                    ⭐ {{ number_format($dish->rating, 1) }}
-                                                </span>
+                <div class="tab-content">
+                    @foreach($categories as $key => $category)
+                        <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
+                            <div class="row g-4">
+                                @foreach($category->dishes as $dish)
+                                    <div class="col-lg-6">
+                                        <div class="menu-item d-flex align-items-center position-relative dish-card">
+                                            <a href="{{ route('dish.details', $dish->id) }}" class="dish-overlay">
+                                                <div class="overlay-effect d-none d-md-block"></div>
+                                                <span class="view-button btn btn-primary btn-sm d-inline d-md-none">View</span>
+                                            </a>
+                                            <div class="ratio ratio-1x1 img-responsive">
+                                                <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
+                                                    class="img-fluid rounded dish-img" />
                                             </div>
-                                            <p class="text-muted">{{ Str::limit($dish->description, 50) }}</p>
-
-
+                                            <div class="w-100 d-flex flex-column text-start ps-4">
+                                                <h4>{{ $dish->name }}</h4>
+                                                <div class="d-flex align-items-center gap-2 mt-1">
+                                                    <span class="badge bg-success text-white px-2 py-1">
+                                                        ⭐ {{ number_format($dish->rating, 1) }}
+                                                    </span>
+                                                </div>
+                                                <p class="text-muted">{{ Str::limit($dish->description, 50) }}</p>
+                                            </div>
                                         </div>
                                     </div>
+                                @endforeach
+                            </div>
 
-                                </div>
-                            @endforeach
+                            <!-- "View All" Button -->
+                            <div class="text-center mt-4">
+                                <a href="{{ route('menu', ['category' => $category->id]) }}" class="btn btn-primary">
+                                    View All {{ $category->category_name }}
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>

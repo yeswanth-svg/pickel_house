@@ -726,8 +726,6 @@ h6,
     background: #13896e;
 }
 
-
-
 /* Hide number input arrows in Chrome, Safari, Edge, and Opera */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
@@ -908,4 +906,337 @@ input[type="number"] {
 
 span {
     color: black;
+}
+
+.cart-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Hide Bootstrap dropdown arrow */
+#messageDropdown::after {
+    display: none !important;
+}
+
+/* Ensure message dropdown is hidden by default */
+.messages-notif-box {
+    display: none;
+}
+
+.messages-notif-box.show {
+    display: block;
+}
+
+/* Ensure dropdown is fully visible within screen */
+#mobileMessageDropdown {
+    right: -13pc;
+    top: 4pc;
+    left: auto; /* Prevent it from overflowing on the left */
+    transform: translateX(-50%); /* Center it under the icon */
+    min-width: 250px; /* Ensure consistent width */
+    max-width: 90vw; /* Prevent it from overflowing on small screens */
+}
+
+/* Optional: Adjust dropdown arrow (if needed) */
+#mobileMessageDropdown::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-bottom-color: #fff;
+}
+
+/* welomeblade menu design  */
+/* Menu Item */
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* Spacing between image and content */
+    padding: 15px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Image Styling (Fixed Size) */
+.menu-item .img-responsive {
+    width: 150px;
+    object-fit: cover;
+    position: relative;
+    /* Prevents image shrinking */
+}
+
+/* Responsive Adjustments */
+/* Desktop View - Categories Side by Side */
+.category-tabs-wrapper {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 100;
+    padding-top: 10px;
+}
+
+.category-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
+    justify-content: center;
+}
+
+.category-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-item {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    margin-right: 10px;
+}
+
+.dish-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.dish-card:hover {
+    transform: scale(1.02);
+}
+
+/* Make sure the button appears properly */
+.dish-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Darken the background on hover */
+/* Darken background on hover */
+.overlay-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* Dark overlay */
+    border-radius: 10px;
+}
+
+/* Show View Button */
+.view-button {
+    z-index: 2;
+    position: relative;
+}
+
+/* View Button should appear on hover (desktop) & touch (mobile) */
+.dish-card:hover .dish-overlay {
+    opacity: 1;
+}
+
+.dish-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.dish-card:hover {
+    transform: scale(1.02);
+}
+
+/* Overlay Effect (Hidden on Mobile) */
+.d-none.d-md-block {
+    display: none !important;
+    /* Hide overlay on mobile */
+}
+
+/* pagiantion style */
+.pagination-container {
+    margin-top: 20px;
+}
+
+/* Pagination Flexbox */
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    border-radius: 8px;
+    gap: 10px; /* 🔹 Adds spacing between elements */
+}
+
+/* Page Number Buttons */
+.page-item .page-link {
+    color: #333;
+    font-weight: 600;
+    padding: 10px 16px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Add spacing between page numbers */
+.page-item {
+    margin: 0 6px; /* 🔹 Space around each page number */
+}
+
+/* Hover Effect */
+.page-item .page-link:hover {
+    background: #ff5722;
+    color: #fff;
+    border-color: #ff5722;
+}
+
+/* Active Page (Current Page) */
+.page-item.active .page-link {
+    background: #ff5722;
+    color: #fff;
+    border-color: #ff5722;
+}
+
+/* Disabled Button (Previous & Next) */
+.page-item.disabled .page-link {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f0f0f0;
+}
+
+/* Custom Prev & Next Arrows */
+.custom-prev,
+.custom-next {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 18px;
+    border-radius: 6px;
+}
+
+/* 🔹 Next Button Styling (Make it Stand Out) */
+.page-item .custom-next {
+    background: #ff5722;
+    color: #fff;
+    font-weight: bold;
+    border: 2px solid #ff5722;
+    margin-left: 10px; /* 🔹 Adds spacing between numbers and Next arrow */
+}
+
+.page-item .custom-next:hover {
+    background: #d84315;
+    border-color: #d84315;
+}
+
+/* 🔹 Prev Button Styling */
+.page-item .custom-prev {
+    margin-right: 10px; /* 🔹 Adds spacing between numbers and Prev arrow */
+}
+
+/* 🔹 Next Button Disabled */
+.page-item.disabled .custom-next {
+    background: #ccc;
+    border-color: #ccc;
+    color: #777;
+}
+
+@media (min-width: 768px) {
+    /* Desktop styles */
+    .d-none.d-md-block {
+        display: block !important;
+        /* Show overlay on desktop */
+    }
+
+    .dish-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .overlay-effect {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        /* Dark overlay */
+        border-radius: 10px;
+    }
+
+    .dish-card:hover .dish-overlay {
+        opacity: 1;
+    }
+}
+
+/* View Button (Always Visible on Mobile) */
+.view-button {
+    z-index: 2;
+    position: relative;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Ensure View Button is always visible on mobile */
+.d-inline.d-md-none {
+    display: inline-block !important;
+}
+
+/* Mobile View - Side Scroll */
+@media (max-width: 768px) {
+    .category-tabs {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 10px;
+        scroll-padding-left: 15px;
+        /* Ensures first category is visible */
+        padding-left: 15px;
+        justify-content: normal;
+        /* Prevents cutoff */
+    }
+
+    .nav-item {
+        flex: 0 0 auto;
+        /* Prevent items from shrinking */
+        scroll-snap-align: start;
+    }
+
+    .nav-item:first-child {
+        margin-left: 5px;
+        /* Ensures the first item is visible */
+    }
+
+    /* Hide scrollbar but allow smooth scrolling */
+    .category-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .category-tabs {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 }
