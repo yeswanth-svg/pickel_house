@@ -8,7 +8,6 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            /* Spacing between image and content */
             padding: 15px;
             background: #fff;
             border-radius: 10px;
@@ -19,9 +18,9 @@
         /* Image Styling (Fixed Size) */
         .menu-item .img-responsive {
             width: 150px;
+            height: 150px;
             object-fit: cover;
-            position: relative;
-            /* Prevents image shrinking */
+            border-radius: 10px;
         }
 
         /* Content Layout */
@@ -43,7 +42,7 @@
         .menu-item .d-flex.align-items-center {
             display: flex;
             flex-wrap: wrap;
-            gap: 2px;
+            gap: 10px;
         }
 
         /* Price & Cart Section */
@@ -66,7 +65,6 @@
             color: red;
             text-decoration: line-through;
             margin-top: -5px;
-            /* Reduce gap between price and discount */
         }
 
         .menu-item .select-tag1 {
@@ -79,11 +77,9 @@
 
         .menu-item .tags {
             font-size: 14px;
-            position: relative;
-            left: -5px;
-            bottom: 10px;
             display: flex;
             flex-wrap: wrap;
+            gap: 5px;
         }
 
         /* Responsive Adjustments */
@@ -110,6 +106,7 @@
         }
 
 
+
         /* Mobile View - Side Scroll */
         @media (max-width: 768px) {
             .category-tabs {
@@ -120,24 +117,19 @@
                 -webkit-overflow-scrolling: touch;
                 padding-bottom: 10px;
                 scroll-padding-left: 15px;
-                /* Ensures first category is visible */
                 padding-left: 15px;
                 justify-content: normal;
-                /* Prevents cutoff */
             }
 
             .nav-item {
                 flex: 0 0 auto;
-                /* Prevent items from shrinking */
                 scroll-snap-align: start;
             }
 
             .nav-item:first-child {
                 margin-left: 5px;
-                /* Ensures the first item is visible */
             }
 
-            /* Hide scrollbar but allow smooth scrolling */
             .category-tabs::-webkit-scrollbar {
                 display: none;
             }
@@ -146,26 +138,20 @@
                 -ms-overflow-style: none;
                 scrollbar-width: none;
             }
-        }
 
-
-
-        @media (max-width: 768px) {
             .menu-item {
-                flex-direction: row;
-                align-items: center;
+                flex-direction: column;
+                align-items: flex-start;
                 text-align: left;
                 gap: 10px;
             }
 
             .menu-item img {
-                width: 120px;
-                height: 120px;
+                width: 100%;
+                height: auto;
                 max-width: 150px;
                 object-fit: cover;
-                top: -4pc;
             }
-
 
             .menu-item .price-section {
                 text-align: left;
@@ -186,9 +172,8 @@
             }
 
             .menu-item .prices {
-                position: relative;
-                /* bottom: 20px; */
-                left: -113px;
+                position: static;
+                left: 0;
             }
 
             .menu-item #cart-process {
@@ -204,7 +189,6 @@
             }
 
             .menu-item h4 {
-                position: static;
                 font-size: 18px;
             }
 
@@ -218,9 +202,9 @@
 
             .menu-item .tags {
                 font-size: 10px !important;
-                position: absolute !important;
-                left: 8pc;
-                margin-bottom: 17px;
+                position: static !important;
+                left: 0;
+                margin-bottom: 10px;
                 justify-content: space-evenly;
             }
         }
@@ -372,7 +356,6 @@
 
     <!-- Menu Start -->
     <div class="container-fluid menu py-6" id="welcome_menu">
-
         <div class="text-center">
             <small
                 class="d-inline-block fw-bold text-dark text-uppercase bg-light border border-primary rounded-pill px-4 py-1 mb-3">
@@ -381,7 +364,6 @@
             <h1 class="display-5 mb-5">Most Loved Pickles & Traditional Sweets Around the World</h1>
         </div>
         <div class="tab-class text-center">
-
             <ul class="nav nav-pills d-flex category-tabs mb-5">
                 @foreach($categories as $key => $category)
                     <li class="nav-item">
@@ -392,9 +374,6 @@
                     </li>
                 @endforeach
             </ul>
-
-
-
 
             <div class="tab-content">
                 @foreach($categories as $key => $category)
@@ -412,21 +391,21 @@
                                                     Out of Stock
                                                 </div>
                                             @endif
-
-
-
                                         </div>
                                         <div class="w-100 d-flex flex-column text-start ps-4">
-                                            <h4 class="d-flex align-items-center">
-                                                {{ $dish->name }}
-                                            </h4>
+                                            <div class="d-flex align-items-center m-2">
+                                                <h4 class="d-flex align-items-center">
+                                                    {{ $dish->name }}
+                                                </h4>
 
-                                            <!-- Rating and Review Section -->
-                                            <div class="d-flex align-items-center gap-2 mt-1" style="position: static;">
-                                                <span class="badge bg-success text-white px-2 py-1">
-                                                    ⭐ {{ number_format($dish->rating, 1) }}
-                                                </span>
+                                                <!-- Rating and Review Section -->
+                                                <div class="d-flex align-items-center gap-2 mt-1">
+                                                    <span class="badge bg-success text-white px-2 py-1">
+                                                        ⭐ {{ number_format($dish->rating, 1) }}
+                                                    </span>
+                                                </div>
                                             </div>
+
 
                                             <div
                                                 class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2 mt-2">
@@ -444,21 +423,11 @@
                                                             @endforeach
                                                         </select>
 
-                                                        <select class="form-select form-select-sm select-tag2" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
-                                                            <option value="">Spice Level</option>
-                                                            <option value="mild">Mild 🌶️</option>
-                                                            <option value="medium">Medium 🌶️🌶️</option>
-                                                            <option value="spicy">Spicy 🌶️🌶️🌶️</option>
-                                                            <option value="extra_spicy">Extra Spicy 🔥</option>
-                                                        </select>
+
                                                     </div>
                                                 @endif
 
-
-
-
                                                 @auth
-
                                                     @if($dish->quantities->isNotEmpty() && $dish->availability_status !== 'out_of_stock')
                                                         <div class="d-flex align-items-center gap-2" id="cart-process">
                                                             <form id="add-to-wishlist-form-{{ $dish->id }}" class="add-to-wishlist-form">
@@ -499,10 +468,8 @@
                                                             </form>
                                                         </div>
                                                     @else
-
                                                         <p class="text-danger">No available quantities</p>
                                                     @endif
-
                                                 @endauth
 
                                                 <div class="text-start prices">
@@ -523,7 +490,6 @@
                                                         @endforeach
                                                     </div>
                                                 @endif
-
                                             </div>
                                         </div>
                                     </div>
@@ -533,9 +499,7 @@
                     </div>
                 @endforeach
             </div>
-
         </div>
-
     </div>
     <!-- Menu End -->
 
@@ -850,40 +814,40 @@
     <script src="{{asset('admin/js/core/jquery-3.7.1.min.js')}}"></script>
 
 
-    <!-- <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        const categoryTabs = document.querySelectorAll(".category-tab");
-                        const spiceSelects = document.querySelectorAll(".select-tag2");
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const categoryTabs = document.querySelectorAll(".category-tab");
+            const spiceSelects = document.querySelectorAll(".select-tag2");
 
-                        function checkCategoryVisibility() {
-                            let activeCategory = document.querySelector(".category-tab.active");
+            function checkCategoryVisibility() {
+                let activeCategory = document.querySelector(".category-tab.active");
 
-                            if (activeCategory && activeCategory.textContent.trim().toLowerCase() === "sweets") {
-                                // Hide all spice-level select elements
-                                spiceSelects.forEach(select => {
-                                    select.style.display = "none";
-                                });
-                            } else {
-                                // Show all spice-level select elements
-                                spiceSelects.forEach(select => {
-                                    select.style.display = "block";
-                                });
-                            }
-                        }
-
-                        // Run on page load (for default active category)
-                        checkCategoryVisibility();
-
-                        // Add event listeners to update when a category is clicked
-                        categoryTabs.forEach(tab => {
-                            tab.addEventListener("click", function () {
-                                // Delay to allow Bootstrap tab change
-                                setTimeout(checkCategoryVisibility, 100);
-                            });
-                        });
+                if (activeCategory && activeCategory.textContent.trim().toLowerCase() === "sweets") {
+                    // Hide all spice-level select elements
+                    spiceSelects.forEach(select => {
+                        select.style.display = "none";
                     });
+                } else {
+                    // Show all spice-level select elements
+                    spiceSelects.forEach(select => {
+                        select.style.display = "block";
+                    });
+                }
+            }
 
-                </script> -->
+            // Run on page load (for default active category)
+            checkCategoryVisibility();
+
+            // Add event listeners to update when a category is clicked
+            categoryTabs.forEach(tab => {
+                tab.addEventListener("click", function () {
+                    // Delay to allow Bootstrap tab change
+                    setTimeout(checkCategoryVisibility, 100);
+                });
+            });
+        });
+
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

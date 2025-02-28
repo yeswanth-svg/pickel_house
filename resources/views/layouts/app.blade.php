@@ -15,27 +15,27 @@
         rel="stylesheet" />
 
     <!-- Icon Font Stylesheet -->
-    <link preload rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link preload href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
 
     <!-- Libraries Stylesheet -->
-    <link preload href="{{asset('lib/animate/animate.min.css')}}" rel="stylesheet" />
-    <link preload href="{{asset('lib/lightbox/css/lightbox.min.css')}}" rel="stylesheet" />
-    <link preload href="{{asset("lib/owlcarousel/owl.carousel.min.css")}}" rel="stylesheet" />
+    <link href="{{asset('lib/animate/animate.min.css')}}" rel="stylesheet" />
+    <link href="{{asset('lib/lightbox/css/lightbox.min.css')}}" rel="stylesheet" />
+    <link href="{{asset("lib/owlcarousel/owl.carousel.min.css")}}" rel="stylesheet" />
 
 
     <!-- <link rel="stylesheet" href="{{asset('admin/css/plugins.min.css')}}" />
     <link rel="stylesheet" href="{{asset('admin/css/kaiadmin.min.css')}}" /> -->
     <!-- Customized Bootstrap Stylesheet -->
-    <link preload href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" />
+    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" />
 
     <!-- Template Stylesheet -->
     <link href="{{asset("css/style.css")}}" rel="stylesheet" />
     <!-- Slick CSS -->
-    <link preload rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css" />
-    <link preload rel="stylesheet" href="{{asset('admin/css/demo.css')}}" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css" />
+    <link rel="stylesheet" href="{{asset('admin/css/demo.css')}}" />
 
-    <script preload src="{{asset('admin/js/plugin/webfont/webfont.min.js')}}"></script>
+    <script src="{{asset('admin/js/plugin/webfont/webfont.min.js')}}"></script>
     <script>
         WebFont.load({
             google: { families: ["Public Sans:300,400,500,600,700"] },
@@ -377,7 +377,7 @@
                 <div class="footer-item">
                     <h4 class="mb-4">Contact Us</h4>
                     <p><i class="fa fa-map-marker-alt text-primary me-2"></i> 123 Street, Visakhapatnam, AP</p>
-                    <p><i class="fa fa-phone-alt text-primary me-2"></i> (+091) 885544 3322</p>
+                    <p><i class="fas fa-phone text-primary me-2"></i> (+091) 885544 3322</p>
                     <p><i class="fas fa-envelope text-primary me-2"></i> info@example.com</p>
                     <p><i class="fa fa-clock text-primary me-2"></i> 24/7 Hours Service</p>
                 </div>
@@ -426,8 +426,6 @@
                       
         </div>
     </div>
-
-    <!-- Social Gallery -->
 
     <!-- Footer Bottom -->
 
@@ -850,7 +848,7 @@
     </script>
 
 
-    <audio id="notificationSound" src="{{ asset('sounds/notification.mp3') }}" preload="auto"></audio>
+    <audio id="notificationSound" src="{{ asset('sounds/notification.mp3') }}"="auto"></audio>
 
     @auth
         <script>
@@ -875,14 +873,14 @@
                             }
 
                             let messageItem = `
-                                    <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
-                                        <div class="notif-content">
-                                            <span class="fw-bold">${notification.data.username}</span>
-                                            <span class="d-block small text-muted">${notification.data.message}</span>
-                                            <span class="small text-muted">${new Date(notification.created_at).toLocaleTimeString()}</span>
-                                        </div>
-                                    </a>
-                                `;
+                                            <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
+                                                <div class="notif-content">
+                                                    <span class="fw-bold">${notification.data.username}</span>
+                                                    <span class="d-block small text-muted">${notification.data.message}</span>
+                                                    <span class="small text-muted">${new Date(notification.created_at).toLocaleTimeString()}</span>
+                                                </div>
+                                            </a>
+                                        `;
 
                             messageList.innerHTML += messageItem;
                             messageListMobile.innerHTML += messageItem;

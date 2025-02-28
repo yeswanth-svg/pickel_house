@@ -124,19 +124,20 @@
                 <p>"Tasty and fresh!"</p>
             </div>
         </div>
+    </div>
 
-        <!-- JavaScript to swap images -->
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const mainImage = document.getElementById("mainProductImage");
-                const thumbnails = document.querySelectorAll(".thumb-img");
+    <!-- JavaScript to swap images -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const mainImage = document.getElementById("mainProductImage");
+            const thumbnails = document.querySelectorAll(".thumb-img");
 
-                thumbnails.forEach(thumbnail => {
-                    thumbnail.addEventListener("click", function () {
-                        mainImage.src = this.src;
-                    });
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener("click", function () {
+                    mainImage.src = this.src;
                 });
             });
-        </script>
+        });
+    </script>
 
 @endsection
