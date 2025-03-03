@@ -178,42 +178,72 @@
 
                 <div class="tab-content">
                     @foreach($categories as $key => $category)
-                        <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
-                            <div class="row g-4">
-                                @foreach($category->dishes as $dish)
-                                    <div class="col-lg-6">
-                                        <div class="menu-item d-flex align-items-center position-relative dish-card ">
-                                            <a href="{{ route('dish.details', $dish->id) }}" class="dish-overlay">
-                                                <div class="d-none d-md-block"></div>
-                                                <span class="view-button btn btn-primary btn-sm d-inline d-md-none">View</span>
-                                            </a>
-                                            <div class="ratio ratio-1x1 img-responsive">
-                                                <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
-                                                    class="img-fluid rounded dish-img" />
-                                            </div>
-                                            <div class="w-100 d-flex flex-column text-start ps-4">
-                                                <h4>{{ $dish->name }}</h4>
-                                                <div class="d-flex align-items-center gap-2 mt-1">
-                                                    <span class="badge bg-success text-white px-2 py-1">
-                                                        ⭐ {{ number_format($dish->rating, 1) }}
-                                                    </span>
-                                                </div>
-                                                <p class="text-muted">{{ Str::limit($dish->description, 50) }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
+                            <div id="tab-{{ $category->id }}" class="tab-pane fade show p-0 @if($key === 0) active @endif">
+                                <div class="row g-4">
+                                    @foreach($category->dishes as $dish)
+                                                    <div class="col-lg-6">
+                                                        <div
+                                                            class="menu-item d-flex align-items-center position-relative dish-card p-3 border rounded shadow-sm">
+                                                            <a href="{{ route('dish.details', $dish->id) }}" class="dish-overlay">
+                                                                <div class="d-none d-md-block"></div>
+                                                                <span class="view-button btn btn-primary btn-sm d-inline d-md-none">View</span>
+                                                            </a>
 
-                            <!-- "View All" Button -->
-                            <div class="text-center mt-4">
-                                <a href="{{ route('menu', ['category' => $category->id]) }}" class="btn btn-primary">
-                                    View All {{ $category->category_name }}
-                                </a>
+                                                            <!-- Dish Image -->
+                                                            <div class="ratio ratio-1x1 img-responsive rounded">
+                                                                <img src="{{ asset('dish_images/' . $dish->image) }}" alt="{{ $dish->name }}"
+                                                                    class="img-fluid rounded dish-img" />
+                                                            </div>
+
+                                                            <!-- Dish Details -->
+                                                            <div class="w-100 d-flex flex-column text-start">
+                                                                <h4 class="mb-2">{{ $dish->name }}</h4>
+
+                                                                <!-- Rating & Price on Same Line -->
+                                                                <div class="d-flex align-items-center justify-content-between">
+                                                                    <span class="badge bg-success text-white px-2 py-1">
+                                                                        ⭐ {{ number_format($dish->rating, 1) }}
+                                                                    </span>
+
+                                                                    @if($dish->quantities->isNotEmpty())
+                                                                                                    @php
+                                                                                                        $firstQuantity = $dish->quantities->first();
+                                                                                                        $discountPrice = $firstQuantity->discount_price ?? $firstQuantity->original_price;
+                                                                                                    @endphp
+                                                                                                    <div class="text-start prices text-lg-start text-center">
+                                                                                                        <span class="fs-6 fw-bold text-success discount-price-display"
+                                                                                                            style="font-size: 1.6rem !important;">
+                                                                                                            {{ convertPrice($firstQuantity->original_price ?? 0) }}
+                                                                                                        </span>
+                                                                                                        <p class="text-primary text-decoration-line-through original-price-display mb-0"
+                                                                                                            style="font-size: 1.5rem !important;">
+                                                                                                            {{ convertPrice($discountPrice) }}
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                    @else
+                                                                        <p class="text-muted">Price not available</p>
+                                                                    @endif
+                                                                </div>
+
+                                                                <!-- Dish Description -->
+                                                                <p class="text-muted mt-2">{{ Str::limit($dish->description, 50) }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                    @endforeach
+                                </div>
+
+                                <!-- "View All" Button -->
+                                <div class="text-center mt-4">
+                                    <a href="{{ route('menu', ['category' => $category->id]) }}"
+                                        class="btn btn-primary rounded-pill px-4 py-2">
+                                        View All {{ $category->category_name }}
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                     @endforeach
                 </div>
+
             </div>
         </div>
     </div>
