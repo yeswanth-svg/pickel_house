@@ -59,7 +59,7 @@ class HomeController extends Controller
     public function singleDish($id)
     {
 
-        $dish = Dish::findOrFail($id);
+        $dish = Dish::with('reviews.user')->findOrFail($id);
         return view('singlepageitem', compact('dish'));
     }
 }

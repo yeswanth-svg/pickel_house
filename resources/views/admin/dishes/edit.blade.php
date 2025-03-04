@@ -157,10 +157,10 @@
                                     </div>
 
 
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-6 mb-3 visually-hidden">
                                         <label for="rating" class="form-label text-success fw-bold fs-4">Rating</label>
-                                        <input type="number" name="rating" id="rating" class="form-control" placeholder=""
-                                            value="{{$dish->rating}}" step="0.1">
+                                        <input type="hidden" name="rating" id="rating" class="form-control" placeholder=""
+                                            value="0" step="0.1">
                                     </div>
 
                                     <!-- Submit Button -->

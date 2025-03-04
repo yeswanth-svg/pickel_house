@@ -70,7 +70,7 @@
                         @foreach($dish->images as $index => $image)
                             <img src="{{ asset('dish_images/' . $image->image_path) }}"
                                 class="img-thumbnail thumb-img {{ $loop->first ? 'selected-thumb' : '' }}" width="100"
-                                style="cursor: pointer;">
+                                style="cursor: pointer;" alt="dish thumbnail">
                         @endforeach
                     </div>
 
@@ -83,12 +83,19 @@
             <div class="col-lg-5 col-md-6 col-sm">
                 <h1 class="small--text-center">{{ $dish->name }}</h1>
                 <div class="d-flex align-items-center rating justify-content-lg-start justify-content-center">
+                    @php
+                        $averageRating = $dish->reviews->count() > 0 ? round($dish->reviews->avg('rating')) : 5;
+                    @endphp
+
                     <p class="text-dark fw-bold">
                         @for ($i = 1; $i <= 5; $i++)
-                            <i class="fas fa-star {{ $i <= $dish->rating ? 'text-warning' : 'text-secondary' }}"></i>
+                            <i class="fas fa-star {{ $i <= $averageRating ? 'text-warning' : 'text-secondary' }}"></i>
                         @endfor
-                        <span class="ms-2">{{ number_format($dish->rating, 1) }}</span>
+                        <span class="ms-2">
+                            {{ number_format($averageRating, 1) }}&nbsp;({{ $dish->reviews->count() }})
+                        </span>
                     </p>
+
                     <br>
 
                 </div>
@@ -116,6 +123,7 @@
 
                 <div class="mb-3">
                     <div class="d-flex align-items-center gap-2 select-tags">
+                        <label for="weight" class="visually-hidden">Weight</label>
                         <select class="quantity-selector form-select select-tag1" data-dish-id="{{ $dish->id }}" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
                             @foreach($dish->quantities as $q)
                                 <option value="{{ $q->id }}" data-discount-price="{{ convertPrice($q->discount_price) }}"
@@ -126,6 +134,7 @@
                             @endforeach
                         </select>
 
+                        <label for="Spicy Level" class="visually-hidden">Spicy Level</label>
                         <select class="form-select select-tag2" {{ $dish->availability_status === 'out_of_stock' ? 'disabled' : '' }}>
                             <option value="">Spice Level</option>
                             <option value="mild">Mild 🌶️</option>
@@ -151,7 +160,8 @@
                                     <input type="hidden" name="spice_level" class="spice_level1">
                                     <button type="button" class="btn btn-lg btn-outline-warning  add-to-wishlist"
                                         data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Add to Wishlist">
+                                        title="Add to Wishlist" aria-label="Add To Wishlist "> <span class="visually-hidden">Add To
+                                            Wishlist</span>
                                         <i class="fas fa-heart"></i>
                                     </button>
                                 </form>
@@ -161,7 +171,9 @@
                                     <input type="hidden" name="quantity_id" class="quantity-input2"
                                         value="{{ $dish->quantities->first()->id }}">
                                     <input type="hidden" name="spice_level" class="spice_level2">
-                                    <div class="input-group input-group-sm" style="width: 100px;">
+                                    <label for="cart-quantity-{{$dish->id}}" class="visually-hidden">Quantity</label>
+
+                                    <div class="input-group input-group-sm">
                                         <button type="button" class="btn btn-outline-secondary btn-sm decrease-qty">−</button>
                                         <input type="number" name="cart_quantity" class="form-control text-center cart-quantity"
                                             min="1" value="1" style="width: 50px; font-size: 20px;">
@@ -169,7 +181,8 @@
                                     </div>
                                     <button type="button" class="btn btn-primary btn-lg add-to-cart m-2"
                                         data-dish-id="{{ $dish->id }}" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="Add to Cart">
+                                        title="Add to Cart" aria-label="Add To Cart ">
+                                        <span class="visually-hidden">Add To Cart</span>
                                         <i class="fas fa-shopping-cart"></i>
                                     </button>
                                 </form>
@@ -184,7 +197,7 @@
 
                 <hr>
 
-                <h4>Product Information</h4>
+                <h1>Product Information</h1>
                 <p>{{ $dish->description }}</p>
 
                 <h4 class="mt-3">Ingredients</h4>
@@ -202,34 +215,86 @@
 
 
         <!-- You may also like section -->
-        <div class="mt-5">
-            <h4>You may also like</h4>
-            <div class="row">
-                <div class="col-md-3 text-center">
-                    <img src="" class="img-fluid">
-                    <p>Boondi Laddu - Rs. 175</p>
-                </div>
-                <div class="col-md-3 text-center">
-                    <img src="" class="img-fluid">
-                    <p>Malarapu Undalu - Rs. 180</p>
-                </div>
-            </div>
-        </div>
+        <!-- <div class="mt-5">
+                                                                        <h4>You may also like</h4>
+                                                                        <div class="row">
+                                                                            <div class="col-md-3 text-center">
+                                                                                <img src="" class="img-fluid">
+                                                                                <p>Boondi Laddu - Rs. 175</p>
+                                                                            </div>
+                                                                            <div class="col-md-3 text-center">
+                                                                                <img src="" class="img-fluid">
+                                                                                <p>Malarapu Undalu - Rs. 180</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> -->
 
         <!-- Reviews Section -->
         <div class="mt-5">
-            <h4>Reviews (3)</h4>
-            <p class="text-warning"><strong>⭐⭐⭐⭐⭐ 5.0 (3 Reviews)</strong></p>
-
-            <div class="review">
-                <p><strong>Ramya S.</strong> ⭐⭐⭐⭐⭐</p>
-                <p>"Best laddu ever! Tastes amazing."</p>
+            <!-- Heading and Write Review Button in One Line -->
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Reviews ({{ $dish->reviews->count() }})</h4>
+                <button class="btn btn-primary" id="write-review-btn">Write a Review</button>
             </div>
-            <div class="review">
-                <p><strong>Saibaba A.</strong> ⭐⭐⭐⭐⭐</p>
-                <p>"Tasty and fresh!"</p>
+
+            <!-- Dynamic Average Rating -->
+            <p class="text-warning mt-2">
+                <strong>
+                    {!! str_repeat('⭐', round($dish->reviews->avg('rating'))) !!}
+                    {{ number_format($dish->reviews->avg('rating'), 1) }}
+
+                </strong>
+            </p>
+
+            <!-- Display Reviews Dynamically -->
+            @foreach($dish->reviews as $review)
+                <div class="review">
+                    <p>
+                        <strong>{{ $review->user->name }}</strong>
+                        {!! str_repeat('⭐', $review->rating) !!}
+                    </p>
+                    <p>"{{ $review->content }}"</p>
+                </div>
+            @endforeach
+
+            <!-- Review Form (Hidden by Default) -->
+            <div id="review-form" style="display: none; width: 50%;">
+                <form action="{{ route('reviews.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="dish_id" value="{{ $dish->id }}">
+
+                    <div class="mb-3">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" name="title" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="rating">Rating</label>
+                        <select class="form-select" name="rating" required>
+                            @for($i = 5; $i >= 1; $i--)
+                                <option value="{{ $i }}">{!! str_repeat('⭐', $i) !!}</option>
+                            @endfor
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="content">Your Review</label>
+                        <textarea class="form-control" name="content" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </form>
             </div>
         </div>
+
+
+
+        <script>
+            document.getElementById('write-review-btn').addEventListener('click', function () {
+                document.getElementById('review-form').style.display = 'block';
+            });
+        </script>
+
     </div>
 
 
@@ -267,39 +332,39 @@
     </script>
 
     <!-- <script>
-                                                                                                                                                                                                                            document.addEventListener("DOMContentLoaded", function () {
-                                                                                                                                                                                                                                const categoryTabs = document.querySelectorAll(".category-tab");
-                                                                                                                                                                                                                                const spiceSelects = document.querySelectorAll(".select-tag2");
+                                                                                                                                                                                                                                                                                                                                                    document.addEventListener("DOMContentLoaded", function () {
+                                                                                                                                                                                                                                                                                                                                                        const categoryTabs = document.querySelectorAll(".category-tab");
+                                                                                                                                                                                                                                                                                                                                                        const spiceSelects = document.querySelectorAll(".select-tag2");
 
-                                                                                                                                                                                                                                function checkCategoryVisibility() {
-                                                                                                                                                                                                                                    let activeCategory = document.querySelector(".category-tab.active");
+                                                                                                                                                                                                                                                                                                                                                        function checkCategoryVisibility() {
+                                                                                                                                                                                                                                                                                                                                                            let activeCategory = document.querySelector(".category-tab.active");
 
-                                                                                                                                                                                                                                    if (activeCategory && activeCategory.textContent.trim().toLowerCase() === "sweets") {
-                                                                                                                                                                                                                                        // Hide all spice-level select elements
-                                                                                                                                                                                                                                        spiceSelects.forEach(select => {
-                                                                                                                                                                                                                                            select.style.display = "none";
-                                                                                                                                                                                                                                        });
-                                                                                                                                                                                                                                    } else {
-                                                                                                                                                                                                                                        // Show all spice-level select elements
-                                                                                                                                                                                                                                        spiceSelects.forEach(select => {
-                                                                                                                                                                                                                                            select.style.display = "block";
-                                                                                                                                                                                                                                        });
-                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                                            if (activeCategory && activeCategory.textContent.trim().toLowerCase() === "sweets") {
+                                                                                                                                                                                                                                                                                                                                                                // Hide all spice-level select elements
+                                                                                                                                                                                                                                                                                                                                                                spiceSelects.forEach(select => {
+                                                                                                                                                                                                                                                                                                                                                                    select.style.display = "none";
+                                                                                                                                                                                                                                                                                                                                                                });
+                                                                                                                                                                                                                                                                                                                                                            } else {
+                                                                                                                                                                                                                                                                                                                                                                // Show all spice-level select elements
+                                                                                                                                                                                                                                                                                                                                                                spiceSelects.forEach(select => {
+                                                                                                                                                                                                                                                                                                                                                                    select.style.display = "block";
+                                                                                                                                                                                                                                                                                                                                                                });
+                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                        }
 
-                                                                                                                                                                                                                                // Run on page load (for default active category)
-                                                                                                                                                                                                                                checkCategoryVisibility();
+                                                                                                                                                                                                                                                                                                                                                        // Run on page load (for default active category)
+                                                                                                                                                                                                                                                                                                                                                        checkCategoryVisibility();
 
-                                                                                                                                                                                                                                // Add event listeners to update when a category is clicked
-                                                                                                                                                                                                                                categoryTabs.forEach(tab => {
-                                                                                                                                                                                                                                    tab.addEventListener("click", function () {
-                                                                                                                                                                                                                                        // Delay to allow Bootstrap tab change
-                                                                                                                                                                                                                                        setTimeout(checkCategoryVisibility, 100);
-                                                                                                                                                                                                                                    });
-                                                                                                                                                                                                                                });
-                                                                                                                                                                                                                            });
+                                                                                                                                                                                                                                                                                                                                                        // Add event listeners to update when a category is clicked
+                                                                                                                                                                                                                                                                                                                                                        categoryTabs.forEach(tab => {
+                                                                                                                                                                                                                                                                                                                                                            tab.addEventListener("click", function () {
+                                                                                                                                                                                                                                                                                                                                                                // Delay to allow Bootstrap tab change
+                                                                                                                                                                                                                                                                                                                                                                setTimeout(checkCategoryVisibility, 100);
+                                                                                                                                                                                                                                                                                                                                                            });
+                                                                                                                                                                                                                                                                                                                                                        });
+                                                                                                                                                                                                                                                                                                                                                    });
 
-                                                                                                                                                                                                                        </script> -->
+                                                                                                                                                                                                                                                                                                                                                </script> -->
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

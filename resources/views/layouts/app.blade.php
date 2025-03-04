@@ -63,8 +63,6 @@
         });
     </script>
 
-    <link rel="preload" as="image" href="img/hero1.png" type="image/webp">
-
 
 
 </head>
@@ -339,15 +337,23 @@
                         Experience the Rich & Authentic Flavors of Pickles.
                     </p>
                     <div class="footer-icon d-flex">
-                        <a class="btn btn-outline-primary btn-sm-square me-2 rounded-circle" href="#"><i
-                                class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-outline-primary btn-sm-square me-2 rounded-circle" href="#"><i
-                                class="fab fa-twitter"></i></a>
-                        <a class="btn btn-outline-primary btn-sm-square me-2 rounded-circle" href="#"><i
-                                class="fab fa-instagram"></i></a>
-                        <a class="btn btn-outline-primary btn-sm-square rounded-circle" href="#"><i
-                                class="fab fa-linkedin-in"></i></a>
+                        <a class="btn btn-outline-primary btn-sm-square me-2 rounded-circle" href="#"
+                            aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a class="btn btn-outline-primary btn-sm-square me-2 rounded-circle" href="#"
+                            aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a class="btn btn-outline-primary btn-sm-square me-2 rounded-circle" href="#"
+                            aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a class="btn btn-outline-primary btn-sm-square rounded-circle" href="#" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
                     </div>
+
                 </div>
             </div>
 
@@ -379,23 +385,23 @@
                 </div>
             </div>
 
-            <!-- Newsletter -->
+            <!-- gallery -->
             <div class="col-lg-2 col-md-6">
                 <div class="footer-item">
                     <h4 class="mb-4">Social Gallery</h4>
                     <div class="row g-2">
                         <div class="col-4"><img src="{{ asset('img/menu-01.jpg') }}"
-                                class="img-fluid rounded-circle border border-primary p-2"></div>
+                                class="img-fluid rounded-circle border border-primary p-2" alt="dish thumbnail"></div>
                         <div class="col-4"><img src="{{ asset('img/menu-02.jpg') }}"
-                                class="img-fluid rounded-circle border border-primary p-2"></div>
+                                class="img-fluid rounded-circle border border-primary p-2" alt="dish thumbnail"></div>
                         <div class="col-4"><img src="{{ asset('img/menu-03.jpg') }}"
-                                class="img-fluid rounded-circle border border-primary p-2"></div>
+                                class="img-fluid rounded-circle border border-primary p-2" alt="dish thumbnail"></div>
                         <div class="col-4"><img src="{{ asset('img/menu-04.jpg') }}"
-                                class="img-fluid rounded-circle border border-primary p-2"></div>
+                                class="img-fluid rounded-circle border border-primary p-2" alt="dish thumbnail"></div>
                         <div class="col-4"><img src="{{ asset('img/menu-05.jpg') }}"
-                                class="img-fluid rounded-circle border border-primary p-2"></div>
+                                class="img-fluid rounded-circle border border-primary p-2" alt="dish thumbnail"></div>
                         <div class="col-4"><img src="{{ asset('img/menu-06.jpg') }}"
-                                class="img-fluid rounded-circle border border-primary p-2"></div>
+                                class="img-fluid rounded-circle border border-primary p-2" alt="dish thumbnail"></div>
                     </div>
                 </div>
                           
@@ -449,7 +455,9 @@
 
     <!-- Back to Top -->
 
-    <a href="#" class="btn btn-md-square btn-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
+    <a href="#" class="btn btn-md-square btn-primary rounded-circle back-to-top" aria-label="Back to Top">
+        <i class="fa fa-arrow-up"></i>
+    </a>
 
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -902,14 +910,14 @@
                             }
 
                             let messageItem = `
-                                                                                                        <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
-                                                                                                            <div class="notif-content">
-                                                                                                                <span class="fw-bold">${notification.data.username}</span>
-                                                                                                                <span class="d-block small text-muted">${notification.data.message}</span>
-                                                                                                                <span class="small text-muted">${new Date(notification.created_at).toLocaleTimeString()}</span>
-                                                                                                            </div>
-                                                                                                        </a>
-                                                                                                    `;
+                                                                                                                                        <a href="{{ url('/support-tickets/') }}/${notification.data.ticket_id}" class="d-flex align-items-center p-2 border-bottom text-dark text-decoration-none">
+                                                                                                                                            <div class="notif-content">
+                                                                                                                                                <span class="fw-bold">${notification.data.username}</span>
+                                                                                                                                                <span class="d-block small text-muted">${notification.data.message}</span>
+                                                                                                                                                <span class="small text-muted">${new Date(notification.created_at).toLocaleTimeString()}</span>
+                                                                                                                                            </div>
+                                                                                                                                        </a>
+                                                                                                                                    `;
 
                             messageList.innerHTML += messageItem;
                             messageListMobile.innerHTML += messageItem;

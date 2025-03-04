@@ -202,7 +202,8 @@
                                                                 <!-- Rating & Price on Same Line -->
                                                                 <div class="d-flex align-items-center justify-content-between">
                                                                     <span class="badge bg-success text-white px-2 py-1">
-                                                                        ⭐ {{ number_format($dish->rating, 1) }}
+                                                                        ⭐
+                                                                        {{ number_format($dish->reviews->count() > 0 ? round($dish->reviews->avg('rating')) : 5, 1) }}
                                                                     </span>
 
                                                                     @if($dish->quantities->isNotEmpty())

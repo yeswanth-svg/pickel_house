@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\SupportTicketController;
 
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\ReviewController;
 
 
 
@@ -171,6 +172,10 @@ Route::middleware('auth')->group(function () {
     //support tickets routes
     Route::resource('support-tickets', UserSupportTicketsController::class);
     Route::post('/support-tickets/{ticket}/messages', [UserSupportTicketsController::class, 'sendMessage'])->name('support.tickets.message');
+
+
+    Route::post('/reviews', [ReviewController::class, 'store'])->middleware('auth')->name('reviews.store');
+
 
 });
 
